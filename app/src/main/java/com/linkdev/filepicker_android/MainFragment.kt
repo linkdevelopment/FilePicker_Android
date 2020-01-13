@@ -1,6 +1,7 @@
 package com.linkdev.filepicker_android
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +41,10 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.IMAGE_GALLERY)
             pickFilesFactory?.pickFiles(setOf(MimeType.PNG), "choose Image")
         }
+        btnOpenCamera.setOnClickListener {
+            pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.IMAGE_CAMERA)
+            pickFilesFactory?.pickFiles(setOf(MimeType.ALL), "choose image")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -54,8 +59,12 @@ class MainFragment : Fragment() {
                     Log.e(TAG, "onPickFileError")
                 }
 
-                override fun onFilePicked(uri: Uri, filePath: String?, file: File?) {
+                override fun onFilePicked(
+                    uri: Uri?, filePath: String?, file: File?, bitmap: Bitmap?
+                ) {
                     Log.e(TAG, "onFilePicked")
+                    uri?.let { imgTest.setImageURI(it) }
+                    bitmap?.let { imgTest.setImageBitmap(it) }
                 }
 
             })

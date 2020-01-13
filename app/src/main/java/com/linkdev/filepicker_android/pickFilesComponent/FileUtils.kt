@@ -1,23 +1,24 @@
 package com.linkdev.filepicker_android.pickFilesComponent
 
-import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
-import android.webkit.MimeTypeMap
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.provider.SyncStateContract
 import android.util.Log
-import androidx.fragment.app.Fragment
-import com.linkdev.filepicker_android.BuildConfig
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import android.webkit.MimeTypeMap
+import com.linkdev.filepicker_android.R
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object FileUtils {
+    const val TAG = "FilePickerTag"
+    const val CAMERA_IMAGE_TYPE = ".jpg"
     // get file extension
     fun getExtensionFromUri(context: Context?, uri: Uri?): String? {
         var mimeType: String? = ""
@@ -77,7 +78,10 @@ object FileUtils {
         val file: File?
         try {
             file = File.createTempFile(
-                BuildConfig.APPLICATION_ID + getFileNameFromUri(context, uri),
+                context.getString(R.string.app_name) + getFileNameFromUri(
+                    context,
+                    uri
+                ),
                 "." + getExtensionFromUri(context, uri), context.cacheDir
             )
 
@@ -94,5 +98,52 @@ object FileUtils {
             e.printStackTrace()
             return null
         }
+    }
+
+    fun getRealPathFromUri(context: Context, contentUri: Uri): String? {
+        var cursor: Cursor? = null
+        try {
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            cursor = context.contentResolver.query(contentUri, proj, null, null, null)
+            return if (cursor != null) {
+                val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                cursor.moveToFirst()
+                cursor.getString(column_index)
+            } else {
+                null
+            }
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(context: Context): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "${context.getString(com.linkdev.filepicker_android.R.string.app_name)}_$timeStamp", /* prefix */
+            CAMERA_IMAGE_TYPE, /* suffix */
+            storageDir /* directory */
+        )
+    }
+
+    fun convertBitmapToFile(context: Context, bitmap: Bitmap, quality: Int): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+        val filesDir = context.getFilesDir()
+        val imageFile =
+            File(filesDir, "${context.getString(R.string.app_name)}_$timeStamp$CAMERA_IMAGE_TYPE")
+        val os: OutputStream
+        try {
+            os = FileOutputStream(imageFile)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, os)
+            os.flush()
+            os.close()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error writing bitmap", e)
+        }
+
+        return imageFile
     }
 }

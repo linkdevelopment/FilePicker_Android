@@ -2,6 +2,7 @@ package com.linkdev.filepicker_android.pickFilesComponent.image
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
@@ -33,11 +34,7 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
     }
 
     override fun handleActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-        shouldMakeDir: Boolean,
-        callback: PickFilesResultCallback
+        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     ) {
         if (resultCode == RESULT_OK) {
             if (data != null && requestCode == PICK_IMAGE_REQUEST_CODE) {
@@ -47,8 +44,9 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
                         FileUtils.getFilePathFromDocument(
                             fragment.requireContext(), uri
                         ) // get real path of file
+                    Log.e(TAG, "file path $filePath")
                     val file = FileUtils.getFileFromPath(filePath) // create file
-                    callback.onFilePicked(uri, filePath, file)
+                    callback.onFilePicked(uri, filePath, file, null)
                 } else {
                     callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
                 }

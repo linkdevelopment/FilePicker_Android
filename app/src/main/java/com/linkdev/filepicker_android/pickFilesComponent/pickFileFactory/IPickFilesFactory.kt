@@ -6,11 +6,8 @@ import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 
 interface IPickFilesFactory {
     fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String)
+
     fun handleActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-        shouldMakeDir: Boolean = false,
-        callback: PickFilesResultCallback
+        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     )
 }

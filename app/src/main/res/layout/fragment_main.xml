@@ -11,4 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="PICK IMAGE FROM GALLERY" />
+
+    <Button
+        android:id="@+id/btnOpenCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="capture image from camera" />
+
+    <ImageView
+        android:id="@+id/imgTest"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/ic_launcher" />
 </LinearLayout>

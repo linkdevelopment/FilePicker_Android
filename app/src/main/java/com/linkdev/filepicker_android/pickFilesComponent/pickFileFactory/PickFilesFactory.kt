@@ -1,14 +1,16 @@
 package com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory
 
 import androidx.fragment.app.Fragment
+import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.image.PickGalleryImage
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 
-class PickFilesFactory(private val fragment: Fragment) {
+class PickFilesFactory(private val fragment: Fragment, private val shouldMakeDir: Boolean = false) {
 
     fun getPickInstance(fileType: FilesType): IPickFilesFactory? {
         return when (fileType) {
             FilesType.IMAGE_GALLERY -> PickGalleryImage(fragment)
+            FilesType.IMAGE_CAMERA -> CaptureImage(fragment, shouldMakeDir)
             else -> null
         }
     }
