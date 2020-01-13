@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FilePicker_Android</string>
+    <string name="pick_file_data_error">Something went wrong</string>
 </resources>

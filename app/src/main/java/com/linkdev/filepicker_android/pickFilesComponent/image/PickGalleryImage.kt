@@ -3,8 +3,11 @@ package com.linkdev.filepicker_android.pickFilesComponent.image
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import androidx.fragment.app.Fragment
+import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileUtils.ErrorStatus.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 
@@ -38,16 +41,19 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
     ) {
         if (resultCode == RESULT_OK) {
             if (data != null && requestCode == PICK_IMAGE_REQUEST_CODE) {
-                val uri = data.data
+                val uri = data.data // get uri from data
                 if (uri != null) {
                     val filePath =
-                        FileUtils.getFilePathFromDocument(fragment.requireContext(), uri)
-                    callback.onFilePicked(uri, filePath, FileUtils.getFileFromPath(filePath))
+                        FileUtils.getFilePathFromDocument(
+                            fragment.requireContext(), uri
+                        ) // get real path of file
+                    val file = FileUtils.getFileFromPath(filePath) // create file
+                    callback.onFilePicked(uri, filePath, file)
                 } else {
-                    callback.onPickFileError()
+                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
                 }
             } else {
-                callback.onPickFileError()
+                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
             }
         } else {
             callback.onPickFileCanceled()

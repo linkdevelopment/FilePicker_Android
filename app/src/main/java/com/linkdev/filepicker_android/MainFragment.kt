@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
@@ -49,7 +50,7 @@ class MainFragment : Fragment() {
                     Log.e(TAG, "onPickFileCanceled")
                 }
 
-                override fun onPickFileError() {
+                override fun onPickFileError(errorModel: ErrorModel) {
                     Log.e(TAG, "onPickFileError")
                 }
 
