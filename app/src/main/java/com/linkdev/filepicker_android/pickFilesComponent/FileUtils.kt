@@ -5,12 +5,15 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
+import androidx.core.content.FileProvider
 import com.linkdev.filepicker_android.R
+import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -118,15 +121,25 @@ object FileUtils {
     }
 
     @Throws(IOException::class)
-    private fun createImageFile(context: Context): File {
+    fun createImageFile(context: Context): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            "${context.getString(com.linkdev.filepicker_android.R.string.app_name)}_$timeStamp", /* prefix */
+            "${context.getString(R.string.app_name)}_$timeStamp", /* prefix */
             CAMERA_IMAGE_TYPE, /* suffix */
             storageDir /* directory */
         )
+    }
+
+    fun getFileURI(context: Context, providerAuth: String, file: File): Uri {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(
+                context, context.packageName + providerAuth, file
+            )
+        } else {
+            Uri.fromFile(file)
+        }
     }
 
     fun convertBitmapToFile(context: Context, bitmap: Bitmap, quality: Int): File {

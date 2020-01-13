@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
@@ -42,7 +43,7 @@ class MainFragment : Fragment() {
             pickFilesFactory?.pickFiles(setOf(MimeType.PNG), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.IMAGE_CAMERA)
+            pickFilesFactory = PickFilesFactory(this, true).getPickInstance(FilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.ALL), "choose image")
         }
     }
@@ -63,8 +64,10 @@ class MainFragment : Fragment() {
                     uri: Uri?, filePath: String?, file: File?, bitmap: Bitmap?
                 ) {
                     Log.e(TAG, "onFilePicked")
+                    Log.e(TAG, "file path from view $filePath Uri is $uri")
+
                     uri?.let { imgTest.setImageURI(it) }
-                    bitmap?.let { imgTest.setImageBitmap(it) }
+//                    bitmap?.let { imgTest.setImageBitmap(it) }
                 }
 
             })
