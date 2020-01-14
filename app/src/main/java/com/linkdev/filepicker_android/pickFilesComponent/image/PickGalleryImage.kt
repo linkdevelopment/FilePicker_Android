@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileUtils.ErrorStatus.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType

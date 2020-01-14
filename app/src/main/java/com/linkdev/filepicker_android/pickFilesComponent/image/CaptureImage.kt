@@ -3,8 +3,10 @@ package com.linkdev.filepicker_android.pickFilesComponent.image
 import android.app.Activity
 import android.content.Intent
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.ERROR_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
@@ -19,44 +21,57 @@ class CaptureImage(private val fragment: Fragment, private val shouldMakeDir: Bo
     companion object {
         const val TAG = "FilePickerTag"
         const val CAPTURE_IMAGE_REQUEST_CODE = 1001
-        const val DATA_EXTRA = "data"
         const val PROVIDER_AUTH = ".provider"
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val imageFile =
-            FileUtils.createImageFile(fragment.requireContext(), FileUtils.geImageName())
-        currentCapturedPath = imageFile?.path
+        if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) == null) {
+            val imageFile =
+                FileUtils.createImageFile(fragment.requireContext())
+            currentCapturedPath = imageFile?.path
 
-        val photoURI =
-            currentCapturedPath?.let { FileUtils.getFileUri(fragment.requireContext(), it) }
+            val photoURI =
+                currentCapturedPath?.let {
+                    FileUtils.getFileUri(
+                        fragment.requireContext(), it, PROVIDER_AUTH
+                    )
+                }
 
-        photoURI?.let {
-            captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-            fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
+            photoURI?.let {
+                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
+            }
+        } else {
+            fragment.startActivityForResult(Intent(), ERROR_REQUEST_CODE)
         }
     }
 
     override fun handleActivityResult(
         requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     ) {
-        if (currentCapturedPath != null) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+                if (currentCapturedPath != null) {
+
+                    val currentFile = File(currentCapturedPath!!)
                     val uri =
-                        FileUtils.getFileUri(fragment.requireContext(), currentCapturedPath!!)
-                    val adjustedBitmap = FileUtils.getAdjustedBitmap(currentCapturedPath!!)
-                    val file = adjustedBitmap?.let {
-                        FileUtils.writeBitmapToFile(adjustedBitmap, FileUtils.geImageName())
-                    }
-                    callback.onFilePicked(uri, file?.path, file, adjustedBitmap)
+                        FileUtils.getFileUri(
+                            fragment.requireContext(), currentCapturedPath!!, PROVIDER_AUTH
+                        )
+
+                    val file =
+                        FileUtils.compressImage(fragment.requireContext(), uri, currentFile.name)
+                    callback.onFilePicked(uri, file?.path, file, null)
                 } else {
-                    callback.onPickFileCanceled()
+                    callback.onPickFileError(ErrorModel())
                 }
+
+            } else if (requestCode == ERROR_REQUEST_CODE) {
+                Log.e("xxx", "errrrrrrrrrrrrrrrrrrro")
             }
         } else {
-            callback.onPickFileError(ErrorModel("error current pic is null"))
+            callback.onPickFileCanceled()
         }
     }
 }
