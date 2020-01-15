@@ -1,7 +1,9 @@
 package com.linkdev.filepicker_android.pickFilesComponent.image
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -26,19 +28,22 @@ class CaptureImage(private val fragment: Fragment, private val shouldMakeDir: Bo
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) == null) {
+        if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             val imageFile =
                 FileUtils.createImageFile(fragment.requireContext())
+
             currentCapturedPath = imageFile?.path
 
             val photoURI =
                 currentCapturedPath?.let {
+                    // get photo uri form content provider
                     FileUtils.getFileUri(
                         fragment.requireContext(), it, PROVIDER_AUTH
                     )
                 }
 
             photoURI?.let {
+                //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
             }
@@ -61,7 +66,13 @@ class CaptureImage(private val fragment: Fragment, private val shouldMakeDir: Bo
                         )
 
                     val file =
-                        FileUtils.compressImage(fragment.requireContext(), uri, currentFile.name)
+                        if (shouldMakeDir) {
+                            FileUtils.compressImage(
+                                fragment.requireContext(), uri, currentFile.name
+                            )
+                        } else {
+                            currentFile
+                        }
                     callback.onFilePicked(uri, file?.path, file, null)
                 } else {
                     callback.onPickFileError(ErrorModel())

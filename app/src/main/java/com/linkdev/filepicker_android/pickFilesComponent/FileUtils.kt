@@ -58,7 +58,7 @@ object FileUtils {
     }
 
     private fun copyStream(inputStream: InputStream, outputStream: FileOutputStream) {
-        val BUFFER_SIZE = 4096
+        val BUFFER_SIZE = 1024
         try {
             val bytes = ByteArray(BUFFER_SIZE)
             var count = 0
