@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
+import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import java.io.File
@@ -77,7 +78,7 @@ class CaptureImage(
 
                     FileUtils.addPicToGallery(file, fragment.requireContext())
 
-                    callback.onFilePicked(photoURI, file?.path, file, null)
+                    callback.onFilePicked(FilesType.IMAGE_CAMERA, photoURI, file?.path, file, null)
                 } else {
                     callback.onPickFileError(ErrorModel())
                 }

@@ -49,6 +49,10 @@ class MainFragment : Fragment() {
             ).getPickInstance(FilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
         }
+        btnPickVideo.setOnClickListener {
+            pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.VIDEO_GALLERY)
+            pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -64,12 +68,18 @@ class MainFragment : Fragment() {
                 }
 
                 override fun onFilePicked(
-                    uri: Uri?, filePath: String?, file: File?, bitmap: Bitmap?
+                    fileType: FilesType, uri: Uri?, filePath: String?, file: File?, bitmap: Bitmap?
                 ) {
                     Log.e(TAG, "onFilePicked")
                     Log.e(TAG, "file path from view $filePath Uri is $uri")
-
-                    uri?.let { imgTest.setImageURI(it) }
+                    when (fileType) {
+                        FilesType.IMAGE_CAMERA, FilesType.IMAGE_GALLERY ->
+                            imgTest.setImageURI(uri)
+                        FilesType.VIDEO_GALLERY, FilesType.VIDEO_CAMERA -> {
+                            vidTest.setVideoURI(uri)
+                            vidTest.start();
+                        }
+                    }
                 }
 
             })

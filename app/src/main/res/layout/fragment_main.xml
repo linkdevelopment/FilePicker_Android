@@ -18,10 +18,22 @@
         android:layout_height="wrap_content"
         android:text="capture image from camera" />
 
+    <Button
+        android:id="@+id/btnPickVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PICK VIDEO FROM GALLERY" />
+
     <ImageView
         android:id="@+id/imgTest"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
         android:src="@mipmap/ic_launcher" />
+
+    <VideoView
+        android:id="@+id/vidTest"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp" />
 </LinearLayout>
