@@ -67,7 +67,6 @@ class MainFragment : Fragment() {
                     Log.e(TAG, "file path from view $filePath Uri is $uri")
 
                     uri?.let { imgTest.setImageURI(it) }
-//                    bitmap?.let { imgTest.setImageBitmap(it) }
                 }
 
             })
