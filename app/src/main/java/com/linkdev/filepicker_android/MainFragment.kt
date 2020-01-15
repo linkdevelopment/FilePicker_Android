@@ -43,7 +43,7 @@ class MainFragment : Fragment() {
             pickFilesFactory?.pickFiles(setOf(MimeType.PNG), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this, true).getPickInstance(FilesType.IMAGE_CAMERA)
+            pickFilesFactory = PickFilesFactory(this, false).getPickInstance(FilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.ALL), "choose image")
         }
     }

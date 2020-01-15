@@ -147,9 +147,23 @@ object FileUtils {
     // create image file
     fun createImageFile(context: Context): File? {
         try {
+            val uniqueFileName = getUniqueFileName()
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
+            return File.createTempFile(uniqueFileName, CAMERA_IMAGE_TYPE, storageDir)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    // create public image file
+    fun createPublicImageFile(context: Context): File? {
+        try {
             val uniqueFileName = getUniqueFileName()
+            val storageDir: File =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    ?: return null
             return File.createTempFile(uniqueFileName, CAMERA_IMAGE_TYPE, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -167,6 +181,43 @@ object FileUtils {
             return file
         }
         return null
+    }
+
+    fun compressPublicImage(context: Context, uri: Uri, fileName: String): File? {
+        val storageDir: File =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                ?: return null
+        val filePath = storageDir.path +"/"+ fileName
+        val file = File(filePath)
+        val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+        if (inputStream != null) {
+            val outputStream = FileOutputStream(file)
+            copyStream(inputStream, outputStream)
+            return file
+        }
+        return null
+    }
+
+    fun writeBitmapToFile(
+        context: Context, bitmap: Bitmap, file: File, shouldMakeDir: Boolean
+    ): File? {
+        return try {
+            val createdFile = if (shouldMakeDir) {
+                createAppFile(context, file.name)
+            } else {
+                Log.e("xxx", "xxx ${file.absolutePath}")
+                file
+            }
+            val fOut = FileOutputStream(createdFile)
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            fOut.flush()
+            fOut.close()
+            return createdFile
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
     }
 
     // create external directory
