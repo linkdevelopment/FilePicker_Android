@@ -261,7 +261,7 @@ object FileUtils {
 
     fun getFileUri(context: Context, fileUrl: String, providerAuth: String): Uri {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(context, context.packageName + providerAuth, File(fileUrl))
+            FileProvider.getUriForFile(context, providerAuth, File(fileUrl))
         } else {
             Uri.fromFile(File(fileUrl))
         }

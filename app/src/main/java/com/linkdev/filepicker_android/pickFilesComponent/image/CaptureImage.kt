@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
@@ -15,14 +14,17 @@ import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFi
 import java.io.File
 
 
-class CaptureImage(private val fragment: Fragment, private val shouldMakeDir: Boolean) :
-    IPickFilesFactory {
+class CaptureImage(
+    private val fragment: Fragment,
+    private val shouldMakeDir: Boolean,
+    private val contentProviderName: String
+) : IPickFilesFactory {
     private var currentCapturedPath: String? = null
+    private var photoURI: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
         const val CAPTURE_IMAGE_REQUEST_CODE = 1001
-        const val PROVIDER_AUTH = ".provider"
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
@@ -32,11 +34,11 @@ class CaptureImage(private val fragment: Fragment, private val shouldMakeDir: Bo
 
             currentCapturedPath = imageFile?.path
 
-            val photoURI =
+            photoURI =
                 currentCapturedPath?.let {
                     // get photo uri form content provider
                     FileUtils.getFileUri(
-                        fragment.requireContext(), it, PROVIDER_AUTH
+                        fragment.requireContext(), it, contentProviderName
                     )
                 }
 
@@ -62,25 +64,20 @@ class CaptureImage(private val fragment: Fragment, private val shouldMakeDir: Bo
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                if (currentCapturedPath != null) {
-
-                    val uri =
-                        FileUtils.getFileUri(
-                            fragment.requireContext(), currentCapturedPath!!, PROVIDER_AUTH
-                        )
+                if (currentCapturedPath != null && photoURI != null) {
 
                     val file: File? = if (shouldMakeDir) {
                         handleCapturedImageWithPrivateDir(
-                            fragment.requireContext(), uri, currentCapturedPath!!
+                            fragment.requireContext(), photoURI!!, currentCapturedPath!!
                         )
 
                     } else {
-                        handleCapturedImageWithPublicDir(fragment.requireContext(), uri)
+                        handleCapturedImageWithPublicDir(fragment.requireContext(), photoURI!!)
                     }
 
                     FileUtils.addPicToGallery(file, fragment.requireContext())
 
-                    callback.onFilePicked(uri, file?.path, file, null)
+                    callback.onFilePicked(photoURI, file?.path, file, null)
                 } else {
                     callback.onPickFileError(ErrorModel())
                 }

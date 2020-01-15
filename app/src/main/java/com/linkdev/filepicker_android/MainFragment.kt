@@ -24,6 +24,7 @@ class MainFragment : Fragment() {
 
     companion object {
         const val TAG = "FilePickerTag"
+        const val CONTENT_PROVIDER_NAME: String = BuildConfig.APPLICATION_ID + ".provider"
     }
 
     override fun onCreateView(
@@ -43,8 +44,10 @@ class MainFragment : Fragment() {
             pickFilesFactory?.pickFiles(setOf(MimeType.PNG), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this, false).getPickInstance(FilesType.IMAGE_CAMERA)
-            pickFilesFactory?.pickFiles(setOf(MimeType.ALL), "choose image")
+            pickFilesFactory = PickFilesFactory(
+                this, true, CONTENT_PROVIDER_NAME
+            ).getPickInstance(FilesType.IMAGE_CAMERA)
+            pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
         }
     }
 
