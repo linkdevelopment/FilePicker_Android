@@ -43,7 +43,7 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
                 if (uri != null) {
                     val filePath =
                         FileUtils.getFilePathFromDocument(
-                            fragment.requireContext(), uri
+                            fragment.requireContext(), uri, "IMG_"
                         ) // get real path of file
                     Log.e(TAG, "file path $filePath")
                     val file = FileUtils.getFileFromPath(filePath) // create file

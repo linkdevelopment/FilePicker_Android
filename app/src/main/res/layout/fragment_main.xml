@@ -24,6 +24,12 @@
         android:layout_height="wrap_content"
         android:text="PICK VIDEO FROM GALLERY" />
 
+    <Button
+        android:id="@+id/btnCaptureVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CAPTURE VIDEO FROM CAMERA" />
+
     <ImageView
         android:id="@+id/imgTest"
         android:layout_width="100dp"

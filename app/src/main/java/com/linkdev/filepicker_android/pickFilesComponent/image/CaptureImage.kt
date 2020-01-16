@@ -91,7 +91,7 @@ class CaptureImage(
     }
 
     private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {
-        val fileNameWithExt = FileUtils.getUniqueFileNameWithExt()
+        val fileNameWithExt = FileUtils.getUniqueFileNameWithExt(FileUtils.CAMERA_IMAGE_TYPE)
         return FileUtils.writePublicImage(context, uri, fileNameWithExt)
     }
 

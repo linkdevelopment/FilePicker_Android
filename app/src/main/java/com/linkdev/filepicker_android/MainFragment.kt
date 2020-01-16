@@ -53,6 +53,10 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.VIDEO_GALLERY)
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
+        btnCaptureVideo.setOnClickListener {
+            pickFilesFactory = PickFilesFactory(this, false).getPickInstance(FilesType.VIDEO_CAMERA)
+            pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -7,13 +7,11 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.hardware.SensorManager.getOrientation
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.getBitmap
 import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
@@ -58,7 +56,7 @@ object FileUtils {
     }
 
     fun getFileFromPath(filePath: String?): File? {
-        return if (filePath != null) File(filePath) else return null
+        return if (filePath != null) File(filePath) else null
     }
 
     @Throws(Exception::class)
@@ -80,14 +78,11 @@ object FileUtils {
     /**
      * Retrieves String file path from a document schemed Uri using fileDescriptor.
      */
-    fun getFilePathFromDocument(context: Context, uri: Uri): String? {
+    fun getFilePathFromDocument(context: Context, uri: Uri, prefix: String): String? {
         val file: File?
         try {
             file = File.createTempFile(
-                context.getString(com.linkdev.filepicker_android.R.string.app_name) + getFileNameFromUri(
-                    context,
-                    uri
-                ),
+                prefix + getFileNameFromUri(context, uri),
                 "." + getExtensionFromUri(context, uri), context.cacheDir
             )
 
@@ -251,8 +246,8 @@ object FileUtils {
     fun getUniqueFileName(): String =
         IMAG_PREFIX + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
 
-    fun getUniqueFileNameWithExt(): String =
-        getUniqueFileName()  + CAMERA_IMAGE_TYPE
+    fun getUniqueFileNameWithExt(extension: String): String =
+        getUniqueFileName() + extension
 
     fun getPublicStorageDirPath(directory: String): String {
         return Environment.getExternalStoragePublicDirectory(directory)
