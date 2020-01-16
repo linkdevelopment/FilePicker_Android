@@ -7,6 +7,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.CAMERA_IMAGE_TYPE
+import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
@@ -56,7 +58,7 @@ class CaptureImage(
         return if (shouldMakeDir) {
             FileUtils.createImageFile(fragment.requireContext())
         } else {
-            FileUtils.createPublicImageFile(fragment.requireContext())
+            FileUtils.createPublicFile(fragment.requireContext(), IMAG_PREFIX, CAMERA_IMAGE_TYPE)
         }
     }
 
@@ -76,7 +78,7 @@ class CaptureImage(
                         handleCapturedImageWithPublicDir(fragment.requireContext(), photoURI!!)
                     }
 
-                    FileUtils.addPicToGallery(file, fragment.requireContext())
+                    FileUtils.addMediaToGallery(file, fragment.requireContext())
 
                     callback.onFilePicked(FilesType.IMAGE_CAMERA, photoURI, file?.path, file, null)
                 } else {
@@ -91,14 +93,15 @@ class CaptureImage(
     }
 
     private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {
-        val fileNameWithExt = FileUtils.getUniqueFileNameWithExt(FileUtils.CAMERA_IMAGE_TYPE)
-        return FileUtils.writePublicImage(context, uri, fileNameWithExt)
+        val fileNameWithExt =
+            FileUtils.getUniqueFileNameWithExt(IMAG_PREFIX, FileUtils.CAMERA_IMAGE_TYPE)
+        return FileUtils.writePublicFile(context, uri, fileNameWithExt)
     }
 
     private fun handleCapturedImageWithPrivateDir(
         context: Context, uri: Uri, currentCapturedPath: String
     ): File? {
         val currentFile = File(currentCapturedPath)
-        return FileUtils.writeImage(context, uri, currentFile.name)
+        return FileUtils.writeMedia(context, uri, currentFile.name)
     }
 }

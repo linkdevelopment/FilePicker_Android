@@ -45,7 +45,7 @@ class MainFragment : Fragment() {
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, true, CONTENT_PROVIDER_NAME
+                this, false, CONTENT_PROVIDER_NAME
             ).getPickInstance(FilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
         }
@@ -54,7 +54,9 @@ class MainFragment : Fragment() {
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
         btnCaptureVideo.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this, false).getPickInstance(FilesType.VIDEO_CAMERA)
+            pickFilesFactory = PickFilesFactory(
+                this, true, CONTENT_PROVIDER_NAME
+            ).getPickInstance(FilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
     }

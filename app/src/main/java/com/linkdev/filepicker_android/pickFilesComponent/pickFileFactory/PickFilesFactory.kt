@@ -18,7 +18,7 @@ class PickFilesFactory(
             FilesType.IMAGE_GALLERY -> PickGalleryImage(fragment)
             FilesType.IMAGE_CAMERA -> CaptureImage(fragment, shouldMakeDir, contentProviderName)
             FilesType.VIDEO_GALLERY -> PickGalleryVideo(fragment)
-            FilesType.VIDEO_CAMERA -> CaptureVideo(fragment, shouldMakeDir)
+            FilesType.VIDEO_CAMERA -> CaptureVideo(fragment, shouldMakeDir,contentProviderName)
             else -> null
         }
     }

@@ -19,12 +19,15 @@ import androidx.core.content.FileProvider
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.ContentValues
 
 
 object FileUtils {
     const val TAG = "FilePickerTag"
     const val CAMERA_IMAGE_TYPE = ".jpg"
+    const val CAMERA_VIDEO_TYPE = ".mp4"
     const val IMAG_PREFIX = "IMG_"
+    const val VID_PREFIX = "VID_"
     const val MAX_FILE_SIZE_MB = 10
     // get file extension
     fun getExtensionFromUri(context: Context?, uri: Uri?): String? {
@@ -143,7 +146,7 @@ object FileUtils {
     // create image file
     fun createImageFile(context: Context): File? {
         try {
-            val uniqueFileName = getUniqueFileName()
+            val uniqueFileName = getUniqueFileName(IMAG_PREFIX)
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
             return File.createTempFile(uniqueFileName, CAMERA_IMAGE_TYPE, storageDir)
@@ -153,14 +156,28 @@ object FileUtils {
         }
     }
 
-    // create public image file
-    fun createPublicImageFile(context: Context): File? {
+    // create video file
+    fun createVideoFile(context: Context): File? {
         try {
-            val uniqueFileName = getUniqueFileName()
+
+            val uniqueFileName = getUniqueFileName(VID_PREFIX)
+            val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                ?: return null
+            return File.createTempFile(uniqueFileName, CAMERA_VIDEO_TYPE, storageDir)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    // create public image file
+    fun createPublicFile(context: Context, prefix: String, suffix: String): File? {
+        val uniqueFileName = getUniqueFileName(prefix)
+        try {
             val storageDir: File =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                     ?: return null
-            return File.createTempFile(uniqueFileName, CAMERA_IMAGE_TYPE, storageDir)
+            return File.createTempFile(uniqueFileName, suffix, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
             return null
@@ -168,7 +185,7 @@ object FileUtils {
     }
 
     // reduce file size
-    fun writeImage(context: Context, uri: Uri, fileName: String): File? {
+    fun writeMedia(context: Context, uri: Uri, fileName: String): File? {
         return try {
             val file = createAppFile(context, fileName)
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
@@ -185,7 +202,7 @@ object FileUtils {
         }
     }
 
-    fun writePublicImage(context: Context, uri: Uri, fileName: String): File? {
+    fun writePublicFile(context: Context, uri: Uri, fileName: String): File? {
         return try {
             val filePath = getPublicStorageDirPath(Environment.DIRECTORY_PICTURES) + "/" + fileName
             val file = File(filePath)
@@ -243,11 +260,11 @@ object FileUtils {
     private fun createAppFile(context: Context, fileName: String?): File =
         File(getFilePath(context, fileName))
 
-    fun getUniqueFileName(): String =
-        IMAG_PREFIX + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+    fun getUniqueFileName(prefix: String): String =
+        prefix + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
 
-    fun getUniqueFileNameWithExt(extension: String): String =
-        getUniqueFileName() + extension
+    fun getUniqueFileNameWithExt(prefix: String, extension: String): String =
+        getUniqueFileName(prefix) + extension
 
     fun getPublicStorageDirPath(directory: String): String {
         return Environment.getExternalStoragePublicDirectory(directory)
@@ -262,134 +279,8 @@ object FileUtils {
         }
     }
 
-    // file operations
-    fun getAdjustedBitmap(filePath: String): Bitmap? {
-        try {
-            val orientation: Int = getOrientation(filePath)
-            var adjustedBitmap: Bitmap? = BitmapFactory.decodeFile(filePath)
-            when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> {
-                    adjustedBitmap = rotateImage(adjustedBitmap, 90f)
-                    adjustedBitmap = resizeBitmap(adjustedBitmap)
-                }
-                ExifInterface.ORIENTATION_ROTATE_180 -> {
-                    adjustedBitmap = rotateImage(adjustedBitmap, 180f)
-                    adjustedBitmap = resizeBitmap(adjustedBitmap)
-                }
-                ExifInterface.ORIENTATION_ROTATE_270 -> {
-                    adjustedBitmap = rotateImage(adjustedBitmap, 270f)
-                    adjustedBitmap = resizeBitmap(adjustedBitmap)
-                }
-                ExifInterface.ORIENTATION_NORMAL -> {
-                    adjustedBitmap = resizeBitmap(adjustedBitmap)
-                }
-                else -> {
-                    adjustedBitmap = resizeBitmap(adjustedBitmap)
-                }
-            }
-            return adjustedBitmap
-        } catch (outOfMemoryError: OutOfMemoryError) {
-            outOfMemoryError.printStackTrace()
-            return null
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-    }
-
-    fun resizeBitmap(bitmap: Bitmap?): Bitmap? {
-        if (bitmap == null)
-            return null
-
-        if (bytesToMegaBytes(bitmap.byteCount) < MAX_FILE_SIZE_MB)
-            return bitmap
-
-        val width = bitmap.width
-        val height = bitmap.height
-
-        var returnedBitmap: Bitmap? = null
-        try {
-            returnedBitmap = Bitmap.createScaledBitmap(bitmap, width / 2, height / 2, false)
-            if (returnedBitmap != null && bytesToMegaBytes(bitmap.byteCount) > MAX_FILE_SIZE_MB) {
-                returnedBitmap = resizeBitmap(returnedBitmap)
-            }
-        } catch (error: OutOfMemoryError) {
-            error.printStackTrace()
-            returnedBitmap = resizeBitmap(returnedBitmap)
-        }
-
-        return returnedBitmap
-    }
-
-    internal fun getOrientation(filePath: String): Int {
-        try {
-            val ei = ExifInterface(filePath)
-            return ei.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED
-            )
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return ExifInterface.ORIENTATION_UNDEFINED
-    }
-
-    fun rotateImage(filePath: String): Bitmap? {
-        val orientation: Int = getOrientation(filePath)
-        val bitmap: Bitmap? = getBitmap(filePath)
-
-        return when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> {
-                rotateImage(bitmap, 90f)
-            }
-            ExifInterface.ORIENTATION_ROTATE_180 -> {
-                rotateImage(bitmap, 180f)
-            }
-            ExifInterface.ORIENTATION_ROTATE_270 -> {
-                rotateImage(bitmap, 270f)
-            }
-            ExifInterface.ORIENTATION_NORMAL -> {
-                return bitmap
-            }
-            else -> {
-                return bitmap
-            }
-        }
-    }
-
-    private fun getBitmap(filePath: String): Bitmap? {
-        try {
-            return BitmapFactory.decodeFile(filePath)
-        } catch (e: OutOfMemoryError) {
-            e.printStackTrace()
-            return resizeBitmap(BitmapFactory.decodeFile(filePath))
-        }
-    }
-
-    fun rotateImage(source: Bitmap?, angle: Float): Bitmap? {
-        if (source == null)
-            return null
-
-        try {
-            val matrix = Matrix()
-            matrix.postRotate(angle)
-            return Bitmap.createBitmap(
-                source, 0, 0, source.width, source.height,
-                matrix, true
-            )
-        } catch (error: OutOfMemoryError) {
-            error.printStackTrace()
-            return null
-        }
-    }
-
-    fun bytesToMegaBytes(bytes: Int): Double {
-        return bytes.toDouble() / 1000000
-    }
-
     // add Image to gallery
-    fun addPicToGallery(file: File?, context: Context) {
+    fun addMediaToGallery(file: File?, context: Context) {
         file?.let {
             Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
                 val f = File(it.path)
@@ -397,6 +288,5 @@ object FileUtils {
                 context.sendBroadcast(mediaScanIntent)
             }
         }
-
     }
 }
