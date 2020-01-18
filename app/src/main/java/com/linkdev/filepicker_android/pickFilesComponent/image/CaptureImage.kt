@@ -33,7 +33,7 @@ class CaptureImage(
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
-            val imageFile = createImageFile()
+            val imageFile = FileUtils.createImageFile(fragment.requireContext())
 
             currentCapturedPath = imageFile?.path
 
@@ -50,15 +50,6 @@ class CaptureImage(
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
             }
-        }
-    }
-
-    // create image file in private dir or public pictures dir
-    private fun createImageFile(): File? {
-        return if (shouldMakeDir) {
-            FileUtils.createImageFile(fragment.requireContext())
-        } else {
-            FileUtils.createPublicFile(fragment.requireContext(), IMAG_PREFIX, CAMERA_IMAGE_TYPE)
         }
     }
 

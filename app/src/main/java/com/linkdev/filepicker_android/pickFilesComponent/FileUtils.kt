@@ -104,45 +104,6 @@ object FileUtils {
         }
     }
 
-    fun getRealPathFromUri(context: Context, contentUri: Uri): String? {
-        var cursor: Cursor? = null
-        try {
-            val proj = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = context.contentResolver.query(contentUri, proj, null, null, null)
-            return if (cursor != null) {
-                val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                cursor.moveToFirst()
-                cursor.getString(column_index)
-            } else {
-                null
-            }
-        } finally {
-            cursor?.close()
-        }
-    }
-
-    // convert bitmap to file
-    fun convertBitmapToFile(context: Context, bitmap: Bitmap, quality: Int): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
-        val filesDir = context.getFilesDir()
-        val imageFile =
-            File(
-                filesDir,
-                "${context.getString(com.linkdev.filepicker_android.R.string.app_name)}_$timeStamp$CAMERA_IMAGE_TYPE"
-            )
-        val os: OutputStream
-        try {
-            os = FileOutputStream(imageFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, os)
-            os.flush()
-            os.close()
-        } catch (e: Exception) {
-            Log.e(TAG, "Error writing bitmap", e)
-        }
-
-        return imageFile
-    }
-
     // create image file
     fun createImageFile(context: Context): File? {
         try {
@@ -164,20 +125,6 @@ object FileUtils {
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
             return File.createTempFile(uniqueFileName, CAMERA_VIDEO_TYPE, storageDir)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-    }
-
-    // create public image file
-    fun createPublicFile(context: Context, prefix: String, suffix: String): File? {
-        val uniqueFileName = getUniqueFileName(prefix)
-        try {
-            val storageDir: File =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                    ?: return null
-            return File.createTempFile(uniqueFileName, suffix, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
             return null
@@ -214,26 +161,6 @@ object FileUtils {
             } else {
                 null
             }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            null
-        }
-    }
-
-    fun writeBitmapToFile(
-        context: Context, bitmap: Bitmap, fileName: String, shouldMakeDir: Boolean
-    ): File? {
-        return try {
-            val createdFile = if (shouldMakeDir) {
-                createAppFile(context, fileName)
-            } else {
-                null
-            }
-            val fOut = FileOutputStream(createdFile!!)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-            fOut.flush()
-            fOut.close()
-            return createdFile
         } catch (ex: Exception) {
             ex.printStackTrace()
             null

@@ -32,7 +32,7 @@ class CaptureVideo(
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
-            val videoFile = createVideoFile()
+            val videoFile = FileUtils.createVideoFile(fragment.requireContext())
             currentCapturedPath = videoFile?.path
             videoUri =
                 currentCapturedPath?.let {
@@ -49,16 +49,6 @@ class CaptureVideo(
             }
         }
 
-    }
-
-
-    // create video file in private dir or public pictures dir
-    private fun createVideoFile(): File? {
-        return if (shouldMakeDir) {
-            FileUtils.createVideoFile(fragment.requireContext())
-        } else {
-            FileUtils.createPublicFile(fragment.requireContext(), VID_PREFIX, CAMERA_VIDEO_TYPE)
-        }
     }
 
     override fun handleActivityResult(
