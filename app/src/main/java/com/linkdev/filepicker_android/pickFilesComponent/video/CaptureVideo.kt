@@ -11,8 +11,9 @@ import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.CAMERA_VIDEO_
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.VID_PREFIX
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
+import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import java.io.File
@@ -72,7 +73,9 @@ class CaptureVideo(
 
                     FileUtils.addMediaToGallery(file, fragment.requireContext())
 
-                    callback.onFilePicked(FilesType.VIDEO_CAMERA, videoUri, file?.path, file, null)
+                    callback.onFilePicked(
+                        DocumentFilesType.VIDEO_FILES, videoUri, file?.path, file, null
+                    )
                 } else {
                     callback.onPickFileError(ErrorModel())
                 }

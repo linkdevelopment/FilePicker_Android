@@ -21,11 +21,10 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: Set<String>
     ALL_VIDEOS("video/*", setOf("mpeg", "mp4", "3gpp", "3gpp2", "avi")),
 
     // ============== TEXT FILES ==============
-    TXT("text/plain", setOf("plain")),
-    HTM("text/plain", setOf("html")),
+    TXT("text/plain", setOf("txt", "tex")),
     PDF("application/pdf", setOf("pdf")),
-    WORD("application/msword", setOf("msword")),
-    EXCEL("application/vnd.ms-excel", setOf("vnd.ms-excel")),
+    WORD("application/msword", setOf("doc", "docx")),
+    EXCEL("application/vnd.ms-excel", setOf("xls","xlsx")),
 
     // ============== Audio ==============
     MP3("audio/mpeg", setOf("mpeg")),
@@ -35,16 +34,8 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: Set<String>
     ALL_FILES("*/*", setOf("*/*"));
 
     companion object {
-        fun getMimeTypeNames(mimeTypeSet: Set<MimeType>): String {
-            if (mimeTypeSet.isEmpty()) throw Exception("Mime Type Should not be empty")
-            return if (mimeTypeSet.size == 1) {
-                mimeTypeSet.first().mimeTypeName
-            } else {
-                getArrayOfMimeType(mimeTypeSet).joinToString(separator = ",")
-            }
-        }
-
         fun getArrayOfMimeType(mimeTypeSet: Set<MimeType>): Array<String> {
+            if (mimeTypeSet.isEmpty()) throw Exception("File Picker Error, MIME type cannot be empty")
             val mimeTypeList = ArrayList<String>()
             for (mimeType: MimeType in mimeTypeSet) {
                 mimeTypeList.add(mimeType.mimeTypeName)

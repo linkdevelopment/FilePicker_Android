@@ -9,6 +9,9 @@ import android.os.Environment
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
+import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
+import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -74,11 +77,11 @@ object FileUtils {
     /**
      * Retrieves String file path from a document schemed Uri using fileDescriptor.
      */
-    fun getFilePathFromDocument(context: Context, uri: Uri, prefix: String): String? {
+    fun getFilePathFromDocument(context: Context, uri: Uri): String? {
         val file: File?
         try {
             file = File.createTempFile(
-                prefix + getFileNameFromUri(context, uri),
+                getFileNameFromUri(context, uri),
                 "." + getExtensionFromUri(context, uri), context.cacheDir
             )
 
@@ -207,6 +210,20 @@ object FileUtils {
                 mediaScanIntent.data = Uri.fromFile(f)
                 context.sendBroadcast(mediaScanIntent)
             }
+        }
+    }
+
+    fun getFileTypeFromUri(context: Context, uri: Uri): DocumentFilesType {
+        val extension = getExtensionFromUri(context, uri)
+        return when {
+            MimeType.ALL_IMAGES.mimeTypeExtension.contains(extension) -> DocumentFilesType.IMAGE_FILES
+            MimeType.ALL_VIDEOS.mimeTypeExtension.contains(extension) -> DocumentFilesType.VIDEO_FILES
+            MimeType.ALL_AUDIO.mimeTypeExtension.contains(extension) -> DocumentFilesType.AUDIO_FILE
+            MimeType.TXT.mimeTypeExtension.contains(extension) -> DocumentFilesType.TEXT_FILE
+            MimeType.PDF.mimeTypeExtension.contains(extension) -> DocumentFilesType.PDF_FILES
+            MimeType.WORD.mimeTypeExtension.contains(extension) -> DocumentFilesType.WORD_FILES
+            MimeType.EXCEL.mimeTypeExtension.contains(extension) -> DocumentFilesType.EXCEL_FILES
+            else -> DocumentFilesType.UNKNOWN
         }
     }
 }

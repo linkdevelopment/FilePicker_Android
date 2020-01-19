@@ -10,7 +10,6 @@ import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_TEXT_FILES_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 
@@ -22,7 +21,6 @@ class PickTextFiles(private val fragment: Fragment) : IPickFilesFactory {
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
-        if (mimeTypeSet.isEmpty()) throw Exception("File Picker Error, MIME type cannot be empty")
         val mimeType = MimeType.getArrayOfMimeType(mimeTypeSet)// get mime type strings
         // make action and set types
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -44,11 +42,12 @@ class PickTextFiles(private val fragment: Fragment) : IPickFilesFactory {
                 if (uri != null) {
                     val filePath =
                         FileUtils.getFilePathFromDocument(
-                            fragment.requireContext(), uri, "FILE_"
+                            fragment.requireContext(), uri
                         ) // get real path of file
-                    Log.e(TAG, "file path $filePath")
                     val file = FileUtils.getFileFromPath(filePath) // create file
-                    callback.onFilePicked(FilesType.TEXT_FILE, uri, filePath, file, null)
+                    val fileType =
+                        FileUtils.getFileTypeFromUri(fragment.requireContext(), uri)
+                    callback.onFilePicked(fileType, uri, filePath, file, null)
                 } else {
                     callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
                 }

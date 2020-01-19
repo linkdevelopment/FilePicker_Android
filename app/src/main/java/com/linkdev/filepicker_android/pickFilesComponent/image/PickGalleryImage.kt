@@ -2,7 +2,6 @@ package com.linkdev.filepicker_android.pickFilesComponent.image
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
@@ -10,7 +9,6 @@ import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_IMAGE_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 
@@ -22,8 +20,6 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
-        if (mimeTypeSet.isEmpty())
-            throw Exception("File Picker Error, MIME type cannot be empty")
         val mimeType = MimeType.getArrayOfMimeType(mimeTypeSet)// get mime type strings
         // make action and set types
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -45,11 +41,12 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
                 if (uri != null) {
                     val filePath =
                         FileUtils.getFilePathFromDocument(
-                            fragment.requireContext(), uri, "IMG_"
+                            fragment.requireContext(), uri
                         ) // get real path of file
-                    Log.e(TAG, "file path $filePath")
+                    val fileType =
+                        FileUtils.getFileTypeFromUri(fragment.requireContext(), uri)
                     val file = FileUtils.getFileFromPath(filePath) // create file
-                    callback.onFilePicked(FilesType.IMAGE_GALLERY, uri, filePath, file, null)
+                    callback.onFilePicked(fileType, uri, filePath, file, null)
                 } else {
                     callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
                 }

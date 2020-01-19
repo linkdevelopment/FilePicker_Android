@@ -9,10 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
+import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.PickFilesFactory
@@ -41,37 +43,45 @@ class MainFragment : Fragment() {
 
     private fun setListeners() {
         btnPickImage.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.IMAGE_GALLERY)
+            pickFilesFactory =
+                PickFilesFactory(this).getPickInstance(FactoryFilesType.IMAGE_GALLERY)
             pickFilesFactory?.pickFiles(setOf(MimeType.PNG), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, true, CONTENT_PROVIDER_NAME
-            ).getPickInstance(FilesType.IMAGE_CAMERA)
+            ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
         }
         btnPickVideo.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this).getPickInstance(FilesType.VIDEO_GALLERY)
+            pickFilesFactory =
+                PickFilesFactory(this).getPickInstance(FactoryFilesType.VIDEO_GALLERY)
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
         btnCaptureVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, false, CONTENT_PROVIDER_NAME
-            ).getPickInstance(FilesType.VIDEO_CAMERA)
+            ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
         btnPickFile.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, false, CONTENT_PROVIDER_NAME
-            ).getPickInstance(FilesType.TEXT_FILE)
+            ).getPickInstance(FactoryFilesType.TEXT_FILE)
             pickFilesFactory?.pickFiles(setOf(MimeType.PDF), "choose Image")
         }
 
         btnPickAudio.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, false, CONTENT_PROVIDER_NAME
-            ).getPickInstance(FilesType.AUDIO_FILE)
+            ).getPickInstance(FactoryFilesType.AUDIO_FILE)
             pickFilesFactory?.pickFiles(setOf(MimeType.ALL_AUDIO), "choose Image")
+        }
+
+        btnPickAll.setOnClickListener {
+            pickFilesFactory = PickFilesFactory(this)
+                .getPickInstance(FactoryFilesType.ALL_FILES)
+            pickFilesFactory?.pickFiles(setOf(MimeType.ALL_FILES), "choose Image")
         }
     }
 
@@ -88,20 +98,23 @@ class MainFragment : Fragment() {
                 }
 
                 override fun onFilePicked(
-                    fileType: FilesType, uri: Uri?, filePath: String?, file: File?, bitmap: Bitmap?
+                    fileType: DocumentFilesType,
+                    uri: Uri?,
+                    filePath: String?,
+                    file: File?,
+                    bitmap: Bitmap?
                 ) {
                     Log.e(TAG, "onFilePicked")
                     Log.e(TAG, "file path from view $filePath Uri is $uri")
                     when (fileType) {
-                        FilesType.IMAGE_CAMERA, FilesType.IMAGE_GALLERY ->
+                        DocumentFilesType.IMAGE_FILES ->
                             imgTest.setImageURI(uri)
-                        FilesType.VIDEO_GALLERY, FilesType.VIDEO_CAMERA -> {
+                        DocumentFilesType.VIDEO_FILES -> {
                             vidTest.setVideoURI(uri)
                             vidTest.start()
                         }
-                        FilesType.AUDIO_FILE -> {
+                        DocumentFilesType.AUDIO_FILE -> {
                             val mp = MediaPlayer()
-
                             try {
                                 mp.setDataSource(filePath)
                                 mp.prepare()
@@ -112,7 +125,7 @@ class MainFragment : Fragment() {
 
                         }
                         else -> {
-
+                            Log.e(TAG, fileType.toString())
                         }
                     }
                 }

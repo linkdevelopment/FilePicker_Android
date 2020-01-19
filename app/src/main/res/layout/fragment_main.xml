@@ -45,7 +45,13 @@
             android:id="@+id/btnPickAudio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PICK TEXT FILE FROM DOCS" />
+            android:text="PICK AUDIO FILE FROM DOCS" />
+
+        <Button
+            android:id="@+id/btnPickAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PICK ALL FILE FROM DOCS" />
 
 
         <ImageView

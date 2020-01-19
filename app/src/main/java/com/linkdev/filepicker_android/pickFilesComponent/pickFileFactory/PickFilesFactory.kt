@@ -1,10 +1,11 @@
 package com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory
 
 import androidx.fragment.app.Fragment
+import com.linkdev.filepicker_android.pickFilesComponent.allFiles.AllFiles
 import com.linkdev.filepicker_android.pickFilesComponent.audio.PickAudio
 import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.image.PickGalleryImage
-import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
+import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.textFiles.PickTextFiles
 import com.linkdev.filepicker_android.pickFilesComponent.video.CaptureVideo
 import com.linkdev.filepicker_android.pickFilesComponent.video.PickGalleryVideo
@@ -15,14 +16,19 @@ class PickFilesFactory(
     private val contentProviderName: String? = null
 ) {
 
-    fun getPickInstance(fileType: FilesType): IPickFilesFactory? {
+    fun getPickInstance(fileType: FactoryFilesType): IPickFilesFactory? {
         return when (fileType) {
-            FilesType.IMAGE_GALLERY -> PickGalleryImage(fragment)
-            FilesType.IMAGE_CAMERA -> CaptureImage(fragment, shouldMakeDir, contentProviderName)
-            FilesType.VIDEO_GALLERY -> PickGalleryVideo(fragment)
-            FilesType.VIDEO_CAMERA -> CaptureVideo(fragment, shouldMakeDir, contentProviderName)
-            FilesType.TEXT_FILE -> PickTextFiles(fragment)
-            FilesType.AUDIO_FILE -> PickAudio(fragment)
+            FactoryFilesType.IMAGE_GALLERY -> PickGalleryImage(fragment)
+            FactoryFilesType.IMAGE_CAMERA -> CaptureImage(
+                fragment, shouldMakeDir, contentProviderName
+            )
+            FactoryFilesType.VIDEO_GALLERY -> PickGalleryVideo(fragment)
+            FactoryFilesType.VIDEO_CAMERA -> CaptureVideo(
+                fragment, shouldMakeDir, contentProviderName
+            )
+            FactoryFilesType.TEXT_FILE -> PickTextFiles(fragment)
+            FactoryFilesType.AUDIO_FILE -> PickAudio(fragment)
+            FactoryFilesType.ALL_FILES -> AllFiles(fragment)
         }
     }
 }

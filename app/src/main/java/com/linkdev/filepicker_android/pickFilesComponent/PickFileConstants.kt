@@ -12,5 +12,6 @@ object PickFileConstants {
         const val CAPTURE_VIDEO_REQUEST_CODE = 1003
         const val PICK_TEXT_FILES_REQUEST_CODE = 1004
         const val PICK_AUDIO_REQUEST_CODE = 1005
+        const val PICK_ALL_REQUEST_CODE = 1006
     }
 }
