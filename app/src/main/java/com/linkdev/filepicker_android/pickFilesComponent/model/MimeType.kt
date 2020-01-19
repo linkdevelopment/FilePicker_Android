@@ -1,5 +1,6 @@
 package com.linkdev.filepicker_android.pickFilesComponent.model
 
+import android.webkit.MimeTypeMap
 import java.lang.Exception
 
 enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: Set<String>) {
@@ -17,7 +18,21 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: Set<String>
     GPP("video/3gpp", setOf("3gpp")),
     GPP2("video/3gpp2", setOf("3gpp2")),
     AVI("video/avi", setOf("avi")),
-    ALL_VIDEOS("video/*", setOf("mpeg", "mp4", "3gpp", "3gpp2", "avi"));
+    ALL_VIDEOS("video/*", setOf("mpeg", "mp4", "3gpp", "3gpp2", "avi")),
+
+    // ============== TEXT FILES ==============
+    TXT("text/plain", setOf("plain")),
+    HTM("text/plain", setOf("html")),
+    PDF("application/pdf", setOf("pdf")),
+    WORD("application/msword", setOf("msword")),
+    EXCEL("application/vnd.ms-excel", setOf("vnd.ms-excel")),
+
+    // ============== Audio ==============
+    MP3("audio/mpeg", setOf("mpeg")),
+    ALL_AUDIO("audio/*", setOf("mpeg")),
+
+
+    ALL_FILES("*/*", setOf("*/*"));
 
     companion object {
         fun getMimeTypeNames(mimeTypeSet: Set<MimeType>): String {

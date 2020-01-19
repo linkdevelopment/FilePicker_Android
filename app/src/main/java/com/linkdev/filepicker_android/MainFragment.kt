@@ -2,6 +2,7 @@ package com.linkdev.filepicker_android
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
-import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
@@ -18,6 +18,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFi
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.PickFilesFactory
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.io.File
+
 
 class MainFragment : Fragment() {
     private var pickFilesFactory: IPickFilesFactory? = null
@@ -59,6 +60,19 @@ class MainFragment : Fragment() {
             ).getPickInstance(FilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
+        btnPickFile.setOnClickListener {
+            pickFilesFactory = PickFilesFactory(
+                this, false, CONTENT_PROVIDER_NAME
+            ).getPickInstance(FilesType.TEXT_FILE)
+            pickFilesFactory?.pickFiles(setOf(MimeType.PDF), "choose Image")
+        }
+
+        btnPickAudio.setOnClickListener {
+            pickFilesFactory = PickFilesFactory(
+                this, false, CONTENT_PROVIDER_NAME
+            ).getPickInstance(FilesType.AUDIO_FILE)
+            pickFilesFactory?.pickFiles(setOf(MimeType.ALL_AUDIO), "choose Image")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -83,7 +97,22 @@ class MainFragment : Fragment() {
                             imgTest.setImageURI(uri)
                         FilesType.VIDEO_GALLERY, FilesType.VIDEO_CAMERA -> {
                             vidTest.setVideoURI(uri)
-                            vidTest.start();
+                            vidTest.start()
+                        }
+                        FilesType.AUDIO_FILE -> {
+                            val mp = MediaPlayer()
+
+                            try {
+                                mp.setDataSource(filePath)
+                                mp.prepare()
+                                mp.start()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+
+                        }
+                        else -> {
+
                         }
                     }
                 }
