@@ -3,23 +3,17 @@ package com.linkdev.filepicker_android.pickFilesComponent
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import android.content.ContentValues
 
 
 object FileUtils {
@@ -28,7 +22,6 @@ object FileUtils {
     const val CAMERA_VIDEO_TYPE = ".mp4"
     const val IMAG_PREFIX = "IMG_"
     const val VID_PREFIX = "VID_"
-    const val MAX_FILE_SIZE_MB = 10
     // get file extension
     fun getExtensionFromUri(context: Context?, uri: Uri?): String? {
         var mimeType: String? = ""

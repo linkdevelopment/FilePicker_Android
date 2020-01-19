@@ -12,7 +12,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.video.PickGalleryVideo
 class PickFilesFactory(
     private val fragment: Fragment,
     private val shouldMakeDir: Boolean = false,
-    private val contentProviderName: String = ""
+    private val contentProviderName: String? = null
 ) {
 
     fun getPickInstance(fileType: FilesType): IPickFilesFactory? {

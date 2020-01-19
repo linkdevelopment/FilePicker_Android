@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
@@ -16,10 +17,11 @@ import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFi
 class PickGalleryVideo(private val fragment: Fragment) : IPickFilesFactory {
     companion object {
         const val TAG = "FilePickerTag"
-        const val PICK_VIDEO_REQUEST_CODE = 1002
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
+        if (mimeTypeSet.isEmpty())
+            throw Exception("File Picker Error, MIME type cannot be empty")
         val mimeType = MimeType.getArrayOfMimeType(mimeTypeSet)// get mime type strings
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pickIntent.type = MimeType.ALL_VIDEOS.mimeTypeName

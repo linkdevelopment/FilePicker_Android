@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.CAMERA_IMAGE_TYPE
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
@@ -20,14 +21,13 @@ import java.io.File
 class CaptureImage(
     private val fragment: Fragment,
     private val shouldMakeDir: Boolean,
-    private val contentProviderName: String
+    private val contentProviderName: String?
 ) : IPickFilesFactory {
     private var currentCapturedPath: String? = null
     private var photoURI: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
-        const val CAPTURE_IMAGE_REQUEST_CODE = 1001
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
@@ -37,6 +37,8 @@ class CaptureImage(
 
             currentCapturedPath = imageFile?.path
 
+            if (contentProviderName.isNullOrBlank())
+                throw Exception("File Picker Error, Please add FileProvider authorities")
             photoURI =
                 currentCapturedPath?.let {
                     // get photo uri form content provider

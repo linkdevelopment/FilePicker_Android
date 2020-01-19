@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.CAMERA_VIDEO_TYPE
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.VID_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FilesType
@@ -19,14 +20,13 @@ import java.io.File
 class CaptureVideo(
     private val fragment: Fragment,
     private val shouldMakeDir: Boolean,
-    private val contentProviderName: String
+    private val contentProviderName: String?
 ) : IPickFilesFactory {
     private var videoUri: Uri? = null
     private var currentCapturedPath: String? = null
 
     companion object {
         const val TAG = "FilePickerTag"
-        const val CAPTURE_VIDEO_REQUEST_CODE = 1003
     }
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
@@ -34,6 +34,9 @@ class CaptureVideo(
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             val videoFile = FileUtils.createVideoFile(fragment.requireContext())
             currentCapturedPath = videoFile?.path
+            if (contentProviderName.isNullOrBlank())
+                throw Exception("File Picker Error, Please add FileProvider authorities")
+
             videoUri =
                 currentCapturedPath?.let {
                     // get photo uri form content provider
@@ -83,7 +86,7 @@ class CaptureVideo(
 
     private fun handleCapturedVideoWithPublicDir(context: Context, uri: Uri): File? {
         val fileNameWithExt =
-            FileUtils.getUniqueFileNameWithExt(VID_PREFIX, FileUtils.CAMERA_VIDEO_TYPE)
+            FileUtils.getUniqueFileNameWithExt(VID_PREFIX, CAMERA_VIDEO_TYPE)
         return FileUtils.writePublicFile(context, uri, fileNameWithExt)
     }
 
