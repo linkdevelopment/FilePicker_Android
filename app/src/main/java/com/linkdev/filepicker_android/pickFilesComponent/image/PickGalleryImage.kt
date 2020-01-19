@@ -48,10 +48,10 @@ class PickGalleryImage(private val fragment: Fragment) : IPickFilesFactory {
                     val file = FileUtils.getFileFromPath(filePath) // create file
                     callback.onFilePicked(fileType, uri, filePath, file, null)
                 } else {
-                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
+                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
                 }
             } else {
-                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
+                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
             }
         } else {
             callback.onPickFileCanceled()

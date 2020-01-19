@@ -50,14 +50,14 @@ class AllFiles(private val fragment: Fragment) : IPickFilesFactory {
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
-                            PickFileConstants.Error.DATA_ERROR, R.string.pick_file_data_error
+                            PickFileConstants.Error.URI_ERROR, R.string.general_error
                         )
                     )
                 }
             } else {
                 callback.onPickFileError(
                     ErrorModel(
-                        PickFileConstants.Error.DATA_ERROR, R.string.pick_file_data_error
+                        PickFileConstants.Error.DATA_ERROR, R.string.general_error
                     )
                 )
             }

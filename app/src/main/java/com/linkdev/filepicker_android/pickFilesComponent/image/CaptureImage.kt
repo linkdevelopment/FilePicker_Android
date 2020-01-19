@@ -6,13 +6,14 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
+import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import java.io.File
@@ -75,10 +76,10 @@ class CaptureImage(
 
                     callback.onFilePicked(DocumentFilesType.IMAGE_FILES, photoURI, file?.path, file, null)
                 } else {
-                    callback.onPickFileError(ErrorModel())
+                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
                 }
             } else {
-                callback.onPickFileError(ErrorModel())
+                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
             }
         } else {
             callback.onPickFileCanceled()

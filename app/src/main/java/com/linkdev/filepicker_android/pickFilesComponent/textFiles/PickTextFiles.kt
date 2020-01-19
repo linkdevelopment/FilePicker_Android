@@ -2,16 +2,17 @@ package com.linkdev.filepicker_android.pickFilesComponent.textFiles
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.URI_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_TEXT_FILES_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
+import java.net.URI
 
 
 class PickTextFiles(private val fragment: Fragment) : IPickFilesFactory {
@@ -49,10 +50,10 @@ class PickTextFiles(private val fragment: Fragment) : IPickFilesFactory {
                         FileUtils.getFileTypeFromUri(fragment.requireContext(), uri)
                     callback.onFilePicked(fileType, uri, filePath, file, null)
                 } else {
-                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
+                    callback.onPickFileError(ErrorModel(URI_ERROR, R.string.general_error))
                 }
             } else {
-                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
+                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
             }
         } else {
             callback.onPickFileCanceled()

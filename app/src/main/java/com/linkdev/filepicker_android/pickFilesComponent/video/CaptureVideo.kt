@@ -6,9 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
+import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.CAMERA_VIDEO_TYPE
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.VID_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
@@ -77,10 +80,10 @@ class CaptureVideo(
                         DocumentFilesType.VIDEO_FILES, videoUri, file?.path, file, null
                     )
                 } else {
-                    callback.onPickFileError(ErrorModel())
+                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
                 }
             } else {
-                callback.onPickFileError(ErrorModel())
+                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
             }
         } else {
             callback.onPickFileCanceled()

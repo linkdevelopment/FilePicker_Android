@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">File Picker</string>
-    <string name="pick_file_data_error">Something went wrong</string>
+    <string name="general_error">Something went wrong</string>
 </resources>

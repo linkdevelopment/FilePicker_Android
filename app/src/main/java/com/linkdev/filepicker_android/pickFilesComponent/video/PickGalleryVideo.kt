@@ -2,11 +2,11 @@ package com.linkdev.filepicker_android.pickFilesComponent.video
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.URI_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
@@ -46,10 +46,10 @@ class PickGalleryVideo(private val fragment: Fragment) : IPickFilesFactory {
                     val file = FileUtils.getFileFromPath(filePath) // create file
                     callback.onFilePicked(fileType, uri, filePath, file, null)
                 } else {
-                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
+                    callback.onPickFileError(ErrorModel(URI_ERROR, R.string.general_error))
                 }
             } else {
-                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.pick_file_data_error))
+                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
             }
         } else {
             callback.onPickFileCanceled()
