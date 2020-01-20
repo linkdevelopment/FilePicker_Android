@@ -4,15 +4,14 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.URI_ERROR
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_TEXT_FILES_REQUEST_CODE
-import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.URI_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.PICK_TEXT_FILES_REQUEST_CODE
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
-import java.net.URI
 
 
 class PickTextFiles(private val fragment: Fragment) : IPickFilesFactory {

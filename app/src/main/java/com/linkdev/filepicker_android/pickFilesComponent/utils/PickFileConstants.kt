@@ -1,4 +1,4 @@
-package com.linkdev.filepicker_android.pickFilesComponent
+package com.linkdev.filepicker_android.pickFilesComponent.utils
 
 object PickFileConstants {
     object Error {

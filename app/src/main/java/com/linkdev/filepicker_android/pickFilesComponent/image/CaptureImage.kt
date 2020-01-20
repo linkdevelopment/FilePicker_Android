@@ -5,17 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.IMAG_PREFIX
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
-import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
+import com.linkdev.filepicker_android.pickFilesComponent.utils.AndroidQFileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.utils.Platform
 import java.io.File
 
 
@@ -34,20 +37,8 @@ class CaptureImage(
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
-            val imageFile = FileUtils.createImageFile(fragment.requireContext())
-
-            currentCapturedPath = imageFile?.path
-
-            if (contentProviderName.isNullOrBlank())
-                throw Exception("File Picker Error, Please add FileProvider authorities")
             photoURI =
-                currentCapturedPath?.let {
-                    // get photo uri form content provider
-                    FileUtils.getFileUri(
-                        fragment.requireContext(), it, contentProviderName
-                    )
-                }
-
+                AndroidQFileUtils.getPhotoUri(fragment.requireContext(), "IMG_", MimeType.JPEG)
             photoURI?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -61,35 +52,21 @@ class CaptureImage(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                if (currentCapturedPath != null && photoURI != null) {
-
-                    val file: File? = if (shouldMakeDir) {
-                        handleCapturedImageWithPrivateDir(
-                            fragment.requireContext(), photoURI!!, currentCapturedPath!!
-                        )
-
-                    } else {
+                if (photoURI != null) {
+                    val file =
                         handleCapturedImageWithPublicDir(fragment.requireContext(), photoURI!!)
-                    }
-
-                    FileUtils.addMediaToGallery(file, fragment.requireContext())
-
-                    callback.onFilePicked(DocumentFilesType.IMAGE_FILES, photoURI, file?.path, file, null)
-                } else {
-                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
+                    callback.onFilePicked(
+                        DocumentFilesType.IMAGE_FILES, photoURI, file?.path, file, null
+                    )
                 }
-            } else {
-                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
             }
-        } else {
-            callback.onPickFileCanceled()
         }
     }
 
     private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {
         val fileNameWithExt =
             FileUtils.getUniqueFileNameWithExt(IMAG_PREFIX, FileUtils.CAMERA_IMAGE_TYPE)
-        return FileUtils.writePublicFile(context, uri, fileNameWithExt)
+        return AndroidQFileUtils.writePublicFile(context, uri, fileNameWithExt)
     }
 
     private fun handleCapturedImageWithPrivateDir(

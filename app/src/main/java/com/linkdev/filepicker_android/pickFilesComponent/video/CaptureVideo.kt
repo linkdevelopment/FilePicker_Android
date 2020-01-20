@@ -7,18 +7,16 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.CAMERA_VIDEO_TYPE
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils.VID_PREFIX
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.Error.DATA_ERROR
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
-import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.CAMERA_VIDEO_TYPE
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.VID_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import java.io.File
 
 class CaptureVideo(

@@ -1,22 +1,24 @@
-package com.linkdev.filepicker_android.pickFilesComponent
+package com.linkdev.filepicker_android.pickFilesComponent.utils
 
 import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
-import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.os.ParcelFileDescriptor
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.getExtensionFromUri
 
 
 object FileUtils {
@@ -59,7 +61,7 @@ object FileUtils {
     }
 
     @Throws(Exception::class)
-    private fun copyStream(inputStream: InputStream, outputStream: FileOutputStream) {
+    fun copyStream(inputStream: InputStream, outputStream: FileOutputStream) {
         val BUFFER_SIZE = 4096
         val bytes = ByteArray(BUFFER_SIZE)
         var count = 0

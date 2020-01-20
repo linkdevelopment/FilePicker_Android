@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.FileUtils
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants
-import com.linkdev.filepicker_android.pickFilesComponent.PickFileConstants.RequestCodes.PICK_ALL_REQUEST_CODE
-import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.PICK_ALL_REQUEST_CODE
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory

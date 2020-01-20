@@ -9,9 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.linkdev.filepicker_android.pickFilesComponent.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
@@ -45,11 +44,11 @@ class MainFragment : Fragment() {
         btnPickImage.setOnClickListener {
             pickFilesFactory =
                 PickFilesFactory(this).getPickInstance(FactoryFilesType.IMAGE_GALLERY)
-            pickFilesFactory?.pickFiles(setOf(MimeType.PNG), "choose Image")
+            pickFilesFactory?.pickFiles(setOf(MimeType.ALL_IMAGES), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, true, CONTENT_PROVIDER_NAME
+                this, false, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
         }
@@ -88,7 +87,8 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(
-            requestCode, resultCode, data, callback = object : PickFilesResultCallback {
+            requestCode, resultCode, data, callback = object :
+                PickFilesResultCallback {
                 override fun onPickFileCanceled() {
                     Log.e(TAG, "onPickFileCanceled")
                 }
