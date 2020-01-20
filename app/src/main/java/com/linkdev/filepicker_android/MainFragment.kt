@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
@@ -48,7 +49,7 @@ class MainFragment : Fragment() {
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, false, CONTENT_PROVIDER_NAME
+                this, true, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
         }
@@ -59,7 +60,7 @@ class MainFragment : Fragment() {
         }
         btnCaptureVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, false, CONTENT_PROVIDER_NAME
+                this, true, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
         }
@@ -108,7 +109,9 @@ class MainFragment : Fragment() {
                     Log.e(TAG, "file path from view $filePath Uri is $uri")
                     when (fileType) {
                         DocumentFilesType.IMAGE_FILES ->
-                            imgTest.setImageURI(uri)
+                            Glide.with(requireContext())
+                                .load(file)
+                                .into(imgTest)
                         DocumentFilesType.VIDEO_FILES -> {
                             vidTest.setVideoURI(uri)
                             vidTest.start()

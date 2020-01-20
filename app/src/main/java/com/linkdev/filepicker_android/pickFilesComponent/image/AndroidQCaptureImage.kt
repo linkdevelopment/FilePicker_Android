@@ -18,12 +18,9 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.AndroidQFileUtils
 import java.io.File
 
 
-class CaptureImage(
-    private val fragment: Fragment,
-    private val shouldMakeDir: Boolean,
-    private val contentProviderName: String?
+class AndroidQCaptureImage(
+    private val fragment: Fragment, private val shouldMakeDir: Boolean
 ) : IPickFilesFactory {
-    private var currentCapturedPath: String? = null
     private var photoURI: Uri? = null
 
     companion object {
