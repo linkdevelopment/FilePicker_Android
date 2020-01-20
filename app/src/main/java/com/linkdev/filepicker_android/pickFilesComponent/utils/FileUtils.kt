@@ -84,7 +84,7 @@ object FileUtils {
         try {
             file = File.createTempFile(
                 getFileNameFromUri(context, uri),
-                "." + getExtensionFromUri(context, uri), context.cacheDir
+                "." + getExtensionFromUri(context, uri), context.externalCacheDir
             )
 
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
