@@ -10,6 +10,8 @@ import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.AndroidQFileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
+import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 
@@ -33,7 +35,11 @@ class AndroidQCaptureVideo(
             videoUri?.let {
                 //read image from given URI
                 captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
-                fragment.startActivityForResult(captureVideoIntent, CAPTURE_VIDEO_REQUEST_CODE)
+                try {
+                    fragment.startActivityForResult(captureVideoIntent, CAPTURE_VIDEO_REQUEST_CODE)
+                } catch (ex: SecurityException) {
+                    logError(NOT_HANDLED_ERROR_MESSAGE, ex)
+                }
             }
         }
     }

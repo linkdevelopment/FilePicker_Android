@@ -12,6 +12,8 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCa
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
+import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
 class PickGalleryVideo(private val fragment: Fragment) : IPickFilesFactory {
     companion object {
@@ -27,7 +29,11 @@ class PickGalleryVideo(private val fragment: Fragment) : IPickFilesFactory {
         // make chooser and set message
         val chooserIntent = Intent.createChooser(pickIntent, chooserMessage)
         // start activity for result
-        fragment.startActivityForResult(chooserIntent, PICK_VIDEO_REQUEST_CODE)
+        try {
+            fragment.startActivityForResult(chooserIntent, PICK_VIDEO_REQUEST_CODE)
+        } catch (ex: SecurityException) {
+            logError(NOT_HANDLED_ERROR_MESSAGE, ex)
+        }
     }
 
     override fun handleActivityResult(

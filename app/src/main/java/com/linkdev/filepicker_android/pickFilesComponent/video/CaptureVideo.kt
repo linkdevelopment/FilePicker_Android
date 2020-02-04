@@ -14,7 +14,9 @@ import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFi
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.CAMERA_VIDEO_TYPE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.VID_PREFIX
+import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import java.io.File
@@ -50,7 +52,11 @@ class CaptureVideo(
             videoUri?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
-                fragment.startActivityForResult(captureImageIntent, CAPTURE_VIDEO_REQUEST_CODE)
+                try {
+                    fragment.startActivityForResult(captureImageIntent, CAPTURE_VIDEO_REQUEST_CODE)
+                } catch (ex: SecurityException) {
+                    logError(NOT_HANDLED_ERROR_MESSAGE, ex)
+                }
             }
         }
 

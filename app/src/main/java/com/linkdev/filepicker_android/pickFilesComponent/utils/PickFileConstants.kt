@@ -15,4 +15,8 @@ object PickFileConstants {
         const val PICK_AUDIO_REQUEST_CODE = 1005
         const val PICK_ALL_REQUEST_CODE = 1006
     }
+
+    object ErrorMessages {
+        const val NOT_HANDLED_ERROR_MESSAGE = "some permission not handled"
+    }
 }

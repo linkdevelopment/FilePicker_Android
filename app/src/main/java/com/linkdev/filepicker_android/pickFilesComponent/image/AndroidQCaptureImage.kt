@@ -1,21 +1,17 @@
 package com.linkdev.filepicker_android.pickFilesComponent.image
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
-import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
-import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
-import com.linkdev.filepicker_android.pickFilesComponent.utils.AndroidQFileUtils
-import java.io.File
+import com.linkdev.filepicker_android.pickFilesComponent.utils.*
+import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
 
 class AndroidQCaptureImage(
@@ -37,7 +33,12 @@ class AndroidQCaptureImage(
             photoURI?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
+                try {
+                    fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
+                } catch (ex: SecurityException) {
+                    logError(NOT_HANDLED_ERROR_MESSAGE, ex)
+
+                }
             }
         }
     }
