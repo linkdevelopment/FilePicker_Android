@@ -5,12 +5,15 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
+import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
+import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.AndroidQFileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
+import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
@@ -55,6 +58,12 @@ class AndroidQCaptureVideo(
                     val file = FileUtils.getFileFromPath(filePath)
                     callback.onFilePicked(
                         DocumentFilesType.VIDEO_FILES, videoUri, filePath, file, null
+                    )
+                } else {
+                    callback.onPickFileError(
+                        ErrorModel(
+                            PickFileConstants.Error.DATA_ERROR, R.string.general_error
+                        )
                     )
                 }
             }
