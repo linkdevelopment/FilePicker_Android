@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
@@ -17,7 +16,9 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 
 
 class AndroidQCaptureImage(
-    private val fragment: Fragment, private val shouldMakeDir: Boolean
+    private val fragment: Fragment,
+    private val requestCode: Int,
+    private val shouldMakeDir: Boolean
 ) : IPickFilesFactory {
     private var photoURI: Uri? = null
 
@@ -36,7 +37,7 @@ class AndroidQCaptureImage(
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 try {
-                    fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
+                    fragment.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
 
@@ -46,10 +47,10 @@ class AndroidQCaptureImage(
     }
 
     override fun handleActivityResult(
-        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     ) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+            if (mRequestCode == requestCode) {
                 if (photoURI != null) {
                     val filePath =
                         FileUtils.getFilePathFromDocument(fragment.requireContext(), photoURI!!)

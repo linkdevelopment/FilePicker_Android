@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.PICK_ALL_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
@@ -14,7 +13,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFi
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
-class AllFiles(private val fragment: Fragment) : IPickFilesFactory {
+class AllFiles(private val fragment: Fragment, private val requestCode: Int) : IPickFilesFactory {
     companion object {
         const val TAG = "FilePickerTag"
     }
@@ -30,17 +29,17 @@ class AllFiles(private val fragment: Fragment) : IPickFilesFactory {
         val chooserIntent = Intent.createChooser(pickIntent, chooserMessage)
         // start activity for result
         try {
-            fragment.startActivityForResult(chooserIntent, PICK_ALL_REQUEST_CODE)
+            fragment.startActivityForResult(chooserIntent, requestCode)
         } catch (ex: SecurityException) {
             logError(NOT_HANDLED_ERROR_MESSAGE, ex)
         }
     }
 
     override fun handleActivityResult(
-        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     ) {
         if (resultCode == Activity.RESULT_OK) {
-            if (data != null && requestCode == PICK_ALL_REQUEST_CODE) {
+            if (data != null && mRequestCode == requestCode) {
                 val uri = data.data // get uri from data
                 if (uri != null) {
                     val filePath =

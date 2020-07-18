@@ -6,16 +6,6 @@ object PickFileConstants {
         const val URI_ERROR = "URI_ERROR"
     }
 
-    object RequestCodes {
-        const val PICK_IMAGE_REQUEST_CODE = 1000
-        const val CAPTURE_IMAGE_REQUEST_CODE = 1001
-        const val PICK_VIDEO_REQUEST_CODE = 1002
-        const val CAPTURE_VIDEO_REQUEST_CODE = 1003
-        const val PICK_TEXT_FILES_REQUEST_CODE = 1004
-        const val PICK_AUDIO_REQUEST_CODE = 1005
-        const val PICK_ALL_REQUEST_CODE = 1006
-    }
-
     object ErrorMessages {
         const val NOT_HANDLED_ERROR_MESSAGE = "some permission not handled"
     }

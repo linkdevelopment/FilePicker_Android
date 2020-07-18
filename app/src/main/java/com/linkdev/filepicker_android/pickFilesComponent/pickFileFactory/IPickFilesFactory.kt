@@ -8,6 +8,6 @@ interface IPickFilesFactory {
     fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String)
 
     fun handleActivityResult(
-        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     )
 }

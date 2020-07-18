@@ -15,12 +15,13 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_VIDEO_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 
 
 class AndroidQCaptureVideo(
-    private val fragment: Fragment, private val shouldMakeDir: Boolean
+    private val fragment: Fragment,
+    private val requestCode: Int,
+    private val shouldMakeDir: Boolean
 ) : IPickFilesFactory {
     private var videoUri: Uri? = null
 
@@ -39,7 +40,7 @@ class AndroidQCaptureVideo(
                 //read image from given URI
                 captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
                 try {
-                    fragment.startActivityForResult(captureVideoIntent, CAPTURE_VIDEO_REQUEST_CODE)
+                    fragment.startActivityForResult(captureVideoIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
                 }
@@ -48,10 +49,10 @@ class AndroidQCaptureVideo(
     }
 
     override fun handleActivityResult(
-        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     ) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
+            if (mRequestCode == requestCode) {
                 if (videoUri != null) {
                     val filePath =
                         FileUtils.getFilePathFromDocument(fragment.requireContext(), videoUri!!)

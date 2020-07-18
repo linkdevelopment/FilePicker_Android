@@ -16,13 +16,13 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.IMAG_PR
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.RequestCodes.CAPTURE_IMAGE_REQUEST_CODE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import java.io.File
 
 
 class CaptureImage(
     private val fragment: Fragment,
+    private var requestCode: Int,
     private val shouldMakeDir: Boolean,
     private val contentProviderName: String?
 ) : IPickFilesFactory {
@@ -54,7 +54,7 @@ class CaptureImage(
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 try {
-                    fragment.startActivityForResult(captureImageIntent, CAPTURE_IMAGE_REQUEST_CODE)
+                    fragment.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
                 }
@@ -63,10 +63,10 @@ class CaptureImage(
     }
 
     override fun handleActivityResult(
-        requestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
     ) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+            if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && photoURI != null) {
 
                     val file: File? = if (shouldMakeDir) {
