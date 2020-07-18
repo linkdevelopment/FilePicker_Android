@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
+import com.linkdev.filepicker_android.pickFilesComponent.model.FileData
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.*
@@ -55,9 +56,9 @@ class AndroidQCaptureImage(
                     val filePath =
                         FileUtils.getFilePathFromDocument(fragment.requireContext(), photoURI!!)
                     val file = FileUtils.getFileFromPath(filePath)
-                    callback.onFilePicked(
-                        DocumentFilesType.IMAGE_FILES, photoURI, filePath, file, null
-                    )
+                    val fileData =
+                        FileData(DocumentFilesType.IMAGE_FILES, photoURI, filePath, file, null)
+                    callback.onFilePicked(fileData)
                 } else {
                     callback.onPickFileError(
                         ErrorModel(

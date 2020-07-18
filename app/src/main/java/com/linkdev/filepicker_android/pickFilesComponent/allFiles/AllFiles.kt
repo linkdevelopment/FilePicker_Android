@@ -8,6 +8,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
+import com.linkdev.filepicker_android.pickFilesComponent.model.FileData
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
@@ -49,7 +50,8 @@ class AllFiles(private val fragment: Fragment, private val requestCode: Int) : I
                     val fileType =
                         FileUtils.getFileTypeFromUri(fragment.requireContext(), uri)
                     val file = FileUtils.getFileFromPath(filePath) // create file
-                    callback.onFilePicked(fileType, uri, filePath, file, null)
+                    val fileData = FileData(fileType, uri, filePath, file, null)
+                    callback.onFilePicked(fileData)
                 } else {
                     callback.onPickFileError(
                         ErrorModel(

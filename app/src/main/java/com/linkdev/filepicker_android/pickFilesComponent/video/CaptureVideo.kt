@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
+import com.linkdev.filepicker_android.pickFilesComponent.model.FileData
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
@@ -79,10 +80,9 @@ class CaptureVideo(
                     }
 
                     FileUtils.addMediaToGallery(file, fragment.requireContext())
-
-                    callback.onFilePicked(
-                        DocumentFilesType.VIDEO_FILES, videoUri, file?.path, file, null
-                    )
+                    val fileData =
+                        FileData(DocumentFilesType.VIDEO_FILES, videoUri, file?.path, file, null)
+                    callback.onFilePicked(fileData)
                 } else {
                     callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
                 }

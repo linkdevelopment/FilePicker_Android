@@ -11,11 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.linkdev.filepicker_android.pickFilesComponent.model.*
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
-import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
-import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
-import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.PickFilesFactory
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -107,28 +104,22 @@ class MainFragment : Fragment() {
                     Log.e(TAG, "onPickFileError")
                 }
 
-                override fun onFilePicked(
-                    fileType: DocumentFilesType,
-                    uri: Uri?,
-                    filePath: String?,
-                    file: File?,
-                    bitmap: Bitmap?
-                ) {
+                override fun onFilePicked(fileData: FileData) {
                     Log.e(TAG, "onFilePicked")
-                    Log.e(TAG, "file path from view $filePath Uri is $uri")
-                    when (fileType) {
+                    Log.e(TAG, "file path from view ${fileData.filePath} Uri is ${fileData.uri}")
+                    when (fileData.fileType) {
                         DocumentFilesType.IMAGE_FILES ->
                             Glide.with(requireContext())
-                                .load(file)
+                                .load(fileData.file)
                                 .into(imgTest)
                         DocumentFilesType.VIDEO_FILES -> {
-                            vidTest.setVideoURI(uri)
+                            vidTest.setVideoURI(fileData.uri)
                             vidTest.start()
                         }
                         DocumentFilesType.AUDIO_FILE -> {
                             val mp = MediaPlayer()
                             try {
-                                mp.setDataSource(filePath)
+                                mp.setDataSource(fileData.filePath)
                                 mp.prepare()
                                 mp.start()
                             } catch (e: Exception) {
@@ -137,7 +128,7 @@ class MainFragment : Fragment() {
 
                         }
                         else -> {
-                            Log.e(TAG, fileType.toString())
+                            Log.e(TAG, fileData.fileType.toString())
                         }
                     }
                 }
