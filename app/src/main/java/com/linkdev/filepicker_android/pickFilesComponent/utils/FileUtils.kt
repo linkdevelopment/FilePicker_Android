@@ -1,15 +1,12 @@
 package com.linkdev.filepicker_android.pickFilesComponent.utils
 
 import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
@@ -17,8 +14,6 @@ import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.os.ParcelFileDescriptor
-import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.getExtensionFromUri
 
 
 object FileUtils {
@@ -27,6 +22,7 @@ object FileUtils {
     const val CAMERA_VIDEO_TYPE = ".mp4"
     const val IMAG_PREFIX = "IMG_"
     const val VID_PREFIX = "VID_"
+
     // get file extension
     fun getExtensionFromUri(context: Context?, uri: Uri?): String? {
         var mimeType: String? = ""
@@ -49,7 +45,10 @@ object FileUtils {
             returnCursor.moveToFirst()
             val name = returnCursor.getString(nameIndex)
             returnCursor.close()
-            return name.substring(0, name.lastIndexOf('.'))
+            return if (name.lastIndexOf('.') != -1)
+                name.substring(0, name.lastIndexOf('.'))
+            else
+                name.substring(0)
         } catch (e: Exception) {
             e.printStackTrace()
             return ""

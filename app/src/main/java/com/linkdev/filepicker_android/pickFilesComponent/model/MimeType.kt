@@ -24,11 +24,11 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: Set<String>
     TXT("text/plain", setOf("txt", "tex")),
     PDF("application/pdf", setOf("pdf")),
     WORD("application/msword", setOf("doc", "docx")),
-    EXCEL("application/vnd.ms-excel", setOf("xls","xlsx")),
+    EXCEL("application/vnd.ms-excel", setOf("xls", "xlsx")),
 
     // ============== Audio ==============
-    MP3("audio/mpeg", setOf("mpeg")),
-    ALL_AUDIO("audio/*", setOf("mpeg")),
+    MP3("audio/mpeg", setOf("mpeg", "mp3")),
+    ALL_AUDIO("audio/*", setOf("mpeg", "mp3")),
 
 
     ALL_FILES("*/*", setOf("*/*"));
