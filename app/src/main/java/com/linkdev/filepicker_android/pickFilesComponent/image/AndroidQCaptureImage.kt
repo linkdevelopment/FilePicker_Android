@@ -12,6 +12,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.model.FileData
 import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.*
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
@@ -32,7 +33,7 @@ class AndroidQCaptureImage(
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             photoURI =
                 AndroidQFileUtils.getPhotoUri(
-                    fragment.requireContext(), "IMG_", MimeType.JPEG, shouldMakeDir
+                    fragment.requireContext(), IMAG_PREFIX, MimeType.JPEG, shouldMakeDir
                 )
             photoURI?.let {
                 //read image from given URI

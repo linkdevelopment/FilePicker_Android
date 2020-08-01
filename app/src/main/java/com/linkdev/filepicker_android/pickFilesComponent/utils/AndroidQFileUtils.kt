@@ -14,7 +14,7 @@ object AndroidQFileUtils {
         context: Context, prefix: String, mimeType: MimeType, shouldMakeDir: Boolean
     ): Uri? {
         val relativePath: String = if (shouldMakeDir) {
-            Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name)
+            Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name) + "/"
         } else {
             Environment.DIRECTORY_PICTURES
         }
@@ -27,6 +27,9 @@ object AndroidQFileUtils {
         val collection =
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         val uriSavedPhoto = resolver.insert(collection, contentValues)
+        val let = uriSavedPhoto?.let { resolver.openOutputStream(it) }
+        let?.flush()
+        let?.close()
         contentValues.clear()
         contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
         uriSavedPhoto?.let {

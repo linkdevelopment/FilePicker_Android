@@ -36,7 +36,9 @@ class CaptureImage(
 
     override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Ensure that there's a camera activity to handle the intent
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
+            // Create the File where the photo should go
             val imageFile = FileUtils.createImageFile(fragment.requireContext())
 
             currentCapturedPath = imageFile?.path
