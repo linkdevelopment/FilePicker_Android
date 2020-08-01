@@ -34,7 +34,7 @@ class CaptureVideo(
         const val TAG = "FilePickerTag"
     }
 
-    override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
+    override fun pickFiles(mimeTypeList: ArrayList<MimeType>, chooserMessage: String) {
         val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             val videoFile = FileUtils.createVideoFile(fragment.requireContext())

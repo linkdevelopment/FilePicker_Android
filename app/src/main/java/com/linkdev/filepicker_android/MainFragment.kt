@@ -50,44 +50,44 @@ class MainFragment : Fragment() {
             pickFilesFactory =
                 PickFilesFactory(this, PICK_IMAGE_REQUEST_CODE)
                     .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(setOf(MimeType.ALL_IMAGES), "choose Image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_IMAGES), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, CAPTURE_IMAGE_REQUEST_CODE, true, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
-            pickFilesFactory?.pickFiles(setOf(MimeType.JPEG), "choose image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
         }
         btnPickVideo.setOnClickListener {
             pickFilesFactory =
                 PickFilesFactory(this, PICK_VIDEO_REQUEST_CODE)
                     .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
         }
         btnCaptureVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, CAPTURE_VIDEO_REQUEST_CODE, true, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
-            pickFilesFactory?.pickFiles(setOf(MimeType.MP4), "choose Image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
         }
         btnPickFile.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, PICK_TEXT_FILES_REQUEST_CODE, false, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(setOf(MimeType.PDF), "choose Image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.PDF), "choose Image")
         }
 
         btnPickAudio.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, PICK_AUDIO_REQUEST_CODE, false, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(setOf(MimeType.ALL_AUDIO), "choose Image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_AUDIO), "choose Image")
         }
 
         btnPickAll.setOnClickListener {
             pickFilesFactory = PickFilesFactory(this, PICK_ALL_REQUEST_CODE)
                 .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(setOf(MimeType.ALL_FILES), "choose Image")
+            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES), "choose Image")
         }
     }
 

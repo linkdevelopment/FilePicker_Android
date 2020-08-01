@@ -19,8 +19,8 @@ class AllFiles(private val fragment: Fragment, private val requestCode: Int) : I
         const val TAG = "FilePickerTag"
     }
 
-    override fun pickFiles(mimeTypeSet: Set<MimeType>, chooserMessage: String) {
-        val mimeType = MimeType.getArrayOfMimeType(mimeTypeSet)// get mime type strings
+    override fun pickFiles(mimeTypeList: ArrayList<MimeType>, chooserMessage: String) {
+        val mimeType = MimeType.getArrayOfMimeType(mimeTypeList)// get mime type strings
         // make action and set types
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pickIntent.type = MimeType.ALL_FILES.mimeTypeName
