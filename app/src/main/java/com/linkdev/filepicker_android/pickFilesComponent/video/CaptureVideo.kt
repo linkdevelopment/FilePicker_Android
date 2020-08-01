@@ -24,6 +24,7 @@ class CaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
     private val shouldMakeDir: Boolean,
+    private val folderName: String? = null,
     private val contentProviderName: String?
 ) : IPickFilesFactory {
     private var videoUri: Uri? = null
@@ -69,9 +70,9 @@ class CaptureVideo(
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && videoUri != null) {
 
-                    val file: File? = if (shouldMakeDir) {
+                    val file: File? = if (shouldMakeDir && !folderName.isNullOrBlank()) {
                         handleCapturedVideoWithPrivateDir(
-                            fragment.requireContext(), videoUri!!, currentCapturedPath!!
+                            fragment.requireContext(), videoUri!!, currentCapturedPath!!, folderName
                         )
 
                     } else {
@@ -100,10 +101,10 @@ class CaptureVideo(
     }
 
     private fun handleCapturedVideoWithPrivateDir(
-        context: Context, uri: Uri, currentCapturedPath: String
+        context: Context, uri: Uri, currentCapturedPath: String, folderName: String
     ): File? {
         val currentFile = File(currentCapturedPath)
-        return FileUtils.writeMedia(context, uri, currentFile.name)
+        return FileUtils.writeMedia(context, uri, currentFile.name, folderName)
     }
 
 }

@@ -24,6 +24,7 @@ class CaptureImage(
     private val fragment: Fragment,
     private var requestCode: Int,
     private val shouldMakeDir: Boolean,
+    private val folderName: String? = null,
     private val contentProviderName: String?
 ) : IPickFilesFactory {
     private var currentCapturedPath: String? = null
@@ -71,9 +72,9 @@ class CaptureImage(
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && photoURI != null) {
 
-                    val file: File? = if (shouldMakeDir) {
+                    val file: File? = if (shouldMakeDir && !folderName.isNullOrBlank()) {
                         handleCapturedImageWithPrivateDir(
-                            fragment.requireContext(), photoURI!!, currentCapturedPath!!
+                            fragment.requireContext(), photoURI!!, currentCapturedPath!!, folderName
                         )
 
                     } else {
@@ -102,9 +103,9 @@ class CaptureImage(
     }
 
     private fun handleCapturedImageWithPrivateDir(
-        context: Context, uri: Uri, currentCapturedPath: String
+        context: Context, uri: Uri, currentCapturedPath: String, folderName: String
     ): File? {
         val currentFile = File(currentCapturedPath)
-        return FileUtils.writeMedia(context, uri, currentFile.name)
+        return FileUtils.writeMedia(context, uri, currentFile.name, folderName)
     }
 }

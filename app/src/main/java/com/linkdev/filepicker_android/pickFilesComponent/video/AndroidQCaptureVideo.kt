@@ -21,7 +21,8 @@ import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesS
 class AndroidQCaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val shouldMakeDir: Boolean
+    private val shouldMakeDir: Boolean,
+    private val folderName: String?
 ) : IPickFilesFactory {
     private var videoUri: Uri? = null
 

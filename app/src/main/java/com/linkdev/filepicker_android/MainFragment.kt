@@ -51,7 +51,7 @@ class MainFragment : Fragment() {
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_IMAGE_REQUEST_CODE, true, CONTENT_PROVIDER_NAME
+                this, CAPTURE_IMAGE_REQUEST_CODE, true, "file Picker Images", CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
         }
@@ -63,21 +63,19 @@ class MainFragment : Fragment() {
         }
         btnCaptureVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_VIDEO_REQUEST_CODE, true, CONTENT_PROVIDER_NAME
+                this, CAPTURE_VIDEO_REQUEST_CODE, true, "file Picker Videos", CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
         }
         btnPickFile.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(
-                this, PICK_TEXT_FILES_REQUEST_CODE, false, CONTENT_PROVIDER_NAME
-            ).getPickInstance(FactoryFilesType.PICK_FILES)
+            pickFilesFactory = PickFilesFactory(this, PICK_TEXT_FILES_REQUEST_CODE)
+                .getPickInstance(FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.PDF), "choose Image")
         }
 
         btnPickAudio.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(
-                this, PICK_AUDIO_REQUEST_CODE, false, CONTENT_PROVIDER_NAME
-            ).getPickInstance(FactoryFilesType.PICK_FILES)
+            pickFilesFactory = PickFilesFactory(this, PICK_AUDIO_REQUEST_CODE)
+                .getPickInstance(FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_AUDIO), "choose Image")
         }
 

@@ -3,6 +3,7 @@ package com.linkdev.filepicker_android.pickFilesComponent.utils
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -20,11 +21,12 @@ object FileUtils {
     const val CAMERA_VIDEO_TYPE = ".mp4"
     const val IMAG_PREFIX = "IMG_"
     const val VID_PREFIX = "VID_"
+    private const val GENERAL_PREFIX = "FILE_"
+    private const val BUFFER_SIZE = 4096
 
     // get file extension
     fun getExtensionFromUri(context: Context?, uri: Uri?): String? {
-        var mimeType: String? = ""
-
+        val mimeType: String?
         mimeType = if (uri?.scheme == ContentResolver.SCHEME_CONTENT) {
             //If scheme is a content
             val mime = MimeTypeMap.getSingleton()
@@ -37,29 +39,34 @@ object FileUtils {
 
     // get file name
     fun getFileNameFromUri(context: Context, uri: Uri): String {
-        try {
-            val returnCursor = context.contentResolver.query(uri, null, null, null, null)!!
-            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            returnCursor.moveToFirst()
-            val name = returnCursor.getString(nameIndex)
-            returnCursor.close()
-            return if (name.lastIndexOf('.') != -1)
-                name.substring(0, name.lastIndexOf('.'))
-            else
-                name.substring(0)
+        var cursor: Cursor? = null
+        return try {
+            cursor = context.contentResolver.query(uri, null, null, null, null)
+            if (cursor != null) {
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                cursor.moveToFirst()
+                val name = cursor.getString(nameIndex)
+                if (name.lastIndexOf('.') != -1)
+                    name.substring(0, name.lastIndexOf('.'))
+                else
+                    name.substring(0)
+            } else {
+                getUniqueFileName(GENERAL_PREFIX)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            return ""
+            getUniqueFileName(GENERAL_PREFIX)
+        } finally {
+            cursor?.close()
         }
     }
 
     fun getFileFromPath(filePath: String?): File? {
-        return if (filePath != null) File(filePath) else null
+        return filePath?.let { File(it) }
     }
 
     @Throws(Exception::class)
     fun copyStream(inputStream: InputStream, outputStream: FileOutputStream) {
-        val BUFFER_SIZE = 4096
         val bytes = ByteArray(BUFFER_SIZE)
         var count = 0
         while (count != -1) {
@@ -73,9 +80,7 @@ object FileUtils {
         outputStream.close()
     }
 
-    /**
-     * Retrieves String file path from a document schemed Uri using fileDescriptor.
-     */
+    // Retrieves String file path from a document schemed Uri using fileDescriptor.
     fun getFilePathFromDocument(context: Context, uri: Uri): String? {
         val file: File?
         try {
@@ -115,7 +120,6 @@ object FileUtils {
     // create video file
     fun createVideoFile(context: Context): File? {
         try {
-
             val uniqueFileName = getUniqueFileName(VID_PREFIX)
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
@@ -126,10 +130,10 @@ object FileUtils {
         }
     }
 
-    // reduce file size
-    fun writeMedia(context: Context, uri: Uri, fileName: String): File? {
+    // Write file
+    fun writeMedia(context: Context, uri: Uri, fileName: String, folderName: String): File? {
         return try {
-            val file = createAppFile(context, fileName)
+            val file = createAppFile(fileName, folderName)
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             if (inputStream != null) {
                 val outputStream = FileOutputStream(file)
@@ -163,11 +167,11 @@ object FileUtils {
     }
 
     // create external directory
-    private fun makeDirectory(context: Context): String {
+    private fun makeDirectory(folderName: String): String {
         val folder = File(
             Environment.getExternalStorageDirectory().absolutePath
                     + "/"
-                    + context.getString(com.linkdev.filepicker_android.R.string.app_name)
+                    + folderName
         )
         if (!folder.exists())
             folder.mkdirs()
@@ -175,12 +179,12 @@ object FileUtils {
     }
 
     // get file path in directory
-    private fun getFilePath(context: Context, fileName: String?) =
-        makeDirectory(context) + "/" + fileName
+    private fun getFilePath(fileName: String?, folderName: String) =
+        makeDirectory(folderName) + "/" + fileName
 
     // get saved file in created path
-    private fun createAppFile(context: Context, fileName: String?): File =
-        File(getFilePath(context, fileName))
+    private fun createAppFile(fileName: String?, folderName: String): File =
+        File(getFilePath(fileName, folderName))
 
     fun getUniqueFileName(prefix: String): String =
         prefix + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
