@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.pickFilesComponent.allFiles.AllFiles
 import com.linkdev.filepicker_android.pickFilesComponent.image.AndroidQCaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
-import com.linkdev.filepicker_android.pickFilesComponent.model.FactoryFilesType
+import com.linkdev.filepicker_android.pickFilesComponent.models.FactoryFilesType
 import com.linkdev.filepicker_android.pickFilesComponent.utils.Platform
 import com.linkdev.filepicker_android.pickFilesComponent.video.AndroidQCaptureVideo
 import com.linkdev.filepicker_android.pickFilesComponent.video.CaptureVideo

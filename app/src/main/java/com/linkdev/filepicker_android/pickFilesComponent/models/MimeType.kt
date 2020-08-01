@@ -1,10 +1,10 @@
-package com.linkdev.filepicker_android.pickFilesComponent.model
+package com.linkdev.filepicker_android.pickFilesComponent.models
 
 import java.lang.Exception
 
 enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: ArrayList<String>) {
     // ============== IMAGES ==============
-    JPEG("image/jpeg", arrayListOf("jpg")),
+    JPEG("image/jpeg", arrayListOf("jpg", "jpeg")),
     PNG("image/png", arrayListOf("png")),
     GIF("image/gif", arrayListOf("gif")),
     BMP("image/x-ms-bmp", arrayListOf("bmp")),
@@ -22,8 +22,21 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: ArrayList<S
     // ============== TEXT FILES ==============
     TXT("text/plain", arrayListOf("txt", "tex")),
     PDF("application/pdf", arrayListOf("pdf")),
-    WORD("application/msword", arrayListOf("doc", "docx")),
-    EXCEL("application/vnd.ms-excel", arrayListOf("xls", "xlsx")),
+    DOC("application/msword", arrayListOf("doc", "docx")),
+    DOCX(
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        arrayListOf("docx")
+    ),
+    XLS("application/vnd.ms-excel", arrayListOf("xls")),
+    XLSX(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        arrayListOf("xlsx")
+    ),
+    PTT("application/vnd.ms-powerpoint", arrayListOf(".ppt")),
+    PTTX(
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        arrayListOf(".pptx")
+    ),
 
     // ============== Audio ==============
     MP3("audio/mpeg", arrayListOf("mpeg", "mp3")),

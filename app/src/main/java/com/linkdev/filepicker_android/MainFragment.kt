@@ -1,9 +1,7 @@
 package com.linkdev.filepicker_android
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,12 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.linkdev.filepicker_android.pickFilesComponent.model.*
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.models.*
+import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.PickFilesFactory
 import kotlinx.android.synthetic.main.fragment_main.*
-import java.io.File
 
 
 class MainFragment : Fragment() {
@@ -95,7 +92,7 @@ class MainFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(
             requestCode, resultCode, data, callback = object :
-                PickFilesResultCallback {
+                PickFilesStatusCallback {
                 override fun onPickFileCanceled() {
                     Log.e(TAG, "onPickFileCanceled")
                 }
@@ -107,32 +104,7 @@ class MainFragment : Fragment() {
                 override fun onFilePicked(fileData: FileData) {
                     Log.e(TAG, "onFilePicked")
                     Log.e(TAG, "file path from view ${fileData.filePath} Uri is ${fileData.uri}")
-                    when (fileData.fileType) {
-                        DocumentFilesType.IMAGE_FILES ->
-                            Glide.with(requireContext())
-                                .load(fileData.file)
-                                .into(imgTest)
-                        DocumentFilesType.VIDEO_FILES -> {
-                            vidTest.setVideoURI(fileData.uri)
-                            vidTest.start()
-                        }
-                        DocumentFilesType.AUDIO_FILE -> {
-                            val mp = MediaPlayer()
-                            try {
-                                mp.setDataSource(fileData.filePath)
-                                mp.prepare()
-                                mp.start()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                        }
-                        else -> {
-                            Log.e(TAG, fileData.fileType.toString())
-                        }
-                    }
                 }
-
             })
     }
 }

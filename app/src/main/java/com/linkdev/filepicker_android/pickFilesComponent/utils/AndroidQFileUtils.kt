@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
+import com.linkdev.filepicker_android.pickFilesComponent.models.MimeType
 
 
 object AndroidQFileUtils {

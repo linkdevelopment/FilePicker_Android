@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
-import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FileData
-import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
+import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker_android.pickFilesComponent.models.ErrorModel
+import com.linkdev.filepicker_android.pickFilesComponent.models.FileData
+import com.linkdev.filepicker_android.pickFilesComponent.models.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
@@ -37,7 +37,7 @@ class AllFiles(private val fragment: Fragment, private val requestCode: Int) : I
     }
 
     override fun handleActivityResult(
-        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null && mRequestCode == requestCode) {
@@ -47,10 +47,8 @@ class AllFiles(private val fragment: Fragment, private val requestCode: Int) : I
                         FileUtils.getFilePathFromDocument(
                             fragment.requireContext(), uri
                         ) // get real path of file
-                    val fileType =
-                        FileUtils.getFileTypeFromUri(fragment.requireContext(), uri)
                     val file = FileUtils.getFileFromPath(filePath) // create file
-                    val fileData = FileData(fileType, uri, filePath, file, null)
+                    val fileData = FileData(uri, filePath, file, null)
                     callback.onFilePicked(fileData)
                 } else {
                     callback.onPickFileError(

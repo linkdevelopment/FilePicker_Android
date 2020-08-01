@@ -7,10 +7,9 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker_android.R
-import com.linkdev.filepicker_android.pickFilesComponent.model.DocumentFilesType
-import com.linkdev.filepicker_android.pickFilesComponent.model.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.model.FileData
-import com.linkdev.filepicker_android.pickFilesComponent.model.MimeType
+import com.linkdev.filepicker_android.pickFilesComponent.models.ErrorModel
+import com.linkdev.filepicker_android.pickFilesComponent.models.FileData
+import com.linkdev.filepicker_android.pickFilesComponent.models.MimeType
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.CAMERA_VIDEO_TYPE
@@ -18,7 +17,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.VID_PRE
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
-import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFilesResultCallback
+import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
 import java.io.File
 
 class CaptureVideo(
@@ -64,7 +63,7 @@ class CaptureVideo(
     }
 
     override fun handleActivityResult(
-        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesResultCallback
+        mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
@@ -81,7 +80,7 @@ class CaptureVideo(
 
                     FileUtils.addMediaToGallery(file, fragment.requireContext())
                     val fileData =
-                        FileData(DocumentFilesType.VIDEO_FILES, videoUri, file?.path, file, null)
+                        FileData(videoUri, file?.path, file, null)
                     callback.onFilePicked(fileData)
                 } else {
                     callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
