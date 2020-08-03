@@ -22,7 +22,6 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.VID_PRE
 class AndroidQCaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val shouldMakeDir: Boolean,
     private val folderName: String?
 ) : IPickFilesFactory {
     private var videoUri: Uri? = null
@@ -36,7 +35,7 @@ class AndroidQCaptureVideo(
         if (captureVideoIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             videoUri =
                 AndroidQFileUtils.getVideoUri(
-                    fragment.requireContext(), VID_PREFIX, MimeType.MP4, shouldMakeDir
+                    fragment.requireContext(), VID_PREFIX, MimeType.MP4, folderName
                 )
             videoUri?.let {
                 captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)

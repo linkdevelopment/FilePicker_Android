@@ -29,6 +29,8 @@ class MainFragment : Fragment() {
         const val PICK_TEXT_FILES_REQUEST_CODE = 1004
         const val PICK_AUDIO_REQUEST_CODE = 1005
         const val PICK_ALL_REQUEST_CODE = 1006
+        const val IMAGES_FOLDER_NAME = "File Picker Images"
+        const val VIDEOS_FOLDER_NAME = "File Picker Videos"
     }
 
     override fun onCreateView(
@@ -51,7 +53,7 @@ class MainFragment : Fragment() {
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_IMAGE_REQUEST_CODE, true, "file Picker Images", CONTENT_PROVIDER_NAME
+                this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
         }
@@ -63,7 +65,7 @@ class MainFragment : Fragment() {
         }
         btnCaptureVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_VIDEO_REQUEST_CODE, true, "file Picker Videos", CONTENT_PROVIDER_NAME
+                this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME, CONTENT_PROVIDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
         }

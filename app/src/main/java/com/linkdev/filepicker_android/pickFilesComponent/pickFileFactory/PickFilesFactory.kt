@@ -12,7 +12,6 @@ import com.linkdev.filepicker_android.pickFilesComponent.video.CaptureVideo
 class PickFilesFactory(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val shouldMakeDir: Boolean = false,
     private val folderName: String? = null,
     private val contentProviderName: String? = null
 ) {
@@ -21,15 +20,15 @@ class PickFilesFactory(
         return when (fileType) {
             FactoryFilesType.IMAGE_CAMERA -> {
                 if (Platform.isAndroidQ())
-                    AndroidQCaptureImage(fragment, requestCode, shouldMakeDir, folderName)
+                    AndroidQCaptureImage(fragment, requestCode, folderName)
                 else
-                    CaptureImage(fragment, requestCode, shouldMakeDir,folderName, contentProviderName)
+                    CaptureImage(fragment, requestCode, folderName, contentProviderName)
             }
             FactoryFilesType.VIDEO_CAMERA -> {
                 if (Platform.isAndroidQ())
-                    AndroidQCaptureVideo(fragment, requestCode, shouldMakeDir, folderName)
+                    AndroidQCaptureVideo(fragment, requestCode, folderName)
                 else
-                    CaptureVideo(fragment, requestCode, shouldMakeDir,folderName, contentProviderName)
+                    CaptureVideo(fragment, requestCode, folderName, contentProviderName)
 
             }
             FactoryFilesType.PICK_FILES -> AllFiles(fragment, requestCode)

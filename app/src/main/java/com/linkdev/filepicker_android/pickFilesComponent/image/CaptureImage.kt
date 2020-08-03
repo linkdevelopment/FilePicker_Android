@@ -23,7 +23,6 @@ import java.io.File
 class CaptureImage(
     private val fragment: Fragment,
     private var requestCode: Int,
-    private val shouldMakeDir: Boolean,
     private val folderName: String? = null,
     private val contentProviderName: String?
 ) : IPickFilesFactory {
@@ -72,7 +71,7 @@ class CaptureImage(
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && photoURI != null) {
 
-                    val file: File? = if (shouldMakeDir && !folderName.isNullOrBlank()) {
+                    val file: File? = if (!folderName.isNullOrBlank()) {
                         handleCapturedImageWithPrivateDir(
                             fragment.requireContext(), photoURI!!, currentCapturedPath!!, folderName
                         )

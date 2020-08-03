@@ -20,7 +20,6 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 class AndroidQCaptureImage(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val shouldMakeDir: Boolean,
     private val folderName: String?
 ) : IPickFilesFactory {
     private var photoURI: Uri? = null
@@ -34,7 +33,7 @@ class AndroidQCaptureImage(
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             photoURI =
                 AndroidQFileUtils.getPhotoUri(
-                    fragment.requireContext(), IMAG_PREFIX, MimeType.JPEG, shouldMakeDir
+                    fragment.requireContext(), IMAG_PREFIX, MimeType.JPEG, folderName
                 )
             photoURI?.let {
                 //read image from given URI

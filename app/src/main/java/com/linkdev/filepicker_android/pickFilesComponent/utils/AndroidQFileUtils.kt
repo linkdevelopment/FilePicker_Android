@@ -11,12 +11,12 @@ import com.linkdev.filepicker_android.pickFilesComponent.models.MimeType
 
 object AndroidQFileUtils {
     fun getPhotoUri(
-        context: Context, prefix: String, mimeType: MimeType, shouldMakeDir: Boolean
+        context: Context, prefix: String, mimeType: MimeType, folderName: String?
     ): Uri? {
-        val relativePath: String = if (shouldMakeDir) {
-            Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name) + "/"
-        } else {
+        val relativePath: String = if (folderName.isNullOrBlank()) {
             Environment.DIRECTORY_PICTURES
+        } else {
+            Environment.DIRECTORY_PICTURES + "/" + folderName
         }
         val contentValues = ContentValues()
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, FileUtils.getUniqueFileName(prefix))
@@ -37,12 +37,12 @@ object AndroidQFileUtils {
     }
 
     fun getVideoUri(
-        context: Context, prefix: String, mimeType: MimeType, shouldMakeDir: Boolean
+        context: Context, prefix: String, mimeType: MimeType, folderName: String?
     ): Uri? {
-        val relativePath: String = if (shouldMakeDir) {
-            Environment.DIRECTORY_MOVIES + "/" + context.getString(R.string.app_name)
-        } else {
+        val relativePath: String = if (folderName.isNullOrBlank()) {
             Environment.DIRECTORY_MOVIES
+        } else {
+            Environment.DIRECTORY_MOVIES + "/" + folderName
         }
 
         val contentValues = ContentValues()

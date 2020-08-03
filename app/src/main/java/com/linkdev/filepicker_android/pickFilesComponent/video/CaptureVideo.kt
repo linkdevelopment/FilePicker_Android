@@ -23,7 +23,6 @@ import java.io.File
 class CaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val shouldMakeDir: Boolean,
     private val folderName: String? = null,
     private val contentProviderName: String?
 ) : IPickFilesFactory {
@@ -70,7 +69,7 @@ class CaptureVideo(
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && videoUri != null) {
 
-                    val file: File? = if (shouldMakeDir && !folderName.isNullOrBlank()) {
+                    val file: File? = if (!folderName.isNullOrBlank()) {
                         handleCapturedVideoWithPrivateDir(
                             fragment.requireContext(), videoUri!!, currentCapturedPath!!, folderName
                         )
