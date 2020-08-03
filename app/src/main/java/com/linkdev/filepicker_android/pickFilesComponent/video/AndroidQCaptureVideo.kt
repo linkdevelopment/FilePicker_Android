@@ -16,6 +16,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logEr
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.VID_PREFIX
 
 
 class AndroidQCaptureVideo(
@@ -35,10 +36,9 @@ class AndroidQCaptureVideo(
         if (captureVideoIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             videoUri =
                 AndroidQFileUtils.getVideoUri(
-                    fragment.requireContext(), "VID_", MimeType.MP4, shouldMakeDir
+                    fragment.requireContext(), VID_PREFIX, MimeType.MP4, shouldMakeDir
                 )
             videoUri?.let {
-                //read image from given URI
                 captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
                 try {
                     fragment.startActivityForResult(captureVideoIntent, requestCode)
@@ -69,6 +69,8 @@ class AndroidQCaptureVideo(
                     )
                 }
             }
+        } else {
+            AndroidQFileUtils.deleteUri(fragment.requireContext(), videoUri)
         }
     }
 }
