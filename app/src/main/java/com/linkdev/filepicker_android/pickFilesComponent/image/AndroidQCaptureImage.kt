@@ -69,6 +69,8 @@ class AndroidQCaptureImage(
                     )
                 }
             }
+        } else {
+            AndroidQFileUtils.deleteUri(fragment.requireContext(), photoURI)
         }
     }
 }
