@@ -44,7 +44,7 @@ class AllFiles(private val fragment: Fragment, private val requestCode: Int) : I
                 val uri = data.data // get uri from data
                 if (uri != null) {
                     val filePath =
-                        FileUtils.getFilePathFromDocument(
+                        FileUtils.getFilePathFromUri(
                             fragment.requireContext(), uri
                         ) // get real path of file
                     val file = FileUtils.getFileFromPath(filePath) // create file

@@ -56,7 +56,7 @@ class AndroidQCaptureImage(
             if (mRequestCode == requestCode) {
                 if (photoURI != null) {
                     val filePath =
-                        FileUtils.getFilePathFromDocument(fragment.requireContext(), photoURI!!)
+                        FileUtils.getFilePathFromUri(fragment.requireContext(), photoURI!!)
                     val file = FileUtils.getFileFromPath(filePath)
                     val fileData =
                         FileData(photoURI, filePath, file, null)

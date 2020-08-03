@@ -56,7 +56,7 @@ class AndroidQCaptureVideo(
             if (mRequestCode == requestCode) {
                 if (videoUri != null) {
                     val filePath =
-                        FileUtils.getFilePathFromDocument(fragment.requireContext(), videoUri!!)
+                        FileUtils.getFilePathFromUri(fragment.requireContext(), videoUri!!)
                     val file = FileUtils.getFileFromPath(filePath)
                     val fileData =
                         FileData(videoUri, filePath, file, null)

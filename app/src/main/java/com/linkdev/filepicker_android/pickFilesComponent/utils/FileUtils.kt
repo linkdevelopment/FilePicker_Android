@@ -37,6 +37,21 @@ object FileUtils {
         return mimeType
     }
 
+    // get file mimeType
+    fun getFileMimeType(context: Context, uri: Uri): String? {
+        return if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+            context.contentResolver.getType(uri)
+        } else {
+            val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+        }
+    }
+
+    // return file name with extension
+    fun getFullFileNameFromUri(context: Context, uri: Uri): String {
+        return "${getFileNameFromUri(context, uri)}.${getExtensionFromUri(context, uri)}"
+    }
+
     // get file name
     fun getFileNameFromUri(context: Context, uri: Uri): String {
         var cursor: Cursor? = null
@@ -80,8 +95,8 @@ object FileUtils {
         outputStream.close()
     }
 
-    // Retrieves String file path from a document schemed Uri using fileDescriptor.
-    fun getFilePathFromDocument(context: Context, uri: Uri): String? {
+    // Retrieves String file path from a document schemed Uri
+    fun getFilePathFromUri(context: Context, uri: Uri): String? {
         val file: File?
         try {
             file = File.createTempFile(

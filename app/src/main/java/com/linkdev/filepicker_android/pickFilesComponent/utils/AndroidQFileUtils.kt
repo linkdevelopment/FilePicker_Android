@@ -27,15 +27,29 @@ object AndroidQFileUtils {
         val collection =
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         val uriSavedPhoto = resolver.insert(collection, contentValues)
-        val let = uriSavedPhoto?.let { resolver.openOutputStream(it) }
-        let?.flush()
-        let?.close()
+        saveFile(context, uriSavedPhoto)
         contentValues.clear()
         contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
         uriSavedPhoto?.let {
             context.contentResolver.update(it, contentValues, null, null)
         }
         return uriSavedPhoto
+    }
+
+    // broadcast image to gallery
+    private fun saveFile(context: Context, uri: Uri?) {
+        try {
+            val let = uri?.let { context.contentResolver.openOutputStream(it) }
+            let?.flush()
+            let?.close()
+        } catch (exception: Throwable) {
+            exception.printStackTrace()
+        }
+    }
+
+    // delte file with given uri
+    fun deleteUri(context: Context, uri: Uri?) {
+        uri?.let { context.contentResolver.delete(it, null, null) }
     }
 
     fun getVideoUri(
