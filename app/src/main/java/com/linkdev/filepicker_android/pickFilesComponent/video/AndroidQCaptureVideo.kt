@@ -16,6 +16,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logEr
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker_android.pickFilesComponent.models.ErrorStatus
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils.VID_PREFIX
 
 
@@ -63,7 +64,7 @@ class AndroidQCaptureVideo(
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
-                            PickFileConstants.Error.DATA_ERROR, R.string.general_error
+                            ErrorStatus.DATA_ERROR, R.string.general_error
                         )
                     )
                 }

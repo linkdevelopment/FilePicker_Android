@@ -1,3 +1,3 @@
 package com.linkdev.filepicker_android.pickFilesComponent.models
 
-data class ErrorModel(var errorStatus: String? = null, var defaultErrorMessage: Int? = null)
+data class ErrorModel(var errorStatus: ErrorStatus? = null, var defaultErrorMessage: Int? = null)

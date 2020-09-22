@@ -8,10 +8,7 @@ import com.linkdev.filepicker_android.R
 import com.linkdev.filepicker_android.pickFilesComponent.utils.FileUtils
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants
 import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
-import com.linkdev.filepicker_android.pickFilesComponent.models.ErrorModel
-import com.linkdev.filepicker_android.pickFilesComponent.models.FileData
-import com.linkdev.filepicker_android.pickFilesComponent.models.MimeType
-import com.linkdev.filepicker_android.pickFilesComponent.models.SelectionTypes
+import com.linkdev.filepicker_android.pickFilesComponent.models.*
 import com.linkdev.filepicker_android.pickFilesComponent.pickFileFactory.IPickFilesFactory
 import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logError
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
@@ -55,9 +52,9 @@ class AllFiles(
                     onSingleSelection(data, callback)
                 }
             } else {
-                /*callback.onPickFileError(
-                    ErrorModel(ErrorStatus.DATA_ERROR, R.string.something_went_wrong)
-                )*/
+                callback.onPickFileError(
+                    ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                )
             }
         } else {
             callback.onPickFileCanceled()
@@ -72,18 +69,18 @@ class AllFiles(
                 val uri = clipData.getItemAt(i).uri
                 val fileData = generateFileData(uri, data)
                 if (fileData == null) {
-                    /*callback.onPickFileError(
-                        ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.something_went_wrong)
-                    )*/
+                    callback.onPickFileError(
+                        ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.general_error)
+                    )
                 } else {
                     pickedFilesList.add(fileData)
                 }
             }
             callback.onFilePicked(pickedFilesList)
         } else {
-            /*callback.onPickFileError(
-                ErrorModel(ErrorStatus.DATA_ERROR, R.string.something_went_wrong)
-            )*/
+            callback.onPickFileError(
+                ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+            )
         }
     }
 
@@ -93,18 +90,18 @@ class AllFiles(
         if (uri != null) {
             val fileData = generateFileData(uri, data)
             if (fileData == null) {
-//                callback.onPickFileError(
-//                    ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.something_went_wrong)
-//                )
+                callback.onPickFileError(
+                    ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.general_error)
+                )
             } else {
                 val pickedFilesList = ArrayList<FileData>()
                 pickedFilesList.add(fileData)
                 callback.onFilePicked(pickedFilesList)
             }
         } else {
-//            callback.onPickFileError(
-//                ErrorModel(ErrorStatus.URI_ERROR, R.string.something_went_wrong)
-//            )
+            callback.onPickFileError(
+                ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
+            )
         }
     }
 

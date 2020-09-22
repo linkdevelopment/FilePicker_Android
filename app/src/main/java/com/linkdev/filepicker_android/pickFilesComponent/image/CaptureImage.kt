@@ -17,6 +17,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.utils.LoggerUtils.logEr
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.Error.DATA_ERROR
 import com.linkdev.filepicker_android.pickFilesComponent.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker_android.pickFilesComponent.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker_android.pickFilesComponent.models.ErrorStatus
 import java.io.File
 
 
@@ -85,10 +86,10 @@ class CaptureImage(
                         FileData(photoURI, file?.path, file, null)
                     callback.onFilePicked(arrayListOf(fileData))
                 } else {
-                    callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
+                    callback.onPickFileError(ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error))
                 }
             } else {
-                callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
+                callback.onPickFileError(ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error))
             }
         } else {
             callback.onPickFileCanceled()
