@@ -5,6 +5,7 @@ import com.linkdev.filepicker_android.pickFilesComponent.allFiles.AllFiles
 import com.linkdev.filepicker_android.pickFilesComponent.image.AndroidQCaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.image.CaptureImage
 import com.linkdev.filepicker_android.pickFilesComponent.models.FactoryFilesType
+import com.linkdev.filepicker_android.pickFilesComponent.models.SelectionTypes
 import com.linkdev.filepicker_android.pickFilesComponent.utils.Platform
 import com.linkdev.filepicker_android.pickFilesComponent.video.AndroidQCaptureVideo
 import com.linkdev.filepicker_android.pickFilesComponent.video.CaptureVideo
@@ -13,7 +14,8 @@ class PickFilesFactory(
     private val fragment: Fragment,
     private val requestCode: Int,
     private val folderName: String? = null,
-    private val contentProviderName: String? = null
+    private val contentProviderName: String? = null,
+    private val selectionType: SelectionTypes = SelectionTypes.SINGLE
 ) {
 
     fun getPickInstance(fileType: FactoryFilesType): IPickFilesFactory? {
@@ -31,7 +33,7 @@ class PickFilesFactory(
                     CaptureVideo(fragment, requestCode, folderName, contentProviderName)
 
             }
-            FactoryFilesType.PICK_FILES -> AllFiles(fragment, requestCode)
+            FactoryFilesType.PICK_FILES -> AllFiles(fragment, requestCode, selectionType)
         }
     }
 }
