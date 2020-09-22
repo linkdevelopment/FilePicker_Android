@@ -81,7 +81,7 @@ class CaptureVideo(
                     FileUtils.addMediaToGallery(file, fragment.requireContext())
                     val fileData =
                         FileData(videoUri, file?.path, file, null)
-                    callback.onFilePicked(fileData)
+                    callback.onFilePicked(arrayListOf(fileData))
                 } else {
                     callback.onPickFileError(ErrorModel(DATA_ERROR, R.string.general_error))
                 }

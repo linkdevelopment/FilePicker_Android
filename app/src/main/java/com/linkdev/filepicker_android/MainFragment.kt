@@ -47,8 +47,11 @@ class MainFragment : Fragment() {
     private fun setListeners() {
         btnPickImage.setOnClickListener {
             pickFilesFactory =
-                PickFilesFactory(this, PICK_IMAGE_REQUEST_CODE)
-                    .getPickInstance(FactoryFilesType.PICK_FILES)
+                PickFilesFactory(
+                    this,
+                    PICK_IMAGE_REQUEST_CODE,
+                    selectionType = SelectionTypes.MULTIPLE
+                ).getPickInstance(FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_IMAGES), "choose Image")
         }
         btnOpenCamera.setOnClickListener {
@@ -101,9 +104,9 @@ class MainFragment : Fragment() {
                     Log.e(TAG, "onPickFileError")
                 }
 
-                override fun onFilePicked(fileData: FileData) {
+                override fun onFilePicked(fileData: ArrayList<FileData>) {
                     Log.e(TAG, "onFilePicked")
-                    Log.e(TAG, "file path from view ${fileData.filePath} Uri is ${fileData.uri}")
+                    Log.e(TAG, "file data size ${fileData.size}")
                 }
             })
     }

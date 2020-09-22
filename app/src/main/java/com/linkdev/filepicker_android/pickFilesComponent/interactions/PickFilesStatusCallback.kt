@@ -6,5 +6,5 @@ import com.linkdev.filepicker_android.pickFilesComponent.models.FileData
 interface PickFilesStatusCallback {
     fun onPickFileCanceled()
     fun onPickFileError(errorModel: ErrorModel)
-    fun onFilePicked(fileData: FileData)
+    fun onFilePicked(fileData: ArrayList<FileData>)
 }

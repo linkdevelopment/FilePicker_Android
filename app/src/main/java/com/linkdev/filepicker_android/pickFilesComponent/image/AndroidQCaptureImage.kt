@@ -59,7 +59,7 @@ class AndroidQCaptureImage(
                     val file = FileUtils.getFileFromPath(filePath)
                     val fileData =
                         FileData(photoURI, filePath, file, null)
-                    callback.onFilePicked(fileData)
+                    callback.onFilePicked(arrayListOf(fileData))
                 } else {
                     callback.onPickFileError(
                         ErrorModel(

@@ -59,7 +59,7 @@ class AndroidQCaptureVideo(
                     val file = FileUtils.getFileFromPath(filePath)
                     val fileData =
                         FileData(videoUri, filePath, file, null)
-                    callback.onFilePicked(fileData)
+                    callback.onFilePicked(arrayListOf(fileData))
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
