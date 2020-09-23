@@ -64,19 +64,8 @@ class CaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && photoURI != null) {
-
-                    val file: File? = if (!folderName.isNullOrBlank()) {
-                        handleCapturedImageWithPrivateDir(
-                            fragment.requireContext(), photoURI!!, currentCapturedPath!!, folderName
-                        )
-
-                    } else {
-                        handleCapturedImageWithPublicDir(fragment.requireContext(), photoURI!!)
-                    }
-
-                    FileUtils.addMediaToGallery(file, fragment.requireContext())
-                    val fileData =
-                        FileData(photoURI, file?.path, file, null)
+                    val file = getFile()
+                    val fileData = FileData(photoURI, file?.path, file, null)
                     callback.onFilePicked(arrayListOf(fileData))
                 } else {
                     callback.onPickFileError(
@@ -89,6 +78,20 @@ class CaptureImage(
         } else {
             callback.onPickFileCanceled()
         }
+    }
+
+    private fun getFile(): File? {
+        val file: File? = if (!folderName.isNullOrBlank()) {
+            handleCapturedImageWithPrivateDir(
+                fragment.requireContext(), photoURI!!, currentCapturedPath!!, folderName
+            )
+
+        } else {
+            handleCapturedImageWithPublicDir(fragment.requireContext(), photoURI!!)
+        }
+
+        FileUtils.addMediaToGallery(file, fragment.requireContext())
+        return file
     }
 
     private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {

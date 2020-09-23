@@ -62,19 +62,8 @@ class CaptureVideo(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && videoUri != null) {
-
-                    val file: File? = if (!folderName.isNullOrBlank()) {
-                        handleCapturedVideoWithPrivateDir(
-                            fragment.requireContext(), videoUri!!, currentCapturedPath!!, folderName
-                        )
-
-                    } else {
-                        handleCapturedVideoWithPublicDir(fragment.requireContext(), videoUri!!)
-                    }
-
-                    FileUtils.addMediaToGallery(file, fragment.requireContext())
-                    val fileData =
-                        FileData(videoUri, file?.path, file, null)
+                    val file = getFile()
+                    val fileData = FileData(videoUri, file?.path, file, null)
                     callback.onFilePicked(arrayListOf(fileData))
                 } else {
                     callback.onPickFileError(
@@ -87,6 +76,20 @@ class CaptureVideo(
         } else {
             callback.onPickFileCanceled()
         }
+    }
+
+    private fun getFile(): File? {
+        val file: File? = if (!folderName.isNullOrBlank()) {
+            handleCapturedVideoWithPrivateDir(
+                fragment.requireContext(), videoUri!!, currentCapturedPath!!, folderName
+            )
+
+        } else {
+            handleCapturedVideoWithPublicDir(fragment.requireContext(), videoUri!!)
+        }
+
+        FileUtils.addMediaToGallery(file, fragment.requireContext())
+        return file
     }
 
     private fun handleCapturedVideoWithPublicDir(context: Context, uri: Uri): File? {
