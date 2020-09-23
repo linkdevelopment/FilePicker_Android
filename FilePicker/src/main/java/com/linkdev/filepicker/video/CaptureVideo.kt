@@ -23,8 +23,7 @@ import java.io.File
 class CaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val folderName: String? = null,
-    private val contentProviderName: String?
+    private val folderName: String? = null
 ) : IPickFilesFactory {
     private var videoUri: Uri? = null
     private var currentCapturedPath: String? = null
@@ -38,15 +37,10 @@ class CaptureVideo(
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             val videoFile = FileUtils.createVideoFile(fragment.requireContext())
             currentCapturedPath = videoFile?.path
-            if (contentProviderName.isNullOrBlank())
-                throw Exception("File Picker Error, Please add FileProvider authorities")
-
             videoUri =
                 currentCapturedPath?.let {
                     // get photo uri form content provider
-                    FileUtils.getFileUri(
-                        fragment.requireContext(), it, contentProviderName
-                    )
+                    FileUtils.getFileUri(fragment.requireContext(), it)
                 }
 
             videoUri?.let {
@@ -83,7 +77,9 @@ class CaptureVideo(
                         FileData(videoUri, file?.path, file, null)
                     callback.onFilePicked(arrayListOf(fileData))
                 } else {
-                    callback.onPickFileError(ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error))
+                    callback.onPickFileError(
+                        ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                    )
                 }
             } else {
                 callback.onPickFileError(ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error))

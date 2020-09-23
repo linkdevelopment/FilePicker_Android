@@ -212,9 +212,9 @@ object FileUtils {
             .absolutePath
     }
 
-    fun getFileUri(context: Context, fileUrl: String, providerAuth: String): Uri {
+    fun getFileUri(context: Context, fileUrl: String): Uri {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(context, providerAuth, File(fileUrl))
+            FileProvider.getUriForFile(context, Constants.PROVIDER_AUTH, File(fileUrl))
         } else {
             Uri.fromFile(File(fileUrl))
         }

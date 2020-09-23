@@ -14,7 +14,6 @@ class PickFilesFactory(
     private val fragment: Fragment,
     private val requestCode: Int,
     private val folderName: String? = null,
-    private val contentProviderName: String? = null,
     private val selectionType: SelectionTypes = SelectionTypes.SINGLE
 ) {
 
@@ -24,13 +23,13 @@ class PickFilesFactory(
                 if (Platform.isAndroidQ())
                     AndroidQCaptureImage(fragment, requestCode, folderName)
                 else
-                    CaptureImage(fragment, requestCode, folderName, contentProviderName)
+                    CaptureImage(fragment, requestCode, folderName)
             }
             FactoryFilesType.VIDEO_CAMERA -> {
                 if (Platform.isAndroidQ())
                     AndroidQCaptureVideo(fragment, requestCode, folderName)
                 else
-                    CaptureVideo(fragment, requestCode, folderName, contentProviderName)
+                    CaptureVideo(fragment, requestCode, folderName)
 
             }
             FactoryFilesType.PICK_FILES -> PickFiles(fragment, requestCode, selectionType)

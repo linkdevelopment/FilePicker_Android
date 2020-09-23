@@ -19,7 +19,6 @@ class MainFragment : Fragment() {
 
     companion object {
         const val TAG = "FilePickerTag"
-        const val CONTENT_PROVIDER_NAME: String = BuildConfig.APPLICATION_ID + ".provider"
         const val PICK_IMAGE_REQUEST_CODE = 1000
         const val CAPTURE_IMAGE_REQUEST_CODE = 1001
         const val PICK_VIDEO_REQUEST_CODE = 1002
@@ -54,7 +53,7 @@ class MainFragment : Fragment() {
         }
         btnOpenCamera.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME, CONTENT_PROVIDER_NAME
+                this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
         }
@@ -66,7 +65,7 @@ class MainFragment : Fragment() {
         }
         btnCaptureVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME, CONTENT_PROVIDER_NAME
+                this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
         }
@@ -104,7 +103,7 @@ class MainFragment : Fragment() {
 
                 override fun onFilePicked(fileData: ArrayList<FileData>) {
                     Log.e(TAG, "onFilePicked")
-                    Log.e(TAG, "file data size ${fileData.size}")
+                    Log.e(TAG, "file data size $fileData")
                 }
             })
     }
