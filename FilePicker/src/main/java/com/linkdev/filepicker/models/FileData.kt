@@ -14,6 +14,7 @@ data class FileData(
     val uri: Uri? = null,
     val filePath: String? = null,
     val file: File? = null,
-    val bitmap: Bitmap? = null,
+    val fileName: String? = null,
+    val mimeType: String? = null,
     val intent: Intent? = null
 ) : Parcelable

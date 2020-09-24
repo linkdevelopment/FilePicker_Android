@@ -55,16 +55,17 @@ class AndroidQCaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (photoURI != null) {
-                    val filePath =
-                        FileUtils.getFilePathFromUri(fragment.requireContext(), photoURI!!)
-                    val file = FileUtils.getFileFromPath(filePath)
-                    val fileData =
-                        FileData(photoURI, filePath, file, null)
-                    callback.onFilePicked(arrayListOf(fileData))
+                    val fileData = generateFileData(photoURI!!, data)
+                    if (fileData != null)
+                        callback.onFilePicked(arrayListOf(fileData))
+                    else
+                        callback.onPickFileError(
+                            ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
+                        )
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
-                            ErrorStatus.DATA_ERROR, R.string.general_error
+                            ErrorStatus.URI_ERROR, R.string.general_error
                         )
                     )
                 }
@@ -72,5 +73,17 @@ class AndroidQCaptureImage(
         } else {
             AndroidQFileUtils.deleteUri(fragment.requireContext(), photoURI)
         }
+    }
+
+    // create File data object
+    private fun generateFileData(uri: Uri, data: Intent?): FileData? {
+        val filePath = FileUtils.getFilePathFromUri(fragment.requireContext(), uri)
+        val file = FileUtils.getFileFromPath(filePath) // create file
+        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), uri)
+        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), uri)
+        return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
+            null
+        else
+            FileData(uri, filePath, file, fileName, mimeType, data)
     }
 }

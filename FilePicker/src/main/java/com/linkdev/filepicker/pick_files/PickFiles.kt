@@ -113,6 +113,6 @@ class PickFiles(
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else
-            FileData(uri = uri, filePath = filePath, file = file, intent = data)
+            FileData(uri, filePath, file, fileName, mimeType, data)
     }
 }

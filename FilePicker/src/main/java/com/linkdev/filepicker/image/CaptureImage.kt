@@ -64,12 +64,16 @@ class CaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && photoURI != null) {
-                    val file = getFile()
-                    val fileData = FileData(photoURI, file?.path, file, null)
-                    callback.onFilePicked(arrayListOf(fileData))
+                    val fileData = generateFileData(data)
+                    if (fileData != null)
+                        callback.onFilePicked(arrayListOf(fileData))
+                    else
+                        callback.onPickFileError(
+                            ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                        )
                 } else {
                     callback.onPickFileError(
-                        ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                        ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
                     )
                 }
             } else {
@@ -78,6 +82,17 @@ class CaptureImage(
         } else {
             callback.onPickFileCanceled()
         }
+    }
+
+    private fun generateFileData(data: Intent?): FileData? {
+        val file = getFile()
+        val filePath = file?.path
+        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), photoURI!!)
+        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), photoURI!!)
+        return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
+            null
+        else
+            FileData(photoURI!!, filePath, file, fileName, mimeType, data)
     }
 
     private fun getFile(): File? {

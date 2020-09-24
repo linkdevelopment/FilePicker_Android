@@ -54,12 +54,13 @@ class AndroidQCaptureVideo(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (videoUri != null) {
-                    val filePath =
-                        FileUtils.getFilePathFromUri(fragment.requireContext(), videoUri!!)
-                    val file = FileUtils.getFileFromPath(filePath)
-                    val fileData =
-                        FileData(videoUri, filePath, file, null)
-                    callback.onFilePicked(arrayListOf(fileData))
+                    val fileData = generateFileData(videoUri!!, data)
+                    if (fileData != null)
+                        callback.onFilePicked(arrayListOf(fileData))
+                    else
+                        callback.onPickFileError(
+                            ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
+                        )
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
@@ -71,5 +72,17 @@ class AndroidQCaptureVideo(
         } else {
             AndroidQFileUtils.deleteUri(fragment.requireContext(), videoUri)
         }
+    }
+
+    // create File data object
+    private fun generateFileData(uri: Uri, data: Intent?): FileData? {
+        val filePath = FileUtils.getFilePathFromUri(fragment.requireContext(), uri)
+        val file = FileUtils.getFileFromPath(filePath) // create file
+        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), uri)
+        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), uri)
+        return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
+            null
+        else
+            FileData(uri, filePath, file, fileName, mimeType, data)
     }
 }

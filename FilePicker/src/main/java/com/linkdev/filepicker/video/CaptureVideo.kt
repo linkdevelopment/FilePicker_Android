@@ -62,12 +62,16 @@ class CaptureVideo(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedPath != null && videoUri != null) {
-                    val file = getFile()
-                    val fileData = FileData(videoUri, file?.path, file, null)
-                    callback.onFilePicked(arrayListOf(fileData))
+                    val fileData = generateFileData(data)
+                    if (fileData != null)
+                        callback.onFilePicked(arrayListOf(fileData))
+                    else
+                        callback.onPickFileError(
+                            ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                        )
                 } else {
                     callback.onPickFileError(
-                        ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                        ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
                     )
                 }
             } else {
@@ -76,6 +80,17 @@ class CaptureVideo(
         } else {
             callback.onPickFileCanceled()
         }
+    }
+
+    private fun generateFileData(data: Intent?): FileData? {
+        val file = getFile()
+        val filePath = file?.path
+        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), videoUri!!)
+        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), videoUri!!)
+        return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
+            null
+        else
+            FileData(videoUri!!, filePath, file, fileName, mimeType, data)
     }
 
     private fun getFile(): File? {
