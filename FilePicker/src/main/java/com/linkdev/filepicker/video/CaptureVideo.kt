@@ -85,7 +85,7 @@ class CaptureVideo(
     private fun generateFileData(data: Intent?): FileData? {
         val file = getFile()
         val filePath = file?.path
-        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), videoUri!!)
+        val fileName = file?.name
         val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), videoUri!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null

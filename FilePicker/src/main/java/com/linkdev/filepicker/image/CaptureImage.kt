@@ -87,7 +87,7 @@ class CaptureImage(
     private fun generateFileData(data: Intent?): FileData? {
         val file = getFile()
         val filePath = file?.path
-        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), photoURI!!)
+        val fileName = file?.name
         val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), photoURI!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
