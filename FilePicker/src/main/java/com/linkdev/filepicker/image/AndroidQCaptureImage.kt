@@ -29,7 +29,7 @@ class AndroidQCaptureImage(
         const val TAG = "FilePickerTag"
     }
 
-    override fun pickFiles(mimeTypeList: ArrayList<MimeType>, chooserMessage: String) {
+    override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             photoURI =

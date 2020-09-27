@@ -21,7 +21,7 @@ class PickFiles(
         const val TAG = "FilePickerTag"
     }
 
-    override fun pickFiles(mimeTypeList: ArrayList<MimeType>, chooserMessage: String) {
+    override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val mimeType = MimeType.getArrayOfMimeType(mimeTypeList)// get mime type strings
         // make action and set types
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -30,11 +30,9 @@ class PickFiles(
         if (selectionType == SelectionTypes.MULTIPLE)
             pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
-        // make chooser and set message
-        val chooserIntent = Intent.createChooser(pickIntent, chooserMessage)
         // start activity for result
         try {
-            fragment.startActivityForResult(chooserIntent, requestCode)
+            fragment.startActivityForResult(pickIntent, requestCode)
         } catch (ex: SecurityException) {
             logError(NOT_HANDLED_ERROR_MESSAGE, ex)
         }

@@ -32,7 +32,7 @@ class CaptureImage(
         const val TAG = "FilePickerTag"
     }
 
-    override fun pickFiles(mimeTypeList: ArrayList<MimeType>, chooserMessage: String) {
+    override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {

@@ -30,7 +30,7 @@ class AndroidQCaptureVideo(
         const val TAG = "FilePickerTag"
     }
 
-    override fun pickFiles(mimeTypeList: ArrayList<MimeType>, chooserMessage: String) {
+    override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureVideoIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
             videoUri =

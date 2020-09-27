@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
                 pickFilesFactory = PickFilesFactory(
                     this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
                 ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
-                pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "capture image")
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG))
             } else {
                 requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
             }
@@ -70,7 +70,7 @@ class MainFragment : Fragment() {
                 pickFilesFactory = PickFilesFactory(
                     this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
                 ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
-                pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "record Image")
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4))
             } else {
                 requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_VIDEO_REQUEST_CODE)
             }
@@ -86,7 +86,7 @@ class MainFragment : Fragment() {
                     requestCode = PICK_ALL_REQUEST_CODE,
                     selectionType = SelectionTypes.MULTIPLE
                 ).getPickInstance(FactoryFilesType.PICK_FILES)
-                pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES), "choose Files")
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES))
             } else {
                 requestPermissionsCompat(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
             }
@@ -98,9 +98,7 @@ class MainFragment : Fragment() {
                     fragment = this,
                     requestCode = PICK_IMAGE_REQUEST_CODE
                 ).getPickInstance(FactoryFilesType.PICK_FILES)
-                pickFilesFactory?.pickFiles(
-                    arrayListOf(MimeType.JPEG, MimeType.PNG), "choose image"
-                )
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG, MimeType.PNG))
             } else {
                 requestPermissionsCompat(getStoragePermissionList(), PICK_IMAGE_REQUEST_CODE)
             }
@@ -112,9 +110,7 @@ class MainFragment : Fragment() {
                     fragment = this,
                     requestCode = PICK_VIDEO_REQUEST_CODE
                 ).getPickInstance(FactoryFilesType.PICK_FILES)
-                pickFilesFactory?.pickFiles(
-                    arrayListOf(MimeType.ALL_VIDEOS), "choose video"
-                )
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_VIDEOS))
             } else {
                 requestPermissionsCompat(getStoragePermissionList(), PICK_VIDEO_REQUEST_CODE)
             }
@@ -126,9 +122,7 @@ class MainFragment : Fragment() {
                     fragment = this,
                     requestCode = PICK_TEXT_FILES_REQUEST_CODE
                 ).getPickInstance(FactoryFilesType.PICK_FILES)
-                pickFilesFactory?.pickFiles(
-                    arrayListOf(MimeType.PDF, MimeType.DOC, MimeType.DOCX), "choose Text file"
-                )
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.PDF, MimeType.DOC, MimeType.DOCX))
             } else {
                 requestPermissionsCompat(getStoragePermissionList(), PICK_TEXT_FILES_REQUEST_CODE)
             }
