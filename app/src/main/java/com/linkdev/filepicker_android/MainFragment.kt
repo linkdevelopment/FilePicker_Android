@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
     private var pickFilesFactory: IPickFilesFactory? = null
+    private lateinit var attachedFilesAdapter: AttachedFilesAdapter
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -38,7 +40,14 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initViews()
         setListeners()
+    }
+
+    private fun initViews() {
+        attachedFilesAdapter = AttachedFilesAdapter(requireContext())
+        rvFiles.layoutManager = LinearLayoutManager(requireContext())
+        rvFiles.adapter = attachedFilesAdapter
     }
 
     private fun setListeners() {
@@ -72,7 +81,7 @@ class MainFragment : Fragment() {
 
                 override fun onFilePicked(fileData: ArrayList<FileData>) {
                     Log.e(TAG, "onFilePicked")
-                    Log.e(TAG, "file data size $fileData")
+                    attachedFilesAdapter.addFiles(fileData)
                 }
             })
     }

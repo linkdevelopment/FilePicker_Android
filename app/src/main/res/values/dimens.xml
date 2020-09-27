@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="margin_9">9dp</dimen>
     <dimen name="margin_15">15dp</dimen>
+    <dimen name="card_radius">5dp</dimen>
 </resources>
