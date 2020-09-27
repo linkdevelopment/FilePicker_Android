@@ -3,6 +3,8 @@
     <dimen name="margin_5">5dp</dimen>
     <dimen name="margin_9">9dp</dimen>
     <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
     <dimen name="card_radius">5dp</dimen>
     <dimen name="pick_btn_width">125dp</dimen>
 </resources>

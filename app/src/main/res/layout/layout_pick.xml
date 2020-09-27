@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvPick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/margin_5"
+        android:gravity="center_vertical|start"
+        android:padding="@dimen/margin_5"
+        android:text="@string/pick"
+        android:textColor="@android:color/black"
+        app:drawableStartCompat="@drawable/ic_arrow_right"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnPickFiles"
+        android:layout_width="@dimen/pick_btn_width"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_files"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPick" />
+
+    <TextView
+        android:id="@+id/tvSelectionType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_9"
+        android:drawablePadding="@dimen/margin_5"
+        android:gravity="center_vertical|start"
+        android:padding="@dimen/margin_5"
+        android:text="@string/selection_types"
+        android:textColor="@android:color/black"
+        app:drawableStartCompat="@drawable/ic_arrow_drop_down"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPickFiles" />
+
+    <RadioGroup
+        android:id="@+id/rgSelectionTypes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_30"
+        android:layout_marginTop="@dimen/margin_5"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectionType">
+
+        <RadioButton
+            android:id="@+id/rbSingleSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:padding="@dimen/margin_5"
+            android:text="@string/single_selection" />
+
+        <RadioButton
+            android:id="@+id/rbMultipleSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_5"
+            android:text="@string/multiple_selection" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/pickGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="btnPickFiles,tvSelectionType,rgSelectionTypes"
+        app:layout_constraintTop_toBottomOf="@id/tvPick" />
+</androidx.constraintlayout.widget.ConstraintLayout>

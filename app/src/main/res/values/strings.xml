@@ -6,4 +6,9 @@
     <string name="pick_images">Pick Images</string>
     <string name="pick_videos">Pick Videos</string>
     <string name="pdfs_doc"><![CDATA[PDFs & DOCs]]></string>
+    <string name="capture">Capture</string>
+    <string name="pick">Pick</string>
+    <string name="single_selection">Single Selection</string>
+    <string name="multiple_selection">Multiple selection</string>
+    <string name="selection_types">Selection types</string>
 </resources>

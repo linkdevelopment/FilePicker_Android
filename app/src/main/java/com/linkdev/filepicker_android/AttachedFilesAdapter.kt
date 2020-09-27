@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_attached_file.view.*
 
 class AttachedFilesAdapter(private val context: Context) :
     RecyclerView.Adapter<AttachedFilesAdapter.AttachedFilesViewHolder>() {
-    private val attachedFilesList = arrayListOf<FileData>()
+    private var attachedFilesList = arrayListOf<FileData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttachedFilesViewHolder {
         val view =
             LayoutInflater.from(context).inflate(R.layout.item_attached_file, parent, false)
@@ -23,8 +23,8 @@ class AttachedFilesAdapter(private val context: Context) :
         holder.onBind(attachedFilesList[position])
     }
 
-    fun addFiles(attachedFiles: ArrayList<FileData>) {
-        attachedFilesList.addAll(attachedFiles)
+    fun replaceFiles(attachedFiles: ArrayList<FileData>) {
+        attachedFilesList = attachedFiles
         notifyDataSetChanged()
     }
 
