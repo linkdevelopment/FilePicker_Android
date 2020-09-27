@@ -70,11 +70,15 @@ class MainFragment : Fragment() {
         }
 
         layoutCapture.setOnClickListener {
-            onCaptureClicked()
+            collapseExpandSection(captureFlow, imgCaptureArrow)
         }
 
         layoutPick.setOnClickListener {
-            onPickClicked()
+            collapseExpandSection(pickGroup, imgPickArrow)
+        }
+
+        layoutSelectionType.setOnClickListener {
+            collapseExpandSection(rgSelectionTypes, imgSelectionArrow)
         }
     }
 
@@ -84,7 +88,7 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG))
+            pickFilesFactory?.pickFiles()
         } else {
             requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
         }
@@ -96,7 +100,7 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4))
+            pickFilesFactory?.pickFiles()
         } else {
             requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_VIDEO_REQUEST_CODE)
         }
@@ -104,6 +108,7 @@ class MainFragment : Fragment() {
 
     /**
      * send list of mime types [com.linkdev.filepicker.models.MimeType]
+     * or will allow all files mime types [com.linkdev.filepicker.models.MimeType.ALL_FILES]
      * check storage permission and open documents
      * */
     private fun onPickFilesClicked() {
@@ -117,14 +122,6 @@ class MainFragment : Fragment() {
         } else {
             requestPermissionsCompat(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
         }
-    }
-
-    private fun onCaptureClicked() {
-        collapseExpandSection(captureFlow, imgCaptureArrow)
-    }
-
-    private fun onPickClicked() {
-        collapseExpandSection(pickGroup, imgPickArrow)
     }
 
     private fun collapseExpandSection(sectionView: View, arrowImage: ImageView) {

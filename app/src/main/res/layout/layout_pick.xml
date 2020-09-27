@@ -42,19 +42,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutPick" />
 
-    <TextView
-        android:id="@+id/tvSelectionType"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutSelectionType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_9"
-        android:drawablePadding="@dimen/margin_5"
-        android:gravity="center_vertical|start"
         android:padding="@dimen/margin_5"
-        android:text="@string/selection_types"
-        android:textColor="@android:color/black"
-        app:drawableStartCompat="@drawable/ic_arrow_drop_down"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPickFiles" />
+        app:layout_constraintTop_toBottomOf="@id/btnPickFiles">
+
+        <TextView
+            android:id="@+id/tvSelectionType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:gravity="center_vertical|start"
+            android:text="@string/selection_types"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSelectionArrow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgSelectionArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_drop_down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RadioGroup
         android:id="@+id/rgSelectionTypes"
@@ -62,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_30"
         android:layout_marginTop="@dimen/margin_5"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectionType">
+        app:layout_constraintTop_toBottomOf="@id/layoutSelectionType">
 
         <RadioButton
             android:id="@+id/rbSingleSelection"
@@ -85,6 +101,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="btnPickFiles,tvSelectionType,rgSelectionTypes"
+        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,layoutSelectionType"
         app:layout_constraintTop_toBottomOf="@id/layoutPick" />
 </androidx.constraintlayout.widget.ConstraintLayout>
