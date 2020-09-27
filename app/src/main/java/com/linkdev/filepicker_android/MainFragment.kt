@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
-import com.linkdev.filepicker.models.ErrorModel
-import com.linkdev.filepicker.models.FactoryFilesType
-import com.linkdev.filepicker.models.FileData
-import com.linkdev.filepicker.models.MimeType
+import com.linkdev.filepicker.models.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
@@ -33,7 +30,6 @@ class MainFragment : Fragment() {
         const val PICK_VIDEO_REQUEST_CODE = 1002
         const val CAPTURE_VIDEO_REQUEST_CODE = 1003
         const val PICK_TEXT_FILES_REQUEST_CODE = 1004
-        const val PICK_AUDIO_REQUEST_CODE = 1005
         const val PICK_ALL_REQUEST_CODE = 1006
         const val IMAGES_FOLDER_NAME = "File Picker Images"
         const val VIDEOS_FOLDER_NAME = "File Picker Videos"
@@ -63,7 +59,7 @@ class MainFragment : Fragment() {
                 pickFilesFactory = PickFilesFactory(
                     this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
                 ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
-                pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "capture image")
             } else {
                 requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
             }
@@ -74,9 +70,67 @@ class MainFragment : Fragment() {
                 pickFilesFactory = PickFilesFactory(
                     this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
                 ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
-                pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "record Image")
             } else {
-                requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
+                requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_VIDEO_REQUEST_CODE)
+            }
+        }
+        /**
+         * send list of mime types [com.linkdev.filepicker.models.MimeType]
+         * can send selection type [com.linkdev.filepicker.models.SelectionTypes] by default it is[com.linkdev.filepicker.models.SelectionTypes.SINGLE]
+         * */
+        btnPickFiles.setOnClickListener {
+            if (arePermissionsGranted(getStoragePermissionList())) {
+                pickFilesFactory = PickFilesFactory(
+                    fragment = this,
+                    requestCode = PICK_ALL_REQUEST_CODE,
+                    selectionType = SelectionTypes.MULTIPLE
+                ).getPickInstance(FactoryFilesType.PICK_FILES)
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES), "choose Files")
+            } else {
+                requestPermissionsCompat(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
+            }
+        }
+
+        btnPickImages.setOnClickListener {
+            if (arePermissionsGranted(getStoragePermissionList())) {
+                pickFilesFactory = PickFilesFactory(
+                    fragment = this,
+                    requestCode = PICK_IMAGE_REQUEST_CODE
+                ).getPickInstance(FactoryFilesType.PICK_FILES)
+                pickFilesFactory?.pickFiles(
+                    arrayListOf(MimeType.JPEG, MimeType.PNG), "choose image"
+                )
+            } else {
+                requestPermissionsCompat(getStoragePermissionList(), PICK_IMAGE_REQUEST_CODE)
+            }
+        }
+
+        btnPickVideos.setOnClickListener {
+            if (arePermissionsGranted(getStoragePermissionList())) {
+                pickFilesFactory = PickFilesFactory(
+                    fragment = this,
+                    requestCode = PICK_VIDEO_REQUEST_CODE
+                ).getPickInstance(FactoryFilesType.PICK_FILES)
+                pickFilesFactory?.pickFiles(
+                    arrayListOf(MimeType.ALL_VIDEOS), "choose video"
+                )
+            } else {
+                requestPermissionsCompat(getStoragePermissionList(), PICK_VIDEO_REQUEST_CODE)
+            }
+        }
+
+        btnTextFiles.setOnClickListener {
+            if (arePermissionsGranted(getStoragePermissionList())) {
+                pickFilesFactory = PickFilesFactory(
+                    fragment = this,
+                    requestCode = PICK_TEXT_FILES_REQUEST_CODE
+                ).getPickInstance(FactoryFilesType.PICK_FILES)
+                pickFilesFactory?.pickFiles(
+                    arrayListOf(MimeType.PDF, MimeType.DOC, MimeType.DOCX), "choose Text file"
+                )
+            } else {
+                requestPermissionsCompat(getStoragePermissionList(), PICK_TEXT_FILES_REQUEST_CODE)
             }
         }
     }
