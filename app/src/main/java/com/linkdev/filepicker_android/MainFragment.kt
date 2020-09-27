@@ -1,17 +1,24 @@
 package com.linkdev.filepicker_android
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
-import com.linkdev.filepicker.models.*
+import com.linkdev.filepicker.models.ErrorModel
+import com.linkdev.filepicker.models.FactoryFilesType
+import com.linkdev.filepicker.models.FileData
+import com.linkdev.filepicker.models.MimeType
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
@@ -52,37 +59,77 @@ class MainFragment : Fragment() {
 
     private fun setListeners() {
         btnCapturePhoto.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
-            ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
+            if (arePermissionsGranted(getCameraPermissionsList())) {
+                pickFilesFactory = PickFilesFactory(
+                    this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
+                ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
+            } else {
+                requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
+            }
         }
 
         btnRecordVideo.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
-            ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
+            if (arePermissionsGranted(getCameraPermissionsList())) {
+                pickFilesFactory = PickFilesFactory(
+                    this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
+                ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
+                pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
+            } else {
+                requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
+            }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        pickFilesFactory?.handleActivityResult(
-            requestCode, resultCode, data, callback = object :
-                PickFilesStatusCallback {
-                override fun onPickFileCanceled() {
-                    Log.e(TAG, "onPickFileCanceled")
-                }
+        pickFilesFactory?.handleActivityResult(requestCode, resultCode, data, pickFilesCallback)
+    }
 
-                override fun onPickFileError(errorModel: ErrorModel) {
-                    Log.e(TAG, "onPickFileError")
-                }
+    private val pickFilesCallback = object :
+        PickFilesStatusCallback {
+        override fun onPickFileCanceled() {
+            Log.e(TAG, "onPickFileCanceled")
+        }
 
-                override fun onFilePicked(fileData: ArrayList<FileData>) {
-                    Log.e(TAG, "onFilePicked")
-                    attachedFilesAdapter.addFiles(fileData)
-                }
-            })
+        override fun onPickFileError(errorModel: ErrorModel) {
+            Log.e(TAG, "onPickFileError")
+        }
+
+        override fun onFilePicked(fileData: ArrayList<FileData>) {
+            Log.e(TAG, "onFilePicked")
+            attachedFilesAdapter.addFiles(fileData)
+        }
+    }
+
+    private fun arePermissionsGranted(permissions: Array<String>): Boolean {
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) return false
+        }
+        return true
+    }
+
+    private fun requestPermissionsCompat(
+        permissions: Array<String>,
+        requestCode: Int
+    ) {
+        ActivityCompat.requestPermissions(requireActivity(), permissions, requestCode)
+    }
+
+    private fun getCameraPermissionsList(): Array<String> {
+        return arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+        )
+    }
+
+    private fun getStoragePermissionList(): Array<String> {
+        return arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
     }
 }
