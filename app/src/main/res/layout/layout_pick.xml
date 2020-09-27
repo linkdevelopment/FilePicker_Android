@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -96,11 +97,55 @@
             android:text="@string/multiple_selection" />
     </RadioGroup>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutMimeTypes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_9"
+        android:padding="@dimen/margin_5"
+        app:layout_constraintTop_toBottomOf="@id/rgSelectionTypes">
+
+        <TextView
+            android:id="@+id/tvMimeTypes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:gravity="center_vertical|start"
+            android:text="@string/mime_types"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgMimeTypesArrow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgMimeTypesArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMimeTypes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margin_30"
+        android:paddingTop="@dimen/margin_5"
+        android:paddingEnd="@dimen/margin_15"
+        android:paddingBottom="@dimen/margin_5"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/layoutMimeTypes"
+        tools:listitem="@layout/item_mime_types" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/pickGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,layoutSelectionType"
+        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,layoutSelectionType,layoutMimeTypes"
         app:layout_constraintTop_toBottomOf="@id/layoutPick" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -54,5 +54,13 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: ArrayList<S
             }
             return mMimeTypeList.toTypedArray()
         }
+
+        fun toList(): ArrayList<MimeType> {
+            return arrayListOf(
+                ALL_IMAGES, JPEG, PNG, GIF, BMP, WEBP, ALL_VIDEOS, MPEG,
+                MP4, GPP, GPP2, AVI, TXT, PDF, DOC, DOCX, XLS, XLSX, PTT,
+                PTTX
+            )
+        }
     }
 }

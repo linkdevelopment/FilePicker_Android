@@ -10,12 +10,15 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
@@ -28,6 +31,7 @@ import kotlinx.android.synthetic.main.layout_pick.*
 class MainFragment : Fragment() {
     private var pickFilesFactory: IPickFilesFactory? = null
     private lateinit var attachedFilesAdapter: AttachedFilesAdapter
+    private lateinit var mimeTypesAdapter: MimeTypesAdapter
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -51,9 +55,21 @@ class MainFragment : Fragment() {
     }
 
     private fun initViews() {
+        initAttachFilesRecyclerView()
+        initMimeTypesRecyclerView()
+        collapseExpandSection(captureFlow, imgCaptureArrow)
+    }
+
+    private fun initAttachFilesRecyclerView() {
         attachedFilesAdapter = AttachedFilesAdapter(requireContext())
         rvFiles.layoutManager = LinearLayoutManager(requireContext())
         rvFiles.adapter = attachedFilesAdapter
+    }
+
+    private fun initMimeTypesRecyclerView() {
+        mimeTypesAdapter = MimeTypesAdapter(requireContext())
+        rvMimeTypes.layoutManager = GridLayoutManager(requireContext(), 2)
+        rvMimeTypes.adapter = mimeTypesAdapter
     }
 
     private fun setListeners() {
@@ -79,6 +95,10 @@ class MainFragment : Fragment() {
 
         layoutSelectionType.setOnClickListener {
             collapseExpandSection(rgSelectionTypes, imgSelectionArrow)
+        }
+
+        layoutMimeTypes.setOnClickListener {
+            collapseExpandSection(rvMimeTypes, imgMimeTypesArrow)
         }
     }
 

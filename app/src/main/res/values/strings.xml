@@ -11,4 +11,5 @@
     <string name="single_selection">Single Selection</string>
     <string name="multiple_selection">Multiple selection</string>
     <string name="selection_types">Selection types</string>
+    <string name="mime_types">Mime types</string>
 </resources>
