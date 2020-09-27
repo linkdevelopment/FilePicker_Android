@@ -3,4 +3,7 @@
     <string name="capture_photo">Capture Photo</string>
     <string name="record_video">Record Video</string>
     <string name="pick_files">Pick Files</string>
+    <string name="pick_images">Pick Images</string>
+    <string name="pick_videos">Pick Videos</string>
+    <string name="pdfs_doc"><![CDATA[PDFs & DOCs]]></string>
 </resources>

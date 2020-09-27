@@ -6,27 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:paddingStart="@dimen/margin_15"
-    android:paddingTop="@dimen/margin_15"
-    android:paddingEnd="@dimen/margin_15">
+    android:paddingTop="@dimen/margin_15">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/btnCapturePhoto"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/pick_btn_width"
             android:layout_height="wrap_content"
             android:text="@string/capture_photo"
             android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@+id/btnRecordVideo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnRecordVideo"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/pick_btn_width"
             android:layout_height="wrap_content"
             android:text="@string/record_video"
             android:textAllCaps="false"
@@ -36,12 +34,51 @@
 
         <Button
             android:id="@+id/btnPickFiles"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/pick_btn_width"
             android:layout_height="wrap_content"
             android:text="@string/pick_files"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnPickImages"
             app:layout_constraintStart_toEndOf="@id/btnRecordVideo"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnPickImages"
+            android:layout_width="@dimen/pick_btn_width"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_images"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@id/btnPickVideos"
+            app:layout_constraintStart_toEndOf="@id/btnPickFiles"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnPickVideos"
+            android:layout_width="@dimen/pick_btn_width"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_videos"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toEndOf="@id/btnPickImages"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnTextFiles"
+            android:layout_width="@dimen/pick_btn_width"
+            android:layout_height="wrap_content"
+            android:text="@string/pdfs_doc"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnPickVideos"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/btnGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_9"
+            android:paddingEnd="@dimen/margin_9"
+            app:constraint_referenced_ids="btnCapturePhoto,btnRecordVideo,btnPickFiles,btnPickImages,btnPickVideos,btnTextFiles"
+            app:flow_wrapMode="aligned"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -51,7 +88,7 @@
             android:clipToPadding="false"
             android:paddingTop="@dimen/margin_15"
             android:paddingBottom="@dimen/margin_15"
-            app:layout_constraintTop_toBottomOf="@id/btnPickFiles"
+            app:layout_constraintTop_toBottomOf="@id/btnGroup"
             tools:listitem="@layout/item_attached_file" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
