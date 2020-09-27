@@ -10,8 +10,10 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.linkdev.filepicker.factory.IPickFilesFactory
@@ -67,11 +69,11 @@ class MainFragment : Fragment() {
             onPickFilesClicked()
         }
 
-        tvCapture.setOnClickListener {
+        layoutCapture.setOnClickListener {
             onCaptureClicked()
         }
 
-        tvPick.setOnClickListener {
+        layoutPick.setOnClickListener {
             onPickClicked()
         }
     }
@@ -119,13 +121,21 @@ class MainFragment : Fragment() {
     }
 
     private fun onCaptureClicked() {
-        captureFlow.visibility = VISIBLE
-        pickGroup.visibility = GONE
+        collapseExpandSection(captureFlow, imgCaptureArrow)
     }
 
     private fun onPickClicked() {
-        pickGroup.visibility = VISIBLE
-        captureFlow.visibility = GONE
+        collapseExpandSection(pickGroup, imgPickArrow)
+    }
+
+    private fun collapseExpandSection(sectionView: View, arrowImage: ImageView) {
+        if (sectionView.visibility == VISIBLE) {
+            sectionView.visibility = GONE
+            arrowImage.setImageResource(R.drawable.ic_arrow_right)
+        } else {
+            sectionView.visibility = VISIBLE
+            arrowImage.setImageResource(R.drawable.ic_arrow_drop_down)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

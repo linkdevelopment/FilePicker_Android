@@ -4,18 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvPick"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawablePadding="@dimen/margin_5"
-        android:gravity="center_vertical|start"
         android:padding="@dimen/margin_5"
-        android:text="@string/pick"
-        android:textColor="@android:color/black"
-        app:drawableStartCompat="@drawable/ic_arrow_right"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvPick"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:gravity="center_vertical|start"
+            android:text="@string/pick"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgPickArrow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgPickArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnPickFiles"
@@ -24,7 +40,7 @@
         android:text="@string/pick_files"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPick" />
+        app:layout_constraintTop_toBottomOf="@id/layoutPick" />
 
     <TextView
         android:id="@+id/tvSelectionType"
@@ -70,5 +86,5 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="btnPickFiles,tvSelectionType,rgSelectionTypes"
-        app:layout_constraintTop_toBottomOf="@id/tvPick" />
+        app:layout_constraintTop_toBottomOf="@id/layoutPick" />
 </androidx.constraintlayout.widget.ConstraintLayout>
