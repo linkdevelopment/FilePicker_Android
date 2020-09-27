@@ -42,49 +42,18 @@ class MainFragment : Fragment() {
     }
 
     private fun setListeners() {
-        btnPickImage.setOnClickListener {
-            pickFilesFactory =
-                PickFilesFactory(
-                    this,
-                    PICK_IMAGE_REQUEST_CODE,
-                    selectionType = SelectionTypes.MULTIPLE
-                ).getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_IMAGES), "choose Image")
-        }
-        btnOpenCamera.setOnClickListener {
+        btnCapturePhoto.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.JPEG), "choose image")
         }
-        btnPickVideo.setOnClickListener {
-            pickFilesFactory =
-                PickFilesFactory(this, PICK_VIDEO_REQUEST_CODE)
-                    .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
-        }
-        btnCaptureVideo.setOnClickListener {
+
+        btnRecordVideo.setOnClickListener {
             pickFilesFactory = PickFilesFactory(
                 this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.MP4), "choose Image")
-        }
-        btnPickFile.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this, PICK_TEXT_FILES_REQUEST_CODE)
-                .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.PDF), "choose Image")
-        }
-
-        btnPickAudio.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this, PICK_AUDIO_REQUEST_CODE)
-                .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_AUDIO), "choose Image")
-        }
-
-        btnPickAll.setOnClickListener {
-            pickFilesFactory = PickFilesFactory(this, PICK_ALL_REQUEST_CODE)
-                .getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES), "choose Image")
         }
     }
 
