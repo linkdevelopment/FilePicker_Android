@@ -31,8 +31,8 @@ class MainFragment : Fragment() {
         const val CAPTURE_VIDEO_REQUEST_CODE = 1003
         const val PICK_TEXT_FILES_REQUEST_CODE = 1004
         const val PICK_ALL_REQUEST_CODE = 1006
-        const val IMAGES_FOLDER_NAME = "File Picker Images"
-        const val VIDEOS_FOLDER_NAME = "File Picker Videos"
+        const val IMAGES_FOLDER_NAME = "File Picker_Images"
+        const val VIDEOS_FOLDER_NAME = "File Picker_Videos"
     }
 
     override fun onCreateView(
