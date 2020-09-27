@@ -104,7 +104,6 @@ class MainFragment : Fragment() {
 
     /**
      * send list of mime types [com.linkdev.filepicker.models.MimeType]
-     * can send selection type [com.linkdev.filepicker.models.SelectionTypes] by default it is[com.linkdev.filepicker.models.SelectionTypes.SINGLE]
      * check storage permission and open documents
      * */
     private fun onPickFilesClicked() {
@@ -112,7 +111,7 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 fragment = this,
                 requestCode = PICK_ALL_REQUEST_CODE,
-                selectionType = SelectionTypes.MULTIPLE
+                selectionType = getSelectionType()
             ).getPickInstance(FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES))
         } else {
@@ -136,6 +135,16 @@ class MainFragment : Fragment() {
             sectionView.visibility = VISIBLE
             arrowImage.setImageResource(R.drawable.ic_arrow_drop_down)
         }
+    }
+
+    /**
+     * selection type [com.linkdev.filepicker.models.SelectionTypes] by default it is[com.linkdev.filepicker.models.SelectionTypes.SINGLE]
+     * */
+    private fun getSelectionType(): SelectionTypes {
+        return if (rbMultipleSelection.isChecked)
+            SelectionTypes.MULTIPLE
+        else
+            SelectionTypes.SINGLE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
