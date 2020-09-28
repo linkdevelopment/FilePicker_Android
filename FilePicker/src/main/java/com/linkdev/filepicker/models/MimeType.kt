@@ -47,7 +47,7 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: ArrayList<S
 
     companion object {
         fun getArrayOfMimeType(mimeTypeList: ArrayList<MimeType>): Array<String> {
-            if (mimeTypeList.isEmpty()) throw Exception("File Picker Error, MIME type cannot be empty")
+            if (mimeTypeList.isEmpty()) return arrayOf(ALL_FILES.mimeTypeName)
             val mMimeTypeList = ArrayList<String>()
             for (mimeType: MimeType in mimeTypeList) {
                 mMimeTypeList.add(mimeType.mimeTypeName)
