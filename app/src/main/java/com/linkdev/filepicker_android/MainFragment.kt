@@ -87,10 +87,12 @@ class MainFragment : Fragment() {
 
         layoutCapture.setOnClickListener {
             collapseExpandSection(captureFlow, imgCaptureArrow)
+            collapseExpandSection(pickGroup, imgPickArrow, true)
         }
 
         layoutPick.setOnClickListener {
             collapseExpandSection(pickGroup, imgPickArrow)
+            collapseExpandSection(captureFlow, imgCaptureArrow, true)
         }
 
         layoutSelectionType.setOnClickListener {
