@@ -102,11 +102,16 @@ class MainFragment : Fragment() {
         }
     }
 
-    // check permission and open camera to capture photo
+    /**
+     * check permission and open camera to capture photo
+     * init [pickFilesFactory] by [PickFilesFactory.getPickInstance]
+     * */
     private fun onCapturePhotoClicked() {
         if (arePermissionsGranted(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_IMAGE_REQUEST_CODE, IMAGES_FOLDER_NAME
+                fragment = this,
+                requestCode = CAPTURE_IMAGE_REQUEST_CODE,
+                folderName = IMAGES_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles()
         } else {
@@ -114,11 +119,16 @@ class MainFragment : Fragment() {
         }
     }
 
-    // check permission and open camera to record video
+    /**
+     * check permission and open camera to record video
+     * init [pickFilesFactory] by [PickFilesFactory.getPickInstance]
+     * */
     private fun onRecordVideoClicked() {
         if (arePermissionsGranted(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
-                this, CAPTURE_VIDEO_REQUEST_CODE, VIDEOS_FOLDER_NAME
+                fragment = this,
+                requestCode = CAPTURE_VIDEO_REQUEST_CODE,
+                folderName = VIDEOS_FOLDER_NAME
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles()
         } else {
@@ -127,9 +137,8 @@ class MainFragment : Fragment() {
     }
 
     /**
-     * send list of mime types [com.linkdev.filepicker.models.MimeType]
-     * or will allow all files mime types [com.linkdev.filepicker.models.MimeType.ALL_FILES]
      * check storage permission and open documents
+     * init [pickFilesFactory] by  [PickFilesFactory.getPickInstance]
      * */
     private fun onPickFilesClicked() {
         if (arePermissionsGranted(getStoragePermissionList())) {
@@ -137,15 +146,15 @@ class MainFragment : Fragment() {
                 fragment = this,
                 requestCode = PICK_ALL_REQUEST_CODE,
                 selectionType = getSelectionType()
-            ).getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(mimeTypesAdapter.getCheckedMimeTypeList())
+            ).getPickInstance(fileType = FactoryFilesType.PICK_FILES)
+            pickFilesFactory?.pickFiles(mimeTypeList = getMimeTypesList())
         } else {
             requestPermissionsCompat(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
         }
     }
 
     /**
-     * selection type [com.linkdev.filepicker.models.SelectionTypes] by default it is[com.linkdev.filepicker.models.SelectionTypes.SINGLE]
+     * selection type [com.linkdev.filepicker.models.SelectionTypes]
      * */
     private fun getSelectionType(): SelectionTypes {
         return if (rbMultipleSelection.isChecked)
@@ -154,6 +163,17 @@ class MainFragment : Fragment() {
             SelectionTypes.SINGLE
     }
 
+    /**
+     * return support list of mime types [com.linkdev.filepicker.models.MimeType]
+     * or by default will allow all files mime types [com.linkdev.filepicker.models.MimeType.ALL_FILES]
+     * */
+    private fun getMimeTypesList(): ArrayList<MimeType> {
+        return mimeTypesAdapter.getCheckedMimeTypeList()
+    }
+
+    /**
+     * call [IPickFilesFactory.handleActivityResult] and handle status using [PickFilesStatusCallback]
+     * */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(requestCode, resultCode, data, pickFilesCallback)
