@@ -138,7 +138,7 @@ class MainFragment : Fragment() {
                 requestCode = PICK_ALL_REQUEST_CODE,
                 selectionType = getSelectionType()
             ).getPickInstance(FactoryFilesType.PICK_FILES)
-            pickFilesFactory?.pickFiles(arrayListOf(MimeType.ALL_FILES))
+            pickFilesFactory?.pickFiles(mimeTypesAdapter.getCheckedMimeTypeList())
         } else {
             requestPermissionsCompat(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
         }

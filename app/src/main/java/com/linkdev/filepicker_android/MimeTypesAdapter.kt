@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_mime_types.view.*
 class MimeTypesAdapter(private val context: Context) :
     RecyclerView.Adapter<MimeTypesAdapter.MimeTypesViewHolder>() {
     private var mimeTypesList = MimeType.toList()
-
+    private var checkedMimeTypesList = arrayListOf<MimeType>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MimeTypesViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_mime_types, parent, false)
         return MimeTypesViewHolder(view)
@@ -23,9 +23,21 @@ class MimeTypesAdapter(private val context: Context) :
         holder.onBind(mimeTypesList[position])
     }
 
+    fun getCheckedMimeTypeList(): ArrayList<MimeType> {
+        return checkedMimeTypesList
+    }
+
     inner class MimeTypesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun onBind(mimeType: MimeType) {
             itemView.cbMimeType.text = mimeType.mimeTypeName
+
+            itemView.cbMimeType.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    checkedMimeTypesList.add(mimeType)
+                } else {
+                    checkedMimeTypesList.remove(mimeType)
+                }
+            }
         }
     }
 }
