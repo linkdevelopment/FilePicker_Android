@@ -3,58 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutPick"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/crdLayoutPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_15"
-        android:layout_marginEnd="@dimen/margin_15"
-        android:padding="@dimen/margin_5"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvPick"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutPick"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|start"
-            android:text="@string/pick"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/font_large"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginEnd="@dimen/margin_15"
+            android:layout_marginBottom="@dimen/margin_12"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imgPickArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvPick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:text="@string/pick"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_large"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnPickFiles"
-        android:layout_width="@dimen/pick_btn_width"
-        android:layout_height="@dimen/btns_height"
-        android:background="@color/colorAccent"
-        android:text="@string/pick_files"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutPick" />
+            <ImageView
+                android:id="@+id/imgPickArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutSelectionType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_9"
-        android:padding="@dimen/margin_5"
-        app:layout_constraintTop_toBottomOf="@id/btnPickFiles">
+        android:layout_marginEnd="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_9"
+        app:layout_constraintTop_toBottomOf="@id/crdLayoutPick">
 
         <TextView
             android:id="@+id/tvSelectionType"
@@ -65,7 +66,7 @@
             android:text="@string/selection_types"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgSelectionArrow"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -74,7 +75,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_drop_down"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -106,8 +107,10 @@
         android:id="@+id/layoutMimeTypes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_9"
-        android:padding="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_9"
         app:layout_constraintTop_toBottomOf="@id/rgSelectionTypes">
 
         <TextView
@@ -119,16 +122,16 @@
             android:text="@string/mime_types"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgMimeTypesArrow"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imgMimeTypesArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_right"
+            android:src="@drawable/ic_arrow_drop_down"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -141,16 +144,30 @@
         android:paddingTop="@dimen/margin_5"
         android:paddingEnd="@dimen/margin_15"
         android:paddingBottom="@dimen/margin_5"
-        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/layoutMimeTypes"
         tools:listitem="@layout/item_mime_types" />
+
+    <Button
+        android:id="@+id/btnPickFiles"
+        android:layout_width="@dimen/pick_btn_width"
+        android:layout_height="@dimen/btns_height"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginBottom="@dimen/margin_15"
+        android:background="@color/colorAccent"
+        android:text="@string/pick_files"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvMimeTypes" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/pickGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,layoutSelectionType,layoutMimeTypes"
-        app:layout_constraintTop_toBottomOf="@id/layoutPick" />
+        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,layoutSelectionType,layoutMimeTypes,rvMimeTypes"
+        app:layout_constraintTop_toBottomOf="@id/crdLayoutPick"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

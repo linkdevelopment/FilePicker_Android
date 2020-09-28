@@ -12,4 +12,5 @@
     <string name="multiple_selection">Multiple selection</string>
     <string name="selection_types">Selection types</string>
     <string name="mime_types">Mime types</string>
+    <string name="picked_files">Picked files</string>
 </resources>

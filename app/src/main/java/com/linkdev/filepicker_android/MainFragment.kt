@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -26,6 +27,7 @@ import com.linkdev.filepicker.models.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_capture.*
 import kotlinx.android.synthetic.main.layout_pick.*
+import kotlinx.android.synthetic.main.layout_picked_files.*
 
 
 class MainFragment : Fragment() {
@@ -190,16 +192,18 @@ class MainFragment : Fragment() {
     private val pickFilesCallback = object :
         PickFilesStatusCallback {
         override fun onPickFileCanceled() {
-            Log.e(TAG, "onPickFileCanceled")
+            Toast.makeText(requireContext(), "user cancel pick files", Toast.LENGTH_SHORT).show()
         }
 
         override fun onPickFileError(errorModel: ErrorModel) {
             Log.e(TAG, "onPickFileError")
+            Toast.makeText(requireContext(), "Some error occurred", Toast.LENGTH_SHORT).show()
         }
 
         override fun onFilePicked(fileData: ArrayList<FileData>) {
             Log.e(TAG, "onFilePicked")
             attachedFilesAdapter.replaceFiles(fileData)
+            layoutPickedFiles.visibility = VISIBLE
         }
     }
 
