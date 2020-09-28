@@ -39,8 +39,10 @@
     <Button
         android:id="@+id/btnPickFiles"
         android:layout_width="@dimen/pick_btn_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/btns_height"
+        android:background="@color/colorAccent"
         android:text="@string/pick_files"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutPick" />

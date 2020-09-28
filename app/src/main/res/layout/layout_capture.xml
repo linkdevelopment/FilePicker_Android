@@ -38,9 +38,11 @@
     <Button
         android:id="@+id/btnCapturePhoto"
         android:layout_width="@dimen/pick_btn_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/btns_height"
+        android:background="@color/colorAccent"
         android:text="@string/capture_photo"
         android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toStartOf="@+id/btnRecordVideo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,9 +50,11 @@
     <Button
         android:id="@+id/btnRecordVideo"
         android:layout_width="@dimen/pick_btn_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/btns_height"
+        android:background="@color/colorAccent"
         android:text="@string/record_video"
         android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@id/btnCapturePhoto"
         app:layout_constraintTop_toTopOf="parent" />
 

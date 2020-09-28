@@ -9,4 +9,5 @@
     <dimen name="pick_btn_width">125dp</dimen>
     <dimen name="font_medium">14sp</dimen>
     <dimen name="font_large">16sp</dimen>
+    <dimen name="btns_height">40dp</dimen>
 </resources>
