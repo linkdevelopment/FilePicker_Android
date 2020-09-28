@@ -19,6 +19,8 @@
             android:gravity="center_vertical|start"
             android:text="@string/capture"
             android:textColor="@android:color/black"
+            android:textSize="@dimen/font_large"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgCaptureArrow"
             app:layout_constraintTop_toTopOf="parent" />
