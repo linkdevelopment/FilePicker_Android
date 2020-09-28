@@ -144,16 +144,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun collapseExpandSection(sectionView: View, arrowImage: ImageView) {
-        if (sectionView.visibility == VISIBLE) {
-            sectionView.visibility = GONE
-            arrowImage.setImageResource(R.drawable.ic_arrow_right)
-        } else {
-            sectionView.visibility = VISIBLE
-            arrowImage.setImageResource(R.drawable.ic_arrow_drop_down)
-        }
-    }
-
     /**
      * selection type [com.linkdev.filepicker.models.SelectionTypes] by default it is[com.linkdev.filepicker.models.SelectionTypes.SINGLE]
      * */
@@ -167,6 +157,12 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(requestCode, resultCode, data, pickFilesCallback)
+        collapseExpandSection(rvMimeTypes, imgMimeTypesArrow, true)
+        if (requestCode == CAPTURE_IMAGE_REQUEST_CODE || requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
+            collapseExpandSection(pickGroup, imgPickArrow, true)
+        } else {
+            collapseExpandSection(captureFlow, imgCaptureArrow, true)
+        }
     }
 
     private val pickFilesCallback = object :
@@ -214,5 +210,19 @@ class MainFragment : Fragment() {
         return arrayOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
+    }
+
+    private fun collapseExpandSection(
+        sectionView: View,
+        arrowImage: ImageView,
+        forceCollapse: Boolean = false
+    ) {
+        if (sectionView.visibility == VISIBLE || forceCollapse) {
+            sectionView.visibility = GONE
+            arrowImage.setImageResource(R.drawable.ic_arrow_right)
+        } else {
+            sectionView.visibility = VISIBLE
+            arrowImage.setImageResource(R.drawable.ic_arrow_drop_down)
+        }
     }
 }
