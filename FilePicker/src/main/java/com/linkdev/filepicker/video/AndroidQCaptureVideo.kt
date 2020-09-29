@@ -18,8 +18,14 @@ import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.utils.FileUtils.VID_PREFIX
 
-
-class AndroidQCaptureVideo(
+/**
+ * AndroidQCaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
+ * either in the movie folder or given folder in the gallery for android 10
+ * @param fragment for host fragment
+ * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param folderName the name of directory that captured image will saved into
+ * */
+internal class AndroidQCaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
     private val folderName: String?
@@ -30,6 +36,7 @@ class AndroidQCaptureVideo(
         const val TAG = "FilePickerTag"
     }
 
+    //handle action to open camera and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureVideoIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
@@ -48,6 +55,13 @@ class AndroidQCaptureVideo(
         }
     }
 
+    /**
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * @param mRequestCode to identify who this result came from
+     * @param resultCode to identify if operation succeeded or canceled
+     * @param data return result data to the caller
+     * @param callback handle file status
+     */
     override fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     ) {

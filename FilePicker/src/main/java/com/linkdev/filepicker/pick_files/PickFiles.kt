@@ -12,7 +12,7 @@ import com.linkdev.filepicker.utils.FileUtils
 import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
-class PickFiles(
+internal class PickFiles(
     private val fragment: Fragment,
     private val requestCode: Int,
     private val selectionType: SelectionTypes

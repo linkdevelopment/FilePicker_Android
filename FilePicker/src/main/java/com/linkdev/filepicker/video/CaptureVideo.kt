@@ -20,7 +20,14 @@ import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.models.ErrorStatus
 import java.io.File
 
-class CaptureVideo(
+/**
+ * CaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
+ * either in the Picture folder or given folder in the gallery
+ * @param fragment for host fragment
+ * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param folderName the name of directory that captured image will saved into
+ * */
+internal class CaptureVideo(
     private val fragment: Fragment,
     private val requestCode: Int,
     private val folderName: String? = null
@@ -32,6 +39,7 @@ class CaptureVideo(
         const val TAG = "FilePickerTag"
     }
 
+    //handle action to open camera and saved temporary file and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
@@ -56,6 +64,13 @@ class CaptureVideo(
 
     }
 
+    /**
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * @param mRequestCode to identify who this result came from
+     * @param resultCode to identify if operation succeeded or canceled
+     * @param data return result data to the caller
+     * @param callback handle file status
+     */
     override fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     ) {

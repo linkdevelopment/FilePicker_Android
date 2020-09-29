@@ -9,7 +9,7 @@ import com.linkdev.filepicker.models.MimeType
 
 
 object AndroidQFileUtils {
-    fun getPhotoUri(
+    internal fun getPhotoUri(
         context: Context, prefix: String, mimeType: MimeType, folderName: String?
     ): Uri? {
         val relativePath: String = if (folderName.isNullOrBlank()) {
@@ -35,7 +35,7 @@ object AndroidQFileUtils {
         return uriSavedPhoto
     }
 
-    fun getVideoUri(
+    internal fun getVideoUri(
         context: Context, prefix: String, mimeType: MimeType, folderName: String?
     ): Uri? {
         val relativePath: String = if (folderName.isNullOrBlank()) {

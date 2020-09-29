@@ -1,7 +1,6 @@
 package com.linkdev.filepicker.models
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
 import androidx.annotation.Keep

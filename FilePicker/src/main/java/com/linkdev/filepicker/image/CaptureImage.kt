@@ -19,8 +19,14 @@ import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import java.io.File
 
-
-class CaptureImage(
+/**
+ * CaptureImage is a piece of PickFile library to handle open camera action and save captured imaged
+ * either in the Picture folder or given folder in the gallery
+ * @param fragment for host fragment
+ * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param folderName the name of directory that captured image will saved into
+ * */
+internal class CaptureImage(
     private val fragment: Fragment,
     private var requestCode: Int,
     private val folderName: String? = null
@@ -32,6 +38,7 @@ class CaptureImage(
         const val TAG = "FilePickerTag"
     }
 
+    //handle action to open camera and saved temporary file and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent
@@ -58,6 +65,13 @@ class CaptureImage(
         }
     }
 
+    /**
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * @param mRequestCode to identify who this result came from
+     * @param resultCode to identify if operation succeeded or canceled
+     * @param data return result data to the caller
+     * @param callback handle file status
+     */
     override fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     ) {
@@ -84,6 +98,10 @@ class CaptureImage(
         }
     }
 
+    /**
+     * generate file data object
+     * @return [FileData]
+     * */
     private fun generateFileData(data: Intent?): FileData? {
         val file = getFile()
         val filePath = file?.path
@@ -95,6 +113,9 @@ class CaptureImage(
             FileData(photoURI!!, filePath, file, fileName, mimeType, data)
     }
 
+    /**
+     * @return [File] saved file using [handleCapturedImageWithPublicDir] or [handleCapturedImageWithPrivateDir]
+     * */
     private fun getFile(): File? {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedImageWithPrivateDir(
@@ -109,12 +130,20 @@ class CaptureImage(
         return file
     }
 
+    /**
+     * save captured image in default folder
+     * @return [File]
+     * */
     private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {
         val fileNameWithExt =
             FileUtils.getUniqueFileNameWithExt(IMAG_PREFIX, FileUtils.CAMERA_IMAGE_TYPE)
         return FileUtils.writePublicFile(context, uri, fileNameWithExt)
     }
 
+    /**
+     * save captured image in given folder name
+     * @return [File]
+     * */
     private fun handleCapturedImageWithPrivateDir(
         context: Context, uri: Uri, currentCapturedPath: String, folderName: String
     ): File? {

@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-object FileUtils {
+internal object FileUtils {
     const val TAG = "FilePickerTag"
     const val CAMERA_IMAGE_TYPE = ".jpg"
     const val CAMERA_VIDEO_TYPE = ".mp4"

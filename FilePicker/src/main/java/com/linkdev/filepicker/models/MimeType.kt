@@ -1,8 +1,10 @@
 package com.linkdev.filepicker.models
 
-import java.lang.Exception
-
-enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: ArrayList<String>) {
+/**
+ * include all available mime types
+ * @param mimeTypeName for mime type pass to action
+ * @param fileExtension form file extension*/
+enum class MimeType(val mimeTypeName: String, val fileExtension: ArrayList<String>) {
     // ============== IMAGES ==============
     JPEG("image/jpeg", arrayListOf("jpg", "jpeg")),
     PNG("image/png", arrayListOf("png")),
@@ -59,7 +61,7 @@ enum class MimeType(val mimeTypeName: String, val mimeTypeExtension: ArrayList<S
             return arrayListOf(
                 ALL_IMAGES, JPEG, PNG, GIF, BMP, WEBP, ALL_VIDEOS, MPEG,
                 MP4, GPP, GPP2, AVI, TXT, PDF, DOC, DOCX, XLS, XLSX, PTT,
-                PTTX
+                ALL_AUDIO, PTTX
             )
         }
     }
