@@ -32,6 +32,7 @@ private var pickFilesFactory: IPickFilesFactory? = null
 ```
 ### Capture photo
 ```kotlin
+// folderName is the directory to save captured photo if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
                private val requestCode: Int,
@@ -42,7 +43,7 @@ pickFilesFactory = PickFilesFactory(
 
 ### Record video
 ```kotlin
-//folderName is the directory to save captured photos/recorded videos if it is null will save file in default directory.
+// folderName is the directory to save recorded videos if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
                private val requestCode: Int,
@@ -52,7 +53,7 @@ pickFilesFactory = PickFilesFactory(
 ```
 ### pick files from documents
 ```kotlin
-//selectionType is to allow multiple selection or not
+// selectionType is to allow multiple selection or not
 // mimeTypeList list of supported files mime types to be picked.
 pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
