@@ -3,7 +3,7 @@
 ![API](https://img.shields.io/badge/Min--SDK-21-yellowgreen)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 # **What is it?**
-FilePicker allows you easily capture image, record video from camera or pick any type of file from document with custom Mime type without creating lots of boilerplate.
+FilePicker allows you easily capture image, record video from camera or pick any type of files from document with custom Mime types without creating lots of boilerplate.
 
 # **Setup**
 
@@ -22,11 +22,11 @@ This library requires specific runtime permissions. Declare it in your `AndroidM
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.CAMERA" />
 ```
-**Note**: for devices running API 23 (Marshmallow) you have to request these permissions in the runtime, before calling `IPickFilesFactory.openCamera()`. It's demonstrated in the sample app.
+**Note**: for devices running API 23 (Marshmallow) you have to request these permissions in the runtime, before calling `IPickFilesFactory.pickFiles()`. It's demonstrated in the sample app.
 
 # **Usage**
 
-Create IPickFileFactory like this:
+Create IPickFileFactory instance like this:
 ```kotlin
 private var pickFilesFactory: IPickFilesFactory? = null
 ```
@@ -54,7 +54,7 @@ pickFilesFactory = PickFilesFactory(
 ### pick files from documents
 ```kotlin
 // selectionType is to allow multiple selection or not
-// mimeTypeList list of supported files mime types to be picked.
+// mimeTypeList list of supported files mime types to be selected.
 pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
                private val requestCode: Int,
@@ -62,22 +62,22 @@ pickFilesFactory = PickFilesFactory(
             ).getPickInstance(FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
-### Getting picked files list
+### Getting selected files list
 ```kotlin
 fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(requestCode, resultCode, data, object :
         PickFilesStatusCallback {
         override fun onPickFileCanceled() {
-        // pick file process canceled by user (resultCode = RESULT_CANCELED)
+            // pick file process canceled by user (resultCode = RESULT_CANCELED)
         }
 
         override fun onPickFileError(errorModel: ErrorModel) {
-        // some error occurred
+            // some error occurred
         }
 
         override fun onFilePicked(fileData: ArrayList<FileData>) {
-        // files picked successfully 
+            // files picked successfully 
         }
     })
                 
