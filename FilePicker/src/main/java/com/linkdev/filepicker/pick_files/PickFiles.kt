@@ -28,6 +28,12 @@ import com.linkdev.filepicker.utils.FileUtils
 import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
+/**
+ * Class used to open document, select files and handle selected file status
+ * @param fragment host view
+ * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param selectionType refers to [SelectionTypes] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
+ *                   by default is single selection*/
 internal class PickFiles(
     private val fragment: Fragment,
     private val requestCode: Int,

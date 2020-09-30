@@ -28,7 +28,7 @@ import com.linkdev.filepicker.video.AndroidQCaptureVideo
 import com.linkdev.filepicker.video.CaptureVideo
 
 /**
- * Class use to provide instance of each pick file type by [getPickInstance] and check [FactoryFilesType]
+ * Class used to provide instance of each pick file type by [getPickInstance] and check [FactoryFilesType]
  * @param fragment host fragment
  * @param requestCode used to handle [Fragment.onActivityResult]
  * @param folderName for custom folder name to save camera/video files

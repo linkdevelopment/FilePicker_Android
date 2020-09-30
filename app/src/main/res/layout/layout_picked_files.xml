@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|start"
-        android:text="@string/picked_files"
+        android:text="@string/selected_files"
         android:textColor="@android:color/black"
         android:textSize="@dimen/font_large"
         android:textStyle="bold" />
