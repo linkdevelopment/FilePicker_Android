@@ -26,16 +26,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
@@ -135,7 +131,7 @@ class MainFragment : Fragment() {
             ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles()
         } else {
-            requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
+            requestPermission(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
         }
     }
 
@@ -152,7 +148,7 @@ class MainFragment : Fragment() {
             ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles()
         } else {
-            requestPermissionsCompat(getCameraPermissionsList(), CAPTURE_VIDEO_REQUEST_CODE)
+            requestPermission(getCameraPermissionsList(), CAPTURE_VIDEO_REQUEST_CODE)
         }
     }
 
@@ -169,7 +165,7 @@ class MainFragment : Fragment() {
             ).getPickInstance(fileType = FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList = getMimeTypesList())
         } else {
-            requestPermissionsCompat(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
+            requestPermission(getStoragePermissionList(), PICK_ALL_REQUEST_CODE)
         }
     }
 
@@ -223,6 +219,20 @@ class MainFragment : Fragment() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            when (requestCode) {
+                CAPTURE_IMAGE_REQUEST_CODE -> onCapturePhotoClicked()
+                CAPTURE_VIDEO_REQUEST_CODE -> onRecordVideoClicked()
+                PICK_ALL_REQUEST_CODE -> onPickFilesClicked()
+            }
+        }
+    }
+
     private fun arePermissionsGranted(permissions: Array<String>): Boolean {
         for (permission in permissions) {
             if (ContextCompat.checkSelfPermission(
@@ -234,11 +244,11 @@ class MainFragment : Fragment() {
         return true
     }
 
-    private fun requestPermissionsCompat(
+    private fun requestPermission(
         permissions: Array<String>,
         requestCode: Int
     ) {
-        ActivityCompat.requestPermissions(requireActivity(), permissions, requestCode)
+        requestPermissions(permissions, requestCode)
     }
 
     private fun getCameraPermissionsList(): Array<String> {
