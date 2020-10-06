@@ -26,7 +26,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -275,7 +274,7 @@ class MainFragment : Fragment() {
         if (sectionView.visibility == VISIBLE || forceCollapse) {
             sectionView.visibility = GONE
             headerTextView
-                .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_right, 0)
+                .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
         } else {
             sectionView.visibility = VISIBLE
             headerTextView
