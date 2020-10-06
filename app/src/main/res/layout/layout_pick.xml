@@ -29,71 +29,37 @@
         app:cardElevation="@dimen/card_elevation"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutPick"
+        <TextView
+            android:id="@+id/tvPick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_15"
             android:layout_marginTop="@dimen/margin_12"
             android:layout_marginEnd="@dimen/margin_15"
             android:layout_marginBottom="@dimen/margin_12"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tvPick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|start"
-                android:text="@string/pick"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgPickArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutSelectionType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_20"
-        android:layout_marginTop="@dimen/margin_9"
-        android:layout_marginEnd="@dimen/margin_20"
-        android:layout_marginBottom="@dimen/margin_9"
-        app:layout_constraintTop_toBottomOf="@id/crdLayoutPick">
-
-        <TextView
-            android:id="@+id/tvSelectionType"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_5"
             android:gravity="center_vertical|start"
-            android:text="@string/selection_types"
+            android:text="@string/pick"
             android:textColor="@android:color/black"
+            android:textSize="@dimen/font_large"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_arrow_right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
 
-        <ImageView
-            android:id="@+id/imgSelectionArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_drop_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvSelectionType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|start"
+        android:paddingHorizontal="@dimen/margin_25"
+        android:paddingVertical="@dimen/margin_9"
+        android:text="@string/selection_types"
+        android:textColor="@android:color/black"
+        app:drawableEndCompat="@drawable/ic_arrow_drop_down"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/crdLayoutPick" />
 
     <RadioGroup
         android:id="@+id/rgSelectionTypes"
@@ -101,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_30"
         android:layout_marginTop="@dimen/margin_5"
-        app:layout_constraintTop_toBottomOf="@id/layoutSelectionType">
+        app:layout_constraintTop_toBottomOf="@id/tvSelectionType">
 
         <RadioButton
             android:id="@+id/rbSingleSelection"
@@ -119,37 +85,17 @@
             android:text="@string/multiple_selection" />
     </RadioGroup>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutMimeTypes"
+    <TextView
+        android:id="@+id/tvMimeTypes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_20"
-        android:layout_marginTop="@dimen/margin_9"
-        android:layout_marginEnd="@dimen/margin_20"
-        android:layout_marginBottom="@dimen/margin_9"
-        app:layout_constraintTop_toBottomOf="@id/rgSelectionTypes">
-
-        <TextView
-            android:id="@+id/tvMimeTypes"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_5"
-            android:gravity="center_vertical|start"
-            android:text="@string/mime_types"
-            android:textColor="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgMimeTypesArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_drop_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:gravity="center_vertical|start"
+        android:paddingHorizontal="@dimen/margin_25"
+        android:paddingVertical="@dimen/margin_9"
+        android:text="@string/mime_types"
+        android:textColor="@android:color/black"
+        app:drawableEndCompat="@drawable/ic_arrow_drop_down"
+        app:layout_constraintTop_toBottomOf="@id/rgSelectionTypes" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMimeTypes"
@@ -161,7 +107,7 @@
         android:paddingEnd="@dimen/margin_15"
         android:paddingBottom="@dimen/margin_5"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/layoutMimeTypes"
+        app:layout_constraintTop_toBottomOf="@id/tvMimeTypes"
         tools:listitem="@layout/item_mime_types" />
 
     <Button
@@ -183,7 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,layoutSelectionType,layoutMimeTypes,rvMimeTypes"
+        app:constraint_referenced_ids="btnPickFiles,rgSelectionTypes,tvSelectionType,tvMimeTypes,rvMimeTypes"
         app:layout_constraintTop_toBottomOf="@id/crdLayoutPick"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
