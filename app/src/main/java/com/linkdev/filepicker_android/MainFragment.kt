@@ -27,6 +27,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -73,7 +74,7 @@ class MainFragment : Fragment() {
     private fun initViews() {
         initAttachFilesRecyclerView()
         initMimeTypesRecyclerView()
-        collapseExpandSection(captureFlow, imgCaptureArrow)
+        collapseExpandSection(captureFlow, tvCapture)
     }
 
     private fun initAttachFilesRecyclerView() {
@@ -101,22 +102,22 @@ class MainFragment : Fragment() {
             onPickFilesClicked()
         }
 
-        layoutCapture.setOnClickListener {
-            collapseExpandSection(captureFlow, imgCaptureArrow)
-            collapseExpandSection(pickGroup, imgPickArrow, true)
+        crdLayoutCapture.setOnClickListener {
+            collapseExpandSection(captureFlow, tvCapture)
+            collapseExpandSection(pickGroup, tvPick, true)
         }
 
-        layoutPick.setOnClickListener {
-            collapseExpandSection(pickGroup, imgPickArrow)
-            collapseExpandSection(captureFlow, imgCaptureArrow, true)
+        crdLayoutPick.setOnClickListener {
+            collapseExpandSection(pickGroup, tvPick)
+            collapseExpandSection(captureFlow, tvCapture, true)
         }
 
-        layoutSelectionType.setOnClickListener {
-            collapseExpandSection(rgSelectionTypes, imgSelectionArrow)
+        tvSelectionType.setOnClickListener {
+            collapseExpandSection(rgSelectionTypes, tvSelectionType)
         }
 
-        layoutMimeTypes.setOnClickListener {
-            collapseExpandSection(rvMimeTypes, imgMimeTypesArrow)
+        tvMimeTypes.setOnClickListener {
+            collapseExpandSection(rvMimeTypes, tvMimeTypes)
         }
     }
 
@@ -195,11 +196,11 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(requestCode, resultCode, data, pickFilesCallback)
-        collapseExpandSection(rvMimeTypes, imgMimeTypesArrow, true)
+        collapseExpandSection(rvMimeTypes, tvMimeTypes, true)
         if (requestCode == CAPTURE_IMAGE_REQUEST_CODE || requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
-            collapseExpandSection(pickGroup, imgPickArrow, true)
+            collapseExpandSection(pickGroup, tvPick, true)
         } else {
-            collapseExpandSection(captureFlow, imgCaptureArrow, true)
+            collapseExpandSection(captureFlow, tvCapture, true)
         }
     }
 
@@ -268,15 +269,17 @@ class MainFragment : Fragment() {
 
     private fun collapseExpandSection(
         sectionView: View,
-        arrowImage: ImageView,
+        headerTextView: TextView,
         forceCollapse: Boolean = false
     ) {
         if (sectionView.visibility == VISIBLE || forceCollapse) {
             sectionView.visibility = GONE
-            arrowImage.setImageResource(R.drawable.ic_arrow_right)
+            headerTextView
+                .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_right, 0)
         } else {
             sectionView.visibility = VISIBLE
-            arrowImage.setImageResource(R.drawable.ic_arrow_drop_down)
+            headerTextView
+                .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0)
         }
     }
 }

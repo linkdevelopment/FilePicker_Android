@@ -29,37 +29,23 @@
         app:cardElevation="@dimen/card_elevation"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutCapture"
+        <TextView
+            android:id="@+id/tvCapture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_15"
             android:layout_marginTop="@dimen/margin_12"
             android:layout_marginEnd="@dimen/margin_15"
-            android:layout_marginBottom="@dimen/margin_12">
-
-            <TextView
-                android:id="@+id/tvCapture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|start"
-                android:text="@string/capture"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgCaptureArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginBottom="@dimen/margin_12"
+            android:gravity="center_vertical|start"
+            android:text="@string/capture"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_large"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.cardview.widget.CardView>
 
     <Button
