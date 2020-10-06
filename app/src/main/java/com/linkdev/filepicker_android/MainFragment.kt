@@ -48,12 +48,14 @@ class MainFragment : Fragment() {
     private lateinit var mimeTypesAdapter: MimeTypesAdapter
 
     companion object {
-        const val TAG = "FilePickerTag"
+        const val TAG = "MainFragment"
+        const val LOG_TAG = "FilePickerTag"
         const val CAPTURE_IMAGE_REQUEST_CODE = 1001
         const val CAPTURE_VIDEO_REQUEST_CODE = 1003
         const val PICK_ALL_REQUEST_CODE = 1004
         const val IMAGES_FOLDER_NAME = "File Picker_Images"
         const val VIDEOS_FOLDER_NAME = "File Picker_Videos"
+        fun newInstance(): MainFragment = MainFragment()
     }
 
     override fun onCreateView(
@@ -208,12 +210,12 @@ class MainFragment : Fragment() {
         }
 
         override fun onPickFileError(errorModel: ErrorModel) {
-            Log.e(TAG, "onPickFileError")
+            Log.e(LOG_TAG, "onPickFileError")
             Toast.makeText(requireContext(), "Some error occurred", Toast.LENGTH_SHORT).show()
         }
 
         override fun onFilePicked(fileData: ArrayList<FileData>) {
-            Log.e(TAG, "onFilePicked")
+            Log.e(LOG_TAG, "onFilePicked: $fileData")
             attachedFilesAdapter.replaceFiles(fileData)
             layoutPickedFiles.visibility = VISIBLE
         }

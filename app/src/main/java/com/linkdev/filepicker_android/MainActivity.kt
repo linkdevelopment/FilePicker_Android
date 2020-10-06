@@ -25,6 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentContainer, MainFragment(), "MainFragment").commit()
+            .add(R.id.fragmentContainer, MainFragment.newInstance(), MainFragment.TAG).commit()
     }
 }
