@@ -19,7 +19,7 @@ package com.linkdev.filepicker.utils
 import android.util.Log
 
 internal object LoggerUtils {
-    const val TAG = "FilePickerTag"
+    const val TAG = "FilePicker"
     fun logError(message: String, cause: Throwable?) {
         Log.e(TAG, message, cause)
     }

@@ -16,5 +16,5 @@
   -->
 
 <resources>
-    <string name="general_error">Something went wrong</string>
+    <string name="file_picker_general_error">An error occurred while processing</string>
 </resources>

@@ -18,6 +18,7 @@ package com.linkdev.filepicker.utils
 
 internal object PickFileConstants {
     object ErrorMessages {
-        const val NOT_HANDLED_ERROR_MESSAGE = "some permission not handled"
+        const val NOT_HANDLED_ERROR_MESSAGE =
+            "Please check the exception and handle suitable runtime permission"
     }
 }

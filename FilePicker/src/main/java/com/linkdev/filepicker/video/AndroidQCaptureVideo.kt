@@ -90,12 +90,12 @@ internal class AndroidQCaptureVideo(
                         callback.onFilePicked(arrayListOf(fileData))
                     else
                         callback.onPickFileError(
-                            ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
+                            ErrorModel(ErrorStatus.URI_ERROR, R.string.file_picker_general_error)
                         )
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
-                            ErrorStatus.DATA_ERROR, R.string.general_error
+                            ErrorStatus.DATA_ERROR, R.string.file_picker_general_error
                         )
                     )
                 }

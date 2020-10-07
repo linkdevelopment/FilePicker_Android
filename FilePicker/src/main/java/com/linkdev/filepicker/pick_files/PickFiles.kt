@@ -81,7 +81,7 @@ internal class PickFiles(
                 }
             } else {
                 callback.onPickFileError(
-                    ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                    ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_general_error)
                 )
             }
         } else {
@@ -98,7 +98,7 @@ internal class PickFiles(
                 val fileData = generateFileData(uri, data)
                 if (fileData == null) {
                     callback.onPickFileError(
-                        ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.general_error)
+                        ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.file_picker_general_error)
                     )
                 } else {
                     pickedFilesList.add(fileData)
@@ -107,7 +107,7 @@ internal class PickFiles(
             callback.onFilePicked(pickedFilesList)
         } else {
             callback.onPickFileError(
-                ErrorModel(ErrorStatus.DATA_ERROR, R.string.general_error)
+                ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_general_error)
             )
         }
     }
@@ -119,7 +119,7 @@ internal class PickFiles(
             val fileData = generateFileData(uri, data)
             if (fileData == null) {
                 callback.onPickFileError(
-                    ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.general_error)
+                    ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.file_picker_general_error)
                 )
             } else {
                 val pickedFilesList = ArrayList<FileData>()
@@ -128,7 +128,7 @@ internal class PickFiles(
             }
         } else {
             callback.onPickFileError(
-                ErrorModel(ErrorStatus.URI_ERROR, R.string.general_error)
+                ErrorModel(ErrorStatus.URI_ERROR, R.string.file_picker_general_error)
             )
         }
     }
