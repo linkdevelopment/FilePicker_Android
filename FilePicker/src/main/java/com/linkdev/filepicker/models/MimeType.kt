@@ -57,8 +57,8 @@ enum class MimeType(val mimeTypeName: String, val fileExtension: ArrayList<Strin
     ),
 
     // ============== Audio ==============
-    MP3("audio/mpeg", arrayListOf("mpeg", "mp3")),
-    ALL_AUDIO("audio/*", arrayListOf("mpeg", "mp3")),
+    MP3("audio/mpeg", arrayListOf("mp3")),
+    ALL_AUDIO("audio/*", arrayListOf("mp3")),
 
 
     ALL_FILES("*/*", arrayListOf("*/*"));
@@ -77,7 +77,7 @@ enum class MimeType(val mimeTypeName: String, val fileExtension: ArrayList<Strin
             return arrayListOf(
                 ALL_IMAGES, JPEG, PNG, GIF, BMP, WEBP, ALL_VIDEOS, MPEG,
                 MP4, GPP, GPP2, AVI, TXT, PDF, DOC, DOCX, XLS, XLSX, PTT,
-                ALL_AUDIO, PTTX
+                ALL_AUDIO, PTTX, MP3
             )
         }
     }
