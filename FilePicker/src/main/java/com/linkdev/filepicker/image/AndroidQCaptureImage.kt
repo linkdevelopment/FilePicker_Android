@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
@@ -36,12 +37,12 @@ import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_
 /**
  * AndroidQCaptureImage is a piece of PickFile library to handle open camera action and save captured imaged
  * either in the Picture folder or given folder in the gallery for android 10
- * @param fragment for host fragment
- * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param caller for host fragment/activity
+ * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
 internal class AndroidQCaptureImage(
-    private val fragment: Fragment,
+    private val caller: Caller,
     private val requestCode: Int,
     private val folderName: String?
 ) : IPickFilesFactory {
@@ -54,16 +55,16 @@ internal class AndroidQCaptureImage(
     //handle action to open camera and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
+        if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
             photoURI =
                 AndroidQFileUtils.getPhotoUri(
-                    fragment.requireContext(), IMAG_PREFIX, MimeType.JPEG, folderName
+                    caller.context, IMAG_PREFIX, MimeType.JPEG, folderName
                 )
             photoURI?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 try {
-                    fragment.startActivityForResult(captureImageIntent, requestCode)
+                    caller.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
 
@@ -73,7 +74,7 @@ internal class AndroidQCaptureImage(
     }
 
     /**
-     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
      * @param mRequestCode to identify who this result came from
      * @param resultCode to identify if operation succeeded or canceled
      * @param data return result data to the caller
@@ -101,16 +102,16 @@ internal class AndroidQCaptureImage(
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(fragment.requireContext(), photoURI)
+            AndroidQFileUtils.deleteUri(caller.context, photoURI)
         }
     }
 
     // create File data object
     private fun generateFileData(uri: Uri, data: Intent?): FileData? {
-        val filePath = FileUtils.getFilePathFromUri(fragment.requireContext(), uri)
+        val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
         val file = FileUtils.getFileFromPath(filePath) // create file
-        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), uri)
-        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), uri)
+        val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
+        val mimeType = FileUtils.getFileMimeType(caller.context, uri)
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else

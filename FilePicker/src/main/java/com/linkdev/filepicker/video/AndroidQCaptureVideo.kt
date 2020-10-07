@@ -31,18 +31,19 @@ import com.linkdev.filepicker.utils.FileUtils
 import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.utils.FileUtils.VID_PREFIX
 
 /**
  * AndroidQCaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
  * either in the movie folder or given folder in the gallery for android 10
- * @param fragment for host fragment
- * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param caller for host fragment/activity
+ * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
 internal class AndroidQCaptureVideo(
-    private val fragment: Fragment,
+    private val caller: Caller,
     private val requestCode: Int,
     private val folderName: String?
 ) : IPickFilesFactory {
@@ -55,15 +56,15 @@ internal class AndroidQCaptureVideo(
     //handle action to open camera and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        if (captureVideoIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
+        if (captureVideoIntent.resolveActivity(caller.context.packageManager) != null) {
             videoUri =
                 AndroidQFileUtils.getVideoUri(
-                    fragment.requireContext(), VID_PREFIX, MimeType.MP4, folderName
+                    caller.context, VID_PREFIX, MimeType.MP4, folderName
                 )
             videoUri?.let {
                 captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
                 try {
-                    fragment.startActivityForResult(captureVideoIntent, requestCode)
+                    caller.startActivityForResult(captureVideoIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
                 }
@@ -72,7 +73,7 @@ internal class AndroidQCaptureVideo(
     }
 
     /**
-     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
      * @param mRequestCode to identify who this result came from
      * @param resultCode to identify if operation succeeded or canceled
      * @param data return result data to the caller
@@ -100,16 +101,16 @@ internal class AndroidQCaptureVideo(
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(fragment.requireContext(), videoUri)
+            AndroidQFileUtils.deleteUri(caller.context, videoUri)
         }
     }
 
     // create File data object
     private fun generateFileData(uri: Uri, data: Intent?): FileData? {
-        val filePath = FileUtils.getFilePathFromUri(fragment.requireContext(), uri)
+        val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
         val file = FileUtils.getFileFromPath(filePath) // create file
-        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), uri)
-        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), uri)
+        val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
+        val mimeType = FileUtils.getFileMimeType(caller.context, uri)
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else

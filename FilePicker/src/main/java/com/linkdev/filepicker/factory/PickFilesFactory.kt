@@ -20,6 +20,7 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.image.AndroidQCaptureImage
 import com.linkdev.filepicker.image.CaptureImage
+import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.FactoryFilesType
 import com.linkdev.filepicker.models.SelectionMode
 import com.linkdev.filepicker.pick_files.PickFiles
@@ -29,15 +30,15 @@ import com.linkdev.filepicker.video.CaptureVideo
 
 /**
  * Class used to provide instance of each pick file type by [getInstance] and check [FactoryFilesType]
- * @param fragment host fragment
- * @param requestCode used to handle [Fragment.onActivityResult]
+ * @param caller host Fragment/Activity
+ * @param requestCode used to handle [Fragment.onActivityResult]/[android.app.Activity.onActivityResult]
  * @param folderName for custom folder name to save camera/video files
  *                   by default null and captured files saved in default folders
  *@param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
  *                   by default is single selection
  * */
 class PickFilesFactory(
-    private val fragment: Fragment,
+    private val caller: Any,
     private val requestCode: Int,
     private val folderName: String? = null,
     private val selectionMode: SelectionMode = SelectionMode.SINGLE
@@ -51,21 +52,22 @@ class PickFilesFactory(
      * [FactoryFilesType.PICK_FILES] to handel open documents and pick files
      * */
     fun getInstance(fileType: FactoryFilesType): IPickFilesFactory? {
+        val caller = Caller.getInstance(caller)
         return when (fileType) {
             FactoryFilesType.IMAGE_CAMERA -> {
                 if (Platform.isAndroidQ())
-                    AndroidQCaptureImage(fragment, requestCode, folderName)
+                    AndroidQCaptureImage(caller, requestCode, folderName)
                 else
-                    CaptureImage(fragment, requestCode, folderName)
+                    CaptureImage(caller, requestCode, folderName)
             }
             FactoryFilesType.VIDEO_CAMERA -> {
                 if (Platform.isAndroidQ())
-                    AndroidQCaptureVideo(fragment, requestCode, folderName)
+                    AndroidQCaptureVideo(caller, requestCode, folderName)
                 else
-                    CaptureVideo(fragment, requestCode, folderName)
+                    CaptureVideo(caller, requestCode, folderName)
 
             }
-            FactoryFilesType.PICK_FILES -> PickFiles(fragment, requestCode, selectionMode)
+            FactoryFilesType.PICK_FILES -> PickFiles(caller, requestCode, selectionMode)
         }
     }
 }

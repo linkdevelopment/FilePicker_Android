@@ -33,18 +33,19 @@ import com.linkdev.filepicker.utils.FileUtils.VID_PREFIX
 import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
 import java.io.File
 
 /**
  * CaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
  * either in the Picture folder or given folder in the gallery
- * @param fragment for host fragment
- * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param caller for host fragment/activity
+ * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
 internal class CaptureVideo(
-    private val fragment: Fragment,
+    private val caller: Caller,
     private val requestCode: Int,
     private val folderName: String? = null
 ) : IPickFilesFactory {
@@ -58,20 +59,20 @@ internal class CaptureVideo(
     //handle action to open camera and saved temporary file and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
-            val videoFile = FileUtils.createVideoFile(fragment.requireContext())
+        if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
+            val videoFile = FileUtils.createVideoFile(caller.context)
             currentCapturedPath = videoFile?.path
             videoUri =
                 currentCapturedPath?.let {
                     // get photo uri form content provider
-                    FileUtils.getFileUri(fragment.requireContext(), it)
+                    FileUtils.getFileUri(caller.context, it)
                 }
 
             videoUri?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
                 try {
-                    fragment.startActivityForResult(captureImageIntent, requestCode)
+                    caller.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
                 }
@@ -81,7 +82,7 @@ internal class CaptureVideo(
     }
 
     /**
-     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
      * @param mRequestCode to identify who this result came from
      * @param resultCode to identify if operation succeeded or canceled
      * @param data return result data to the caller
@@ -117,7 +118,7 @@ internal class CaptureVideo(
         val file = getFile()
         val filePath = file?.path
         val fileName = file?.name
-        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), videoUri!!)
+        val mimeType = FileUtils.getFileMimeType(caller.context, videoUri!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
@@ -127,14 +128,14 @@ internal class CaptureVideo(
     private fun getFile(): File? {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedVideoWithPrivateDir(
-                fragment.requireContext(), videoUri!!, currentCapturedPath!!, folderName
+                caller.context, videoUri!!, currentCapturedPath!!, folderName
             )
 
         } else {
-            handleCapturedVideoWithPublicDir(fragment.requireContext(), videoUri!!)
+            handleCapturedVideoWithPublicDir(caller.context, videoUri!!)
         }
 
-        FileUtils.addMediaToGallery(file, fragment.requireContext())
+        FileUtils.addMediaToGallery(file, caller.context)
         return file
     }
 

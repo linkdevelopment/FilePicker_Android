@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
@@ -38,12 +39,12 @@ import java.io.File
 /**
  * CaptureImage is a piece of PickFile library to handle open camera action and save captured imaged
  * either in the Picture folder or given folder in the gallery
- * @param fragment for host fragment
- * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param caller for host fragment/activity
+ * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
 internal class CaptureImage(
-    private val fragment: Fragment,
+    private val caller: Caller,
     private var requestCode: Int,
     private val folderName: String? = null
 ) : IPickFilesFactory {
@@ -58,22 +59,22 @@ internal class CaptureImage(
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent
-        if (captureImageIntent.resolveActivity(fragment.requireContext().packageManager) != null) {
+        if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
             // Create the File where the photo should go
-            val imageFile = FileUtils.createImageFile(fragment.requireContext())
+            val imageFile = FileUtils.createImageFile(caller.context)
 
             currentCapturedPath = imageFile?.path
             photoURI =
                 currentCapturedPath?.let {
                     // get photo uri form content provider
-                    FileUtils.getFileUri(fragment.requireContext(), it)
+                    FileUtils.getFileUri(caller.context, it)
                 }
 
             photoURI?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 try {
-                    fragment.startActivityForResult(captureImageIntent, requestCode)
+                    caller.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
                 }
@@ -82,7 +83,7 @@ internal class CaptureImage(
     }
 
     /**
-     * used to handle Activity result called on the host view [Fragment.onActivityResult]
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
      * @param mRequestCode to identify who this result came from
      * @param resultCode to identify if operation succeeded or canceled
      * @param data return result data to the caller
@@ -122,7 +123,7 @@ internal class CaptureImage(
         val file = getFile()
         val filePath = file?.path
         val fileName = file?.name
-        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), photoURI!!)
+        val mimeType = FileUtils.getFileMimeType(caller.context, photoURI!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
@@ -135,14 +136,14 @@ internal class CaptureImage(
     private fun getFile(): File? {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedImageWithPrivateDir(
-                fragment.requireContext(), photoURI!!, currentCapturedPath!!, folderName
+                caller.context, photoURI!!, currentCapturedPath!!, folderName
             )
 
         } else {
-            handleCapturedImageWithPublicDir(fragment.requireContext(), photoURI!!)
+            handleCapturedImageWithPublicDir(caller.context, photoURI!!)
         }
 
-        FileUtils.addMediaToGallery(file, fragment.requireContext())
+        FileUtils.addMediaToGallery(file, caller.context)
         return file
     }
 

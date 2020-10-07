@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.*
 import com.linkdev.filepicker.utils.FileUtils
 import com.linkdev.filepicker.utils.LoggerUtils.logError
@@ -30,12 +31,12 @@ import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_
 
 /**
  * Class used to open document, select files and handle selected file status
- * @param fragment host view
- * @param requestCode to handle [Fragment.onActivityResult] request code
+ * @param caller host view fragment/Activity
+ * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param selectionType refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
  *                   by default is single selection*/
 internal class PickFiles(
-    private val fragment: Fragment,
+    private val caller: Caller,
     private val requestCode: Int,
     private val selectionType: SelectionMode
 ) : IPickFilesFactory {
@@ -54,7 +55,7 @@ internal class PickFiles(
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
         // start activity for result
         try {
-            fragment.startActivityForResult(pickIntent, requestCode)
+            caller.startActivityForResult(pickIntent, requestCode)
         } catch (ex: SecurityException) {
             logError(NOT_HANDLED_ERROR_MESSAGE, ex)
         }
@@ -126,10 +127,10 @@ internal class PickFiles(
 
     // create File data object
     private fun generateFileData(uri: Uri, data: Intent): FileData? {
-        val filePath = FileUtils.getFilePathFromUri(fragment.requireContext(), uri)
+        val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
         val file = FileUtils.getFileFromPath(filePath) // create file
-        val fileName = FileUtils.getFullFileNameFromUri(fragment.requireContext(), uri)
-        val mimeType = FileUtils.getFileMimeType(fragment.requireContext(), uri)
+        val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
+        val mimeType = FileUtils.getFileMimeType(caller.context, uri)
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else

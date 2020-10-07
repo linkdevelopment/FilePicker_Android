@@ -135,7 +135,7 @@ class MainFragment : Fragment() {
     private fun onCapturePhotoClicked() {
         if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
-                fragment = this,
+                caller = this,
                 requestCode = CAPTURE_IMAGE_REQUEST_CODE,
                 folderName = IMAGES_FOLDER_NAME
             ).getInstance(FactoryFilesType.IMAGE_CAMERA)
@@ -152,7 +152,7 @@ class MainFragment : Fragment() {
     private fun onRecordVideoClicked() {
         if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
-                fragment = this,
+                caller = this,
                 requestCode = CAPTURE_VIDEO_REQUEST_CODE,
                 folderName = VIDEOS_FOLDER_NAME
             ).getInstance(FactoryFilesType.VIDEO_CAMERA)
@@ -169,7 +169,7 @@ class MainFragment : Fragment() {
     private fun onPickFilesClicked() {
         if (checkPermissions(getStoragePermissionList())) {
             pickFilesFactory = PickFilesFactory(
-                fragment = this,
+                caller = this,
                 requestCode = PICK_ALL_REQUEST_CODE,
                 selectionMode = getSelectionMode()
             ).getInstance(fileType = FactoryFilesType.PICK_FILES)
