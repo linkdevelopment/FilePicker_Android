@@ -36,6 +36,8 @@ import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.models.*
+import com.linkdev.filepicker_android.adapters.AttachedFilesAdapter
+import com.linkdev.filepicker_android.adapters.MimeTypesAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_capture.*
 import kotlinx.android.synthetic.main.layout_pick.*
@@ -73,19 +75,25 @@ class MainFragment : Fragment() {
     private fun initViews() {
         initAttachFilesRecyclerView()
         initMimeTypesRecyclerView()
-        collapseExpandSection(captureFlow, tvCapture)
+        collapseExpandSection(captureSection, tvCapture)
     }
 
     private fun initAttachFilesRecyclerView() {
-        attachedFilesAdapter = AttachedFilesAdapter(requireContext())
+        attachedFilesAdapter =
+            AttachedFilesAdapter(
+                requireContext()
+            )
         rvFiles.layoutManager = LinearLayoutManager(requireContext())
         rvFiles.adapter = attachedFilesAdapter
     }
 
     private fun initMimeTypesRecyclerView() {
-        mimeTypesAdapter = MimeTypesAdapter(requireContext())
-        rvMimeTypes.layoutManager = GridLayoutManager(requireContext(), 2)
-        rvMimeTypes.adapter = mimeTypesAdapter
+        mimeTypesAdapter =
+            MimeTypesAdapter(
+                requireContext()
+            )
+        mimeTypesSection.layoutManager = GridLayoutManager(requireContext(), 2)
+        mimeTypesSection.adapter = mimeTypesAdapter
     }
 
     private fun setListeners() {
@@ -102,21 +110,21 @@ class MainFragment : Fragment() {
         }
 
         crdLayoutCapture.setOnClickListener {
-            collapseExpandSection(captureFlow, tvCapture)
-            collapseExpandSection(pickGroup, tvPick, true)
+            collapseExpandSection(captureSection, tvCapture)
+            collapseExpandSection(pickSection, tvPick, true)
         }
 
         crdLayoutPick.setOnClickListener {
-            collapseExpandSection(pickGroup, tvPick)
-            collapseExpandSection(captureFlow, tvCapture, true)
+            collapseExpandSection(pickSection, tvPick)
+            collapseExpandSection(captureSection, tvCapture, true)
         }
 
-        tvSelectionType.setOnClickListener {
-            collapseExpandSection(rgSelectionTypes, tvSelectionType)
+        tvSelectionMode.setOnClickListener {
+            collapseExpandSection(selectionModeSection, tvSelectionMode)
         }
 
         tvMimeTypes.setOnClickListener {
-            collapseExpandSection(rvMimeTypes, tvMimeTypes)
+            collapseExpandSection(mimeTypesSection, tvMimeTypes)
         }
     }
 
@@ -125,7 +133,7 @@ class MainFragment : Fragment() {
      * init [pickFilesFactory] by [PickFilesFactory.getPickInstance]
      * */
     private fun onCapturePhotoClicked() {
-        if (arePermissionsGranted(getCameraPermissionsList())) {
+        if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
                 fragment = this,
                 requestCode = CAPTURE_IMAGE_REQUEST_CODE,
@@ -142,7 +150,7 @@ class MainFragment : Fragment() {
      * init [pickFilesFactory] by [PickFilesFactory.getPickInstance]
      * */
     private fun onRecordVideoClicked() {
-        if (arePermissionsGranted(getCameraPermissionsList())) {
+        if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
                 fragment = this,
                 requestCode = CAPTURE_VIDEO_REQUEST_CODE,
@@ -159,11 +167,11 @@ class MainFragment : Fragment() {
      * init [pickFilesFactory] by  [PickFilesFactory.getPickInstance]
      * */
     private fun onPickFilesClicked() {
-        if (arePermissionsGranted(getStoragePermissionList())) {
+        if (checkPermissions(getStoragePermissionList())) {
             pickFilesFactory = PickFilesFactory(
                 fragment = this,
                 requestCode = PICK_ALL_REQUEST_CODE,
-                selectionType = getSelectionType()
+                selectionType = getSelectionMode()
             ).getPickInstance(fileType = FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList = getMimeTypesList())
         } else {
@@ -174,7 +182,7 @@ class MainFragment : Fragment() {
     /**
      * selection type [com.linkdev.filepicker.models.SelectionTypes]
      * */
-    private fun getSelectionType(): SelectionTypes {
+    private fun getSelectionMode(): SelectionTypes {
         return if (rbMultipleSelection.isChecked)
             SelectionTypes.MULTIPLE
         else
@@ -195,12 +203,7 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pickFilesFactory?.handleActivityResult(requestCode, resultCode, data, pickFilesCallback)
-        collapseExpandSection(rvMimeTypes, tvMimeTypes, true)
-        if (requestCode == CAPTURE_IMAGE_REQUEST_CODE || requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
-            collapseExpandSection(pickGroup, tvPick, true)
-        } else {
-            collapseExpandSection(captureFlow, tvCapture, true)
-        }
+        showHideSections(requestCode)
     }
 
     private val pickFilesCallback = object :
@@ -221,6 +224,15 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun showHideSections(requestCode: Int) {
+        collapseExpandSection(mimeTypesSection, tvMimeTypes, true)
+        if (requestCode == CAPTURE_IMAGE_REQUEST_CODE || requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
+            collapseExpandSection(pickSection, tvPick, true)
+        } else {
+            collapseExpandSection(captureSection, tvCapture, true)
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -235,7 +247,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun arePermissionsGranted(permissions: Array<String>): Boolean {
+    private fun checkPermissions(permissions: Array<String>): Boolean {
         for (permission in permissions) {
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -268,16 +280,16 @@ class MainFragment : Fragment() {
 
     private fun collapseExpandSection(
         sectionView: View,
-        headerTextView: TextView,
+        headerSection: TextView,
         forceCollapse: Boolean = false
     ) {
         if (sectionView.visibility == VISIBLE || forceCollapse) {
             sectionView.visibility = GONE
-            headerTextView
+            headerSection
                 .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
         } else {
             sectionView.visibility = VISIBLE
-            headerTextView
+            headerSection
                 .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0)
         }
     }

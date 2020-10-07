@@ -23,17 +23,12 @@
     app:cardCornerRadius="@dimen/card_radius"
     app:cardUseCompatPadding="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/tvFileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_15">
-
-        <TextView
-            android:id="@+id/tvFileName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="File Name" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:padding="@dimen/margin_15"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="File Name" />
 </androidx.cardview.widget.CardView>
