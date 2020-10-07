@@ -37,7 +37,7 @@ pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
                private val requestCode: Int,
                private val folderName: String? = null
-            ).getPickInstance(FactoryFilesType.IMAGE_CAMERA)
+            ).getInstance(FactoryFilesType.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
 
@@ -48,18 +48,18 @@ pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
                private val requestCode: Int,
                private val folderName: String? = null
-            ).getPickInstance(FactoryFilesType.VIDEO_CAMERA)
+            ).getInstance(FactoryFilesType.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
 ### pick files from documents
 ```kotlin
-// selectionType is to allow multiple selection or not
+// selectionMode is to allow multiple selection or not
 // mimeTypeList list of supported files mime types to be selected.
 pickFilesFactory = PickFilesFactory(
                private val fragment: Fragment,
                private val requestCode: Int,
-               private val selectionType: SelectionTypes = SelectionTypes.SINGLE
-            ).getPickInstance(FactoryFilesType.PICK_FILES)
+               private val selectionMode: SelectionMode = SelectionMode.SINGLE
+            ).getInstance(FactoryFilesType.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
 ### Getting selected files list

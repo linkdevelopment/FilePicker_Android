@@ -32,12 +32,12 @@ import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_
  * Class used to open document, select files and handle selected file status
  * @param fragment host view
  * @param requestCode to handle [Fragment.onActivityResult] request code
- * @param selectionType refers to [SelectionTypes] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
+ * @param selectionType refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
  *                   by default is single selection*/
 internal class PickFiles(
     private val fragment: Fragment,
     private val requestCode: Int,
-    private val selectionType: SelectionTypes
+    private val selectionType: SelectionMode
 ) : IPickFilesFactory {
     companion object {
         const val TAG = "FilePickerTag"
@@ -49,7 +49,7 @@ internal class PickFiles(
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pickIntent.type = MimeType.ALL_FILES.mimeTypeName
         pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
-        if (selectionType == SelectionTypes.MULTIPLE)
+        if (selectionType == SelectionMode.MULTIPLE)
             pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
         // start activity for result
@@ -65,7 +65,7 @@ internal class PickFiles(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null && mRequestCode == requestCode) {
-                if (selectionType == SelectionTypes.MULTIPLE && data.clipData != null) {
+                if (selectionType == SelectionMode.MULTIPLE && data.clipData != null) {
                     onMultipleSelection(data, callback)
                 } else {
                     onSingleSelection(data, callback)

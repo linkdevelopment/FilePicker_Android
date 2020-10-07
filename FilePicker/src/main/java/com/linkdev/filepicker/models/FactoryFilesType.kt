@@ -17,7 +17,7 @@
 package com.linkdev.filepicker.models
 
 /**
- * used with [com.linkdev.filepicker.factory.PickFilesFactory.getPickInstance]
+ * used with [com.linkdev.filepicker.factory.PickFilesFactory.getInstance]
 to return instance of file picker class
  * */
 enum class FactoryFilesType {
