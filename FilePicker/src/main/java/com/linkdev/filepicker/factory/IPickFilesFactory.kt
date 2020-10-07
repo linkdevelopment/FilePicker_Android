@@ -16,13 +16,25 @@
 
 package com.linkdev.filepicker.factory
 
+import android.app.Activity
 import android.content.Intent
+import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.models.MimeType
 
 interface IPickFilesFactory {
+    /**
+     * implemented by each class to handle Intent action
+     * @param mimeTypeList is list of mime Types to be allowed*/
     fun pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 
+    /**
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
+     * @param mRequestCode to identify who this result came from
+     * @param resultCode to identify if operation succeeded or canceled
+     * @param data return result data to the caller
+     * @param callback handle file status
+     */
     fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     )

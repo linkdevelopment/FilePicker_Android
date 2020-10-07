@@ -44,6 +44,7 @@ internal class PickFiles(
         const val TAG = "FilePickerTag"
     }
 
+    // used to handle action open document
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val mimeType = MimeType.getArrayOfMimeType(mimeTypeList)// get mime type strings
         // make action and set types
@@ -61,6 +62,13 @@ internal class PickFiles(
         }
     }
 
+    /**
+     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
+     * @param mRequestCode to identify who this result came from
+     * @param resultCode to identify if operation succeeded or canceled
+     * @param data return result data to the caller
+     * @param callback handle file status
+     */
     override fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
     ) {
