@@ -31,5 +31,6 @@ data class FileData(
     val file: File? = null,
     val fileName: String? = null,
     val mimeType: String? = null,
+    val fileSize: Double? = null,
     val intent: Intent? = null
 ) : Parcelable

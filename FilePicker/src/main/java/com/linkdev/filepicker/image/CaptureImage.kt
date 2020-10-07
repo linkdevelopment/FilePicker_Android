@@ -108,7 +108,12 @@ internal class CaptureImage(
                     )
                 }
             } else {
-                callback.onPickFileError(ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_general_error))
+                callback.onPickFileError(
+                    ErrorModel(
+                        ErrorStatus.DATA_ERROR,
+                        R.string.file_picker_general_error
+                    )
+                )
             }
         } else {
             callback.onPickFileCanceled()
@@ -124,10 +129,11 @@ internal class CaptureImage(
         val filePath = file?.path
         val fileName = file?.name
         val mimeType = FileUtils.getFileMimeType(caller.context, photoURI!!)
+        val fileSize = FileUtils.getFileSize(caller.context, photoURI!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
-            FileData(photoURI!!, filePath, file, fileName, mimeType, data)
+            FileData(photoURI!!, filePath, file, fileName, mimeType, fileSize, data)
     }
 
     /**

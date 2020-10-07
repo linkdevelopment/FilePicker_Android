@@ -111,9 +111,10 @@ internal class AndroidQCaptureVideo(
         val file = FileUtils.getFileFromPath(filePath) // create file
         val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
         val mimeType = FileUtils.getFileMimeType(caller.context, uri)
+        val fileSize = FileUtils.getFileSize(caller.context, uri)
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else
-            FileData(uri, filePath, file, fileName, mimeType, data)
+            FileData(uri, filePath, file, fileName, mimeType, fileSize, data)
     }
 }

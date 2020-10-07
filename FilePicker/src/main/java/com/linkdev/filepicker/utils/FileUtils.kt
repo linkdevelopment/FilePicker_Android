@@ -96,6 +96,22 @@ internal object FileUtils {
         return filePath?.let { File(it) }
     }
 
+    fun getFileSize(context: Context, uri: Uri): Double {
+        val mCursor = context.contentResolver
+            .query(uri, null, null, null, null, null)
+        mCursor.use { cursor ->
+            if (cursor != null && cursor.moveToFirst()) {
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                var size = "-1"
+                if (!cursor.isNull(sizeIndex)) {
+                    size = cursor.getString(sizeIndex)
+                }
+                return size.toDouble()
+            }
+        }
+        return -1.0
+    }
+
     @Throws(Exception::class)
     fun copyStream(inputStream: InputStream, outputStream: FileOutputStream) {
         val bytes = ByteArray(BUFFER_SIZE)
