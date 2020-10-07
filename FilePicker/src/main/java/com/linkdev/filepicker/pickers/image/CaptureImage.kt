@@ -48,8 +48,8 @@ internal class CaptureImage(
     private var requestCode: Int,
     private val folderName: String? = null
 ) : IPickFilesFactory {
-    private var currentCapturedPath: String? = null
-    private var photoURI: Uri? = null
+    private var currentCapturedImagePath: String? = null
+    private var currentCapturedImageURI: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -63,16 +63,16 @@ internal class CaptureImage(
             // Create the File where the photo should go
             val imageFile = FileUtils.createImageFile(caller.context)
 
-            currentCapturedPath = imageFile?.path
-            photoURI =
-                currentCapturedPath?.let {
+            currentCapturedImagePath = imageFile?.path
+            currentCapturedImageURI =
+                currentCapturedImagePath?.let {
                     // get photo uri form content provider
                     FileUtils.getFileUri(caller.context, it)
                 }
 
-            photoURI?.let {
+            currentCapturedImageURI?.let {
                 //read image from given URI
-                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentCapturedImageURI)
                 try {
                     caller.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
@@ -94,7 +94,7 @@ internal class CaptureImage(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (currentCapturedPath != null && photoURI != null) {
+                if (currentCapturedImagePath != null && currentCapturedImageURI != null) {
                     val fileData = generateFileData(data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
@@ -128,12 +128,12 @@ internal class CaptureImage(
         val file = getFile()
         val filePath = file?.path
         val fileName = file?.name
-        val mimeType = FileUtils.getFileMimeType(caller.context, photoURI!!)
-        val fileSize = FileUtils.getFileSize(caller.context, photoURI!!)
+        val mimeType = FileUtils.getFileMimeType(caller.context, currentCapturedImageURI!!)
+        val fileSize = FileUtils.getFileSize(caller.context, currentCapturedImageURI!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
-            FileData(photoURI!!, filePath, file, fileName, mimeType, fileSize, data)
+            FileData(currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, data)
     }
 
     /**
@@ -142,11 +142,11 @@ internal class CaptureImage(
     private fun getFile(): File? {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedImageWithPrivateDir(
-                caller.context, photoURI!!, currentCapturedPath!!, folderName
+                caller.context, currentCapturedImageURI!!, currentCapturedImagePath!!, folderName
             )
 
         } else {
-            handleCapturedImageWithPublicDir(caller.context, photoURI!!)
+            handleCapturedImageWithPublicDir(caller.context, currentCapturedImageURI!!)
         }
 
         FileUtils.addMediaToGallery(file, caller.context)

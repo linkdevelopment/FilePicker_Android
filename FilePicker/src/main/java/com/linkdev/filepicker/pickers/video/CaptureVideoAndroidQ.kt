@@ -42,12 +42,12 @@ import com.linkdev.filepicker.utils.FileUtils.VID_PREFIX
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
-internal class AndroidQCaptureVideo(
+internal class CaptureVideoAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
     private val folderName: String?
 ) : IPickFilesFactory {
-    private var videoUri: Uri? = null
+    private var currentCapturedVideoUri: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -57,12 +57,12 @@ internal class AndroidQCaptureVideo(
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureVideoIntent.resolveActivity(caller.context.packageManager) != null) {
-            videoUri =
+            currentCapturedVideoUri =
                 AndroidQFileUtils.getVideoUri(
                     caller.context, VID_PREFIX, MimeType.MP4, folderName
                 )
-            videoUri?.let {
-                captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
+            currentCapturedVideoUri?.let {
+                captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentCapturedVideoUri)
                 try {
                     caller.startActivityForResult(captureVideoIntent, requestCode)
                 } catch (ex: SecurityException) {
@@ -84,8 +84,8 @@ internal class AndroidQCaptureVideo(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (videoUri != null) {
-                    val fileData = generateFileData(videoUri!!, data)
+                if (currentCapturedVideoUri != null) {
+                    val fileData = generateFileData(currentCapturedVideoUri!!, data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -101,7 +101,7 @@ internal class AndroidQCaptureVideo(
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(caller.context, videoUri)
+            AndroidQFileUtils.deleteUri(caller.context, currentCapturedVideoUri)
         }
     }
 

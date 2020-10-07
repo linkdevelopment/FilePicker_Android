@@ -41,12 +41,12 @@ import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
-internal class AndroidQCaptureImage(
+internal class CaptureImageAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
     private val folderName: String?
 ) : IPickFilesFactory {
-    private var photoURI: Uri? = null
+    private var currentCapturedImageURI: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -56,13 +56,13 @@ internal class AndroidQCaptureImage(
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
-            photoURI =
+            currentCapturedImageURI =
                 AndroidQFileUtils.getPhotoUri(
                     caller.context, IMAG_PREFIX, MimeType.JPEG, folderName
                 )
-            photoURI?.let {
+            currentCapturedImageURI?.let {
                 //read image from given URI
-                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentCapturedImageURI)
                 try {
                     caller.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
@@ -85,8 +85,8 @@ internal class AndroidQCaptureImage(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (photoURI != null) {
-                    val fileData = generateFileData(photoURI!!, data)
+                if (currentCapturedImageURI != null) {
+                    val fileData = generateFileData(currentCapturedImageURI!!, data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -102,7 +102,7 @@ internal class AndroidQCaptureImage(
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(caller.context, photoURI)
+            AndroidQFileUtils.deleteUri(caller.context, currentCapturedImageURI)
         }
     }
 

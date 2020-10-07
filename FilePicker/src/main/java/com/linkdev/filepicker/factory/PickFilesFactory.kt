@@ -18,14 +18,14 @@ package com.linkdev.filepicker.factory
 
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.linkdev.filepicker.pickers.image.AndroidQCaptureImage
+import com.linkdev.filepicker.pickers.image.CaptureImageAndroidQ
 import com.linkdev.filepicker.pickers.image.CaptureImage
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.FileTypes
 import com.linkdev.filepicker.models.SelectionMode
 import com.linkdev.filepicker.pickers.pick_files.PickFiles
 import com.linkdev.filepicker.utils.Platform
-import com.linkdev.filepicker.pickers.video.AndroidQCaptureVideo
+import com.linkdev.filepicker.pickers.video.CaptureVideoAndroidQ
 import com.linkdev.filepicker.pickers.video.CaptureVideo
 
 /**
@@ -56,13 +56,13 @@ class PickFilesFactory(
         return when (fileTypes) {
             FileTypes.CAPTURE_IMAGE -> {
                 if (Platform.isAndroidQ())
-                    AndroidQCaptureImage(caller, requestCode, galleryFolderName)
+                    CaptureImageAndroidQ(caller, requestCode, galleryFolderName)
                 else
                     CaptureImage(caller, requestCode, galleryFolderName)
             }
             FileTypes.CAPTURE_VIDEO -> {
                 if (Platform.isAndroidQ())
-                    AndroidQCaptureVideo(caller, requestCode, galleryFolderName)
+                    CaptureVideoAndroidQ(caller, requestCode, galleryFolderName)
                 else
                     CaptureVideo(caller, requestCode, galleryFolderName)
 

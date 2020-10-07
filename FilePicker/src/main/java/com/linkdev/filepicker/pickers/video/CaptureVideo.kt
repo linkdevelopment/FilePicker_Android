@@ -49,8 +49,8 @@ internal class CaptureVideo(
     private val requestCode: Int,
     private val folderName: String? = null
 ) : IPickFilesFactory {
-    private var videoUri: Uri? = null
-    private var currentCapturedPath: String? = null
+    private var currentCapturedVideoUri: Uri? = null
+    private var currentCapturedVideoPath: String? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -61,14 +61,14 @@ internal class CaptureVideo(
         val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
             val videoFile = FileUtils.createVideoFile(caller.context)
-            currentCapturedPath = videoFile?.path
-            videoUri =
-                currentCapturedPath?.let {
+            currentCapturedVideoPath = videoFile?.path
+            currentCapturedVideoUri =
+                currentCapturedVideoPath?.let {
                     // get photo uri form content provider
                     FileUtils.getFileUri(caller.context, it)
                 }
 
-            videoUri?.let {
+            currentCapturedVideoUri?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
                 try {
@@ -93,7 +93,7 @@ internal class CaptureVideo(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (currentCapturedPath != null && videoUri != null) {
+                if (currentCapturedVideoPath != null && currentCapturedVideoUri != null) {
                     val fileData = generateFileData(data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
@@ -123,22 +123,22 @@ internal class CaptureVideo(
         val file = getFile()
         val filePath = file?.path
         val fileName = file?.name
-        val mimeType = FileUtils.getFileMimeType(caller.context, videoUri!!)
-        val fileSize = FileUtils.getFileSize(caller.context, videoUri!!)
+        val mimeType = FileUtils.getFileMimeType(caller.context, currentCapturedVideoUri!!)
+        val fileSize = FileUtils.getFileSize(caller.context, currentCapturedVideoUri!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
-            FileData(videoUri!!, filePath, file, fileName, mimeType, fileSize, data)
+            FileData(currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize, data)
     }
 
     private fun getFile(): File? {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedVideoWithPrivateDir(
-                caller.context, videoUri!!, currentCapturedPath!!, folderName
+                caller.context, currentCapturedVideoUri!!, currentCapturedVideoPath!!, folderName
             )
 
         } else {
-            handleCapturedVideoWithPublicDir(caller.context, videoUri!!)
+            handleCapturedVideoWithPublicDir(caller.context, currentCapturedVideoUri!!)
         }
 
         FileUtils.addMediaToGallery(file, caller.context)
