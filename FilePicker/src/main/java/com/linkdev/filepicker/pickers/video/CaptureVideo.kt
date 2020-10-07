@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.image
+package com.linkdev.filepicker.pickers.video
 
 import android.app.Activity
 import android.content.Context
@@ -23,33 +23,34 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
-import com.linkdev.filepicker.factory.IPickFilesFactory
-import com.linkdev.filepicker.interactions.PickFilesStatusCallback
-import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorModel
-import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
+import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.utils.FileUtils
-import com.linkdev.filepicker.utils.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker.utils.FileUtils.CAMERA_VIDEO_TYPE
+import com.linkdev.filepicker.utils.FileUtils.VID_PREFIX
 import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
+import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
+import com.linkdev.filepicker.models.ErrorStatus
 import java.io.File
 
 /**
- * CaptureImage is a piece of PickFile library to handle open camera action and save captured imaged
+ * CaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
  * either in the Picture folder or given folder in the gallery
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
-internal class CaptureImage(
+internal class CaptureVideo(
     private val caller: Caller,
-    private var requestCode: Int,
+    private val requestCode: Int,
     private val folderName: String? = null
 ) : IPickFilesFactory {
+    private var videoUri: Uri? = null
     private var currentCapturedPath: String? = null
-    private var photoURI: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -57,22 +58,19 @@ internal class CaptureImage(
 
     //handle action to open camera and saved temporary file and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
-        val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        // Ensure that there's a camera activity to handle the intent
+        val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
-            // Create the File where the photo should go
-            val imageFile = FileUtils.createImageFile(caller.context)
-
-            currentCapturedPath = imageFile?.path
-            photoURI =
+            val videoFile = FileUtils.createVideoFile(caller.context)
+            currentCapturedPath = videoFile?.path
+            videoUri =
                 currentCapturedPath?.let {
                     // get photo uri form content provider
                     FileUtils.getFileUri(caller.context, it)
                 }
 
-            photoURI?.let {
+            videoUri?.let {
                 //read image from given URI
-                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
                 try {
                     caller.startActivityForResult(captureImageIntent, requestCode)
                 } catch (ex: SecurityException) {
@@ -80,6 +78,7 @@ internal class CaptureImage(
                 }
             }
         }
+
     }
 
     /**
@@ -94,7 +93,7 @@ internal class CaptureImage(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (currentCapturedPath != null && photoURI != null) {
+                if (currentCapturedPath != null && videoUri != null) {
                     val fileData = generateFileData(data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
@@ -120,57 +119,43 @@ internal class CaptureImage(
         }
     }
 
-    /**
-     * generate file data object
-     * @return [FileData]
-     * */
     private fun generateFileData(data: Intent?): FileData? {
         val file = getFile()
         val filePath = file?.path
         val fileName = file?.name
-        val mimeType = FileUtils.getFileMimeType(caller.context, photoURI!!)
-        val fileSize = FileUtils.getFileSize(caller.context, photoURI!!)
+        val mimeType = FileUtils.getFileMimeType(caller.context, videoUri!!)
+        val fileSize = FileUtils.getFileSize(caller.context, videoUri!!)
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
-            FileData(photoURI!!, filePath, file, fileName, mimeType, fileSize, data)
+            FileData(videoUri!!, filePath, file, fileName, mimeType, fileSize, data)
     }
 
-    /**
-     * @return [File] saved file using [handleCapturedImageWithPublicDir] or [handleCapturedImageWithPrivateDir]
-     * */
     private fun getFile(): File? {
         val file: File? = if (!folderName.isNullOrBlank()) {
-            handleCapturedImageWithPrivateDir(
-                caller.context, photoURI!!, currentCapturedPath!!, folderName
+            handleCapturedVideoWithPrivateDir(
+                caller.context, videoUri!!, currentCapturedPath!!, folderName
             )
 
         } else {
-            handleCapturedImageWithPublicDir(caller.context, photoURI!!)
+            handleCapturedVideoWithPublicDir(caller.context, videoUri!!)
         }
 
         FileUtils.addMediaToGallery(file, caller.context)
         return file
     }
 
-    /**
-     * save captured image in default folder
-     * @return [File]
-     * */
-    private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {
+    private fun handleCapturedVideoWithPublicDir(context: Context, uri: Uri): File? {
         val fileNameWithExt =
-            FileUtils.getUniqueFileNameWithExt(IMAG_PREFIX, FileUtils.CAMERA_IMAGE_TYPE)
+            FileUtils.getUniqueFileNameWithExt(VID_PREFIX, CAMERA_VIDEO_TYPE)
         return FileUtils.writePublicFile(context, uri, fileNameWithExt)
     }
 
-    /**
-     * save captured image in given folder name
-     * @return [File]
-     * */
-    private fun handleCapturedImageWithPrivateDir(
+    private fun handleCapturedVideoWithPrivateDir(
         context: Context, uri: Uri, currentCapturedPath: String, folderName: String
     ): File? {
         val currentFile = File(currentCapturedPath)
         return FileUtils.writeMedia(context, uri, currentFile.name, folderName)
     }
+
 }

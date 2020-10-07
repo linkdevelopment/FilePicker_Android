@@ -209,7 +209,7 @@ class MainFragment : Fragment() {
     private val pickFilesCallback = object :
         PickFilesStatusCallback {
         override fun onPickFileCanceled() {
-            Toast.makeText(requireContext(), "user cancel pick files", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Action canceled", Toast.LENGTH_SHORT).show()
         }
 
         override fun onPickFileError(errorModel: ErrorModel) {

@@ -37,6 +37,7 @@ internal object FileUtils {
     const val CAMERA_VIDEO_TYPE = ".mp4"
     const val IMAG_PREFIX = "IMG_"
     const val VID_PREFIX = "VID_"
+    const val DATE_PATTERN = "yyyyMMdd_HHmmss"
     private const val GENERAL_PREFIX = "FILE_"
     private const val BUFFER_SIZE = 4096
 
@@ -234,7 +235,7 @@ internal object FileUtils {
         File(getFilePath(fileName, folderName))
 
     fun getUniqueFileName(prefix: String): String =
-        prefix + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+        prefix + SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH).format(Date())
 
     fun getUniqueFileNameWithExt(prefix: String, extension: String): String =
         getUniqueFileName(prefix) + extension

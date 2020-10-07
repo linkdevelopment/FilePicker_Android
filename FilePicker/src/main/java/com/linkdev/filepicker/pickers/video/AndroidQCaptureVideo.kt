@@ -14,39 +14,40 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.image
+package com.linkdev.filepicker.pickers.video
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
-import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.R
-import com.linkdev.filepicker.interactions.PickFilesStatusCallback
-import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorModel
-import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
-import com.linkdev.filepicker.utils.*
-import com.linkdev.filepicker.utils.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker.factory.IPickFilesFactory
+import com.linkdev.filepicker.utils.AndroidQFileUtils
+import com.linkdev.filepicker.utils.FileUtils
 import com.linkdev.filepicker.utils.LoggerUtils.logError
 import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
+import com.linkdev.filepicker.interactions.PickFilesStatusCallback
+import com.linkdev.filepicker.mapper.Caller
+import com.linkdev.filepicker.models.ErrorStatus
+import com.linkdev.filepicker.utils.FileUtils.VID_PREFIX
 
 /**
- * AndroidQCaptureImage is a piece of PickFile library to handle open camera action and save captured imaged
- * either in the Picture folder or given folder in the gallery for android 10
+ * AndroidQCaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
+ * either in the movie folder or given folder in the gallery for android 10
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param folderName the name of directory that captured image will saved into
  * */
-internal class AndroidQCaptureImage(
+internal class AndroidQCaptureVideo(
     private val caller: Caller,
     private val requestCode: Int,
     private val folderName: String?
 ) : IPickFilesFactory {
-    private var photoURI: Uri? = null
+    private var videoUri: Uri? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -54,20 +55,18 @@ internal class AndroidQCaptureImage(
 
     //handle action to open camera and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
-        val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
-            photoURI =
-                AndroidQFileUtils.getPhotoUri(
-                    caller.context, IMAG_PREFIX, MimeType.JPEG, folderName
+        val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        if (captureVideoIntent.resolveActivity(caller.context.packageManager) != null) {
+            videoUri =
+                AndroidQFileUtils.getVideoUri(
+                    caller.context, VID_PREFIX, MimeType.MP4, folderName
                 )
-            photoURI?.let {
-                //read image from given URI
-                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            videoUri?.let {
+                captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
                 try {
-                    caller.startActivityForResult(captureImageIntent, requestCode)
+                    caller.startActivityForResult(captureVideoIntent, requestCode)
                 } catch (ex: SecurityException) {
                     logError(NOT_HANDLED_ERROR_MESSAGE, ex)
-
                 }
             }
         }
@@ -85,8 +84,8 @@ internal class AndroidQCaptureImage(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (photoURI != null) {
-                    val fileData = generateFileData(photoURI!!, data)
+                if (videoUri != null) {
+                    val fileData = generateFileData(videoUri!!, data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -96,13 +95,13 @@ internal class AndroidQCaptureImage(
                 } else {
                     callback.onPickFileError(
                         ErrorModel(
-                            ErrorStatus.URI_ERROR, R.string.file_picker_general_error
+                            ErrorStatus.DATA_ERROR, R.string.file_picker_general_error
                         )
                     )
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(caller.context, photoURI)
+            AndroidQFileUtils.deleteUri(caller.context, videoUri)
         }
     }
 

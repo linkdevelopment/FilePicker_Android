@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.pick_files
+package com.linkdev.filepicker.pickers.pick_files
 
 import android.app.Activity
 import android.content.Intent

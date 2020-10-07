@@ -18,15 +18,15 @@ package com.linkdev.filepicker.factory
 
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.linkdev.filepicker.image.AndroidQCaptureImage
-import com.linkdev.filepicker.image.CaptureImage
+import com.linkdev.filepicker.pickers.image.AndroidQCaptureImage
+import com.linkdev.filepicker.pickers.image.CaptureImage
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.FileTypes
 import com.linkdev.filepicker.models.SelectionMode
-import com.linkdev.filepicker.pick_files.PickFiles
+import com.linkdev.filepicker.pickers.pick_files.PickFiles
 import com.linkdev.filepicker.utils.Platform
-import com.linkdev.filepicker.video.AndroidQCaptureVideo
-import com.linkdev.filepicker.video.CaptureVideo
+import com.linkdev.filepicker.pickers.video.AndroidQCaptureVideo
+import com.linkdev.filepicker.pickers.video.CaptureVideo
 
 /**
  * Class used to provide instance of each pick file type by [getInstance] and check [FileTypes]
