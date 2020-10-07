@@ -238,7 +238,13 @@ class MainFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        var allPermissionGranted = true
+        for (permission: Int in grantResults)
+            if (permission == PackageManager.PERMISSION_DENIED) {
+                allPermissionGranted = false
+            }
+
+        if (allPermissionGranted) {
             when (requestCode) {
                 CAPTURE_IMAGE_REQUEST_CODE -> onCapturePhotoClicked()
                 CAPTURE_VIDEO_REQUEST_CODE -> onRecordVideoClicked()
@@ -274,7 +280,7 @@ class MainFragment : Fragment() {
 
     private fun getStoragePermissionList(): Array<String> {
         return arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
     }
 
