@@ -133,7 +133,7 @@ internal class CaptureImage(
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
-            FileData(currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, data)
+            FileData(currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize)
     }
 
     /**

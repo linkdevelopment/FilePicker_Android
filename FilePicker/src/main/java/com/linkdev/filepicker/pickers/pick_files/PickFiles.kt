@@ -142,6 +142,6 @@ internal class PickFiles(
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else
-            FileData(uri, filePath, file, fileName, mimeType, fileSize, data)
+            FileData(uri, filePath, file, fileName, mimeType, fileSize)
     }
 }

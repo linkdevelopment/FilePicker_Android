@@ -128,7 +128,7 @@ internal class CaptureVideo(
         return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
         else
-            FileData(currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize, data)
+            FileData(currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize)
     }
 
     private fun getFile(): File? {
