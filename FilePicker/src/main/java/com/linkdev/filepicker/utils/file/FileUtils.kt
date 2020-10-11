@@ -26,7 +26,6 @@ import android.os.Environment
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.linkdev.filepicker.utils.constant.Constants
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -179,8 +178,10 @@ internal object FileUtils {
                 )
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
-            return File.createTempFile(uniqueFileName,
-                CAMERA_IMAGE_TYPE, storageDir)
+            return File.createTempFile(
+                uniqueFileName,
+                CAMERA_IMAGE_TYPE, storageDir
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             return null
@@ -196,8 +197,10 @@ internal object FileUtils {
                 )
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
-            return File.createTempFile(uniqueFileName,
-                CAMERA_VIDEO_TYPE, storageDir)
+            return File.createTempFile(
+                uniqueFileName,
+                CAMERA_VIDEO_TYPE, storageDir
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             return null
@@ -288,9 +291,10 @@ internal object FileUtils {
     }
 
     fun getFileUri(context: Context, fileUrl: String): Uri {
+        val packageName = context.applicationContext.packageName
+        val authorities = "$packageName.filepicker.provider"
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(context,
-                Constants.PROVIDER_AUTH, File(fileUrl))
+            FileProvider.getUriForFile(context, authorities, File(fileUrl))
         } else {
             Uri.fromFile(File(fileUrl))
         }
