@@ -133,16 +133,16 @@ class MainFragment : Fragment() {
      * init [pickFilesFactory] by [PickFilesFactory.getInstance]
      * */
     private fun onCapturePhotoClicked() {
-        if (checkPermissions(getCameraPermissionsList())) {
+//        if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = CAPTURE_IMAGE_REQUEST_CODE,
                 galleryFolderName = IMAGES_FOLDER_NAME
             ).getInstance(FileTypes.CAPTURE_IMAGE)
             pickFilesFactory?.pickFiles()
-        } else {
-            requestPermission(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
-        }
+//        } else {
+//            requestPermission(getCameraPermissionsList(), CAPTURE_IMAGE_REQUEST_CODE)
+//        }
     }
 
     /**

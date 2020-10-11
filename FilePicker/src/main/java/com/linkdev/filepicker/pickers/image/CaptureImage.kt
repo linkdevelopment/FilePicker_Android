@@ -30,10 +30,10 @@ import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.file.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
-import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import java.io.File
 
 /**
@@ -73,10 +73,10 @@ internal class CaptureImage(
             currentCapturedImageURI?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentCapturedImageURI)
-                try {
+                if (caller.isCameraPermissionsGranted()) {
                     caller.startActivityForResult(captureImageIntent, requestCode)
-                } catch (ex: SecurityException) {
-                    logError(NOT_HANDLED_ERROR_MESSAGE, ex)
+                } else {
+                    logError(NOT_HANDLED_CAMERA_ERROR_MESSAGE, SecurityException())
                 }
             }
         }
