@@ -55,11 +55,10 @@ internal class PickFiles(
             pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
         // start activity for result
-        try {
+        if (caller.isDocumentPermissionsGranted())
             caller.startActivityForResult(pickIntent, requestCode)
-        } catch (ex: SecurityException) {
-            logError(NOT_HANDLED_ERROR_MESSAGE, ex)
-        }
+        else
+            logError(NOT_HANDLED_ERROR_MESSAGE, Throwable(SecurityException()))
     }
 
     /**
