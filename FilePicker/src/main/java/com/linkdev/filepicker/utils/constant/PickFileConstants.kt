@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.utils
+package com.linkdev.filepicker.utils.constant
 
-import android.util.Log
-
-internal object LoggerUtils {
-    const val TAG = "FilePicker"
-    fun logError(message: String, cause: Throwable?) {
-        Log.e(TAG, message, cause)
+internal object PickFileConstants {
+    object ErrorMessages {
+        const val NOT_HANDLED_ERROR_MESSAGE =
+            "Please check the exception and handle suitable runtime permission"
     }
 }

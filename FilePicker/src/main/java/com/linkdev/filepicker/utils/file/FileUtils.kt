@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.utils
+package com.linkdev.filepicker.utils.file
 
 import android.content.ContentResolver
 import android.content.Context
@@ -23,10 +23,10 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.linkdev.filepicker.utils.constant.Constants
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -75,11 +75,15 @@ internal object FileUtils {
                 cursor.moveToFirst()
                 cursor.getString(nameIndex)
             } else {
-                getUniqueFileName(GENERAL_PREFIX)
+                getUniqueFileName(
+                    GENERAL_PREFIX
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            getUniqueFileName(GENERAL_PREFIX)
+            getUniqueFileName(
+                GENERAL_PREFIX
+            )
         } finally {
             cursor?.close()
         }
@@ -87,7 +91,11 @@ internal object FileUtils {
 
     // get file name
     fun getFileNameFromUri(context: Context, uri: Uri): String {
-        val name = getFullFileNameFromUri(context, uri)
+        val name =
+            getFullFileNameFromUri(
+                context,
+                uri
+            )
         return if (name.lastIndexOf('.') != -1)
             name.substring(0, name.lastIndexOf('.'))
         else
@@ -134,14 +142,23 @@ internal object FileUtils {
         val file: File?
         try {
             file = File.createTempFile(
-                getFileNameFromUri(context, uri),
-                "." + getExtensionFromUri(context, uri), context.externalCacheDir
+                getFileNameFromUri(
+                    context,
+                    uri
+                ),
+                "." + getExtensionFromUri(
+                    context,
+                    uri
+                ), context.externalCacheDir
             )
 
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             if (inputStream != null && file != null) {
                 val outputStream = FileOutputStream(file)
-                copyStream(inputStream, outputStream)
+                copyStream(
+                    inputStream,
+                    outputStream
+                )
             } else {
                 return null
             }
@@ -156,10 +173,14 @@ internal object FileUtils {
     // create image file
     fun createImageFile(context: Context): File? {
         try {
-            val uniqueFileName = getUniqueFileName(IMAG_PREFIX)
+            val uniqueFileName =
+                getUniqueFileName(
+                    IMAG_PREFIX
+                )
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
-            return File.createTempFile(uniqueFileName, CAMERA_IMAGE_TYPE, storageDir)
+            return File.createTempFile(uniqueFileName,
+                CAMERA_IMAGE_TYPE, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
             return null
@@ -169,10 +190,14 @@ internal object FileUtils {
     // create video file
     fun createVideoFile(context: Context): File? {
         try {
-            val uniqueFileName = getUniqueFileName(VID_PREFIX)
+            val uniqueFileName =
+                getUniqueFileName(
+                    VID_PREFIX
+                )
             val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
-            return File.createTempFile(uniqueFileName, CAMERA_VIDEO_TYPE, storageDir)
+            return File.createTempFile(uniqueFileName,
+                CAMERA_VIDEO_TYPE, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
             return null
@@ -182,11 +207,17 @@ internal object FileUtils {
     // Write file
     fun writeMedia(context: Context, uri: Uri, fileName: String, folderName: String): File? {
         return try {
-            val file = createAppFile(fileName, folderName)
+            val file = createAppFile(
+                fileName,
+                folderName
+            )
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             if (inputStream != null) {
                 val outputStream = FileOutputStream(file)
-                copyStream(inputStream, outputStream)
+                copyStream(
+                    inputStream,
+                    outputStream
+                )
                 file
             } else {
                 null
@@ -199,12 +230,17 @@ internal object FileUtils {
 
     fun writePublicFile(context: Context, uri: Uri, fileName: String): File? {
         return try {
-            val filePath = getPublicStorageDirPath(Environment.DIRECTORY_PICTURES) + "/" + fileName
+            val filePath = getPublicStorageDirPath(
+                Environment.DIRECTORY_PICTURES
+            ) + "/" + fileName
             val file = File(filePath)
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             if (inputStream != null) {
                 val outputStream = FileOutputStream(file)
-                copyStream(inputStream, outputStream)
+                copyStream(
+                    inputStream,
+                    outputStream
+                )
                 file
             } else {
                 null
@@ -233,7 +269,12 @@ internal object FileUtils {
 
     // get saved file in created path
     private fun createAppFile(fileName: String?, folderName: String): File =
-        File(getFilePath(fileName, folderName))
+        File(
+            getFilePath(
+                fileName,
+                folderName
+            )
+        )
 
     fun getUniqueFileName(prefix: String): String =
         prefix + SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH).format(Date())
@@ -248,7 +289,8 @@ internal object FileUtils {
 
     fun getFileUri(context: Context, fileUrl: String): Uri {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(context, Constants.PROVIDER_AUTH, File(fileUrl))
+            FileProvider.getUriForFile(context,
+                Constants.PROVIDER_AUTH, File(fileUrl))
         } else {
             Uri.fromFile(File(fileUrl))
         }

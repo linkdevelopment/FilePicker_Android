@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.utils
+package com.linkdev.filepicker.utils.file
 
 import android.content.ContentValues
 import android.content.Context

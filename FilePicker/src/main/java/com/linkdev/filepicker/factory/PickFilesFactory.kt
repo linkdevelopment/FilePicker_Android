@@ -24,7 +24,7 @@ import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.FileTypes
 import com.linkdev.filepicker.models.SelectionMode
 import com.linkdev.filepicker.pickers.pick_files.PickFiles
-import com.linkdev.filepicker.utils.Platform
+import com.linkdev.filepicker.utils.version.Platform
 import com.linkdev.filepicker.pickers.video.CaptureVideoAndroidQ
 import com.linkdev.filepicker.pickers.video.CaptureVideo
 

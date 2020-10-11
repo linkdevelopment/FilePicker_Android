@@ -25,9 +25,9 @@ import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.*
-import com.linkdev.filepicker.utils.FileUtils
-import com.linkdev.filepicker.utils.LoggerUtils.logError
-import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.file.FileUtils
+import com.linkdev.filepicker.utils.log.LoggerUtils.logError
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 
 /**
  * Class used to open document, select files and handle selected file status

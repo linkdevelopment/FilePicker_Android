@@ -29,10 +29,11 @@ import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
-import com.linkdev.filepicker.utils.*
-import com.linkdev.filepicker.utils.FileUtils.IMAG_PREFIX
-import com.linkdev.filepicker.utils.LoggerUtils.logError
-import com.linkdev.filepicker.utils.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.file.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker.utils.log.LoggerUtils.logError
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.file.AndroidQFileUtils
+import com.linkdev.filepicker.utils.file.FileUtils
 
 /**
  * AndroidQCaptureImage is a piece of PickFile library to handle open camera action and save captured imaged

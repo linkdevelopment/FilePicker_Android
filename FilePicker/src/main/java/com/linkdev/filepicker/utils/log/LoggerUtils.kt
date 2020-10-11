@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker.utils
+package com.linkdev.filepicker.utils.log
 
-object Constants {
-    internal const val PROVIDER_AUTH = "com.linkdev.filepicker.provider"
+import android.util.Log
+
+internal object LoggerUtils {
+    const val TAG = "FilePicker"
+    fun logError(message: String, cause: Throwable?) {
+        Log.e(TAG, message, cause)
+    }
 }
