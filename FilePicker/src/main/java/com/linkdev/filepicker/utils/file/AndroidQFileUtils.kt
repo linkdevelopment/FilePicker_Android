@@ -22,6 +22,8 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import com.linkdev.filepicker.models.MimeType
+import java.io.File
+import java.io.FileOutputStream
 
 
 object AndroidQFileUtils {
@@ -49,6 +51,29 @@ object AndroidQFileUtils {
             context.contentResolver.update(it, contentValues, null, null)
         }
         return uriSavedPhoto
+    }
+
+    fun savePublicImage(context: Context, file: File, fileName: String, folderName: String?) {
+        val relativePath: String = if (folderName.isNullOrBlank()) {
+            Environment.DIRECTORY_PICTURES
+        } else {
+            Environment.DIRECTORY_PICTURES + "/" + folderName
+        }
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+        values.put(MediaStore.Images.Media.MIME_TYPE, MimeType.JPEG.mimeTypeName)
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, relativePath)
+        val item =
+            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        item?.let { uri ->
+            context.contentResolver.openFileDescriptor(uri, "w", null).use { pfd ->
+                pfd?.let {
+                    val output = FileOutputStream(it.fileDescriptor)
+                    output.write(file.readBytes())
+                    output.close()
+                }
+            }
+        }
     }
 
     internal fun getVideoUri(
