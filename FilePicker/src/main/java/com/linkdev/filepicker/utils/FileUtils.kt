@@ -18,11 +18,12 @@ package com.linkdev.filepicker.utils
 
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
@@ -66,22 +67,13 @@ internal object FileUtils {
 
     // return file name with extension
     fun getFullFileNameFromUri(context: Context, uri: Uri): String {
-        return "${getFileNameFromUri(context, uri)}.${getExtensionFromUri(context, uri)}"
-    }
-
-    // get file name
-    fun getFileNameFromUri(context: Context, uri: Uri): String {
         var cursor: Cursor? = null
         return try {
             cursor = context.contentResolver.query(uri, null, null, null, null)
             if (cursor != null) {
                 val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 cursor.moveToFirst()
-                val name = cursor.getString(nameIndex)
-                if (name.lastIndexOf('.') != -1)
-                    name.substring(0, name.lastIndexOf('.'))
-                else
-                    name.substring(0)
+                cursor.getString(nameIndex)
             } else {
                 getUniqueFileName(GENERAL_PREFIX)
             }
@@ -91,6 +83,15 @@ internal object FileUtils {
         } finally {
             cursor?.close()
         }
+    }
+
+    // get file name
+    fun getFileNameFromUri(context: Context, uri: Uri): String {
+        val name = getFullFileNameFromUri(context, uri)
+        return if (name.lastIndexOf('.') != -1)
+            name.substring(0, name.lastIndexOf('.'))
+        else
+            name.substring(0)
     }
 
     fun getFileFromPath(filePath: String?): File? {
@@ -255,12 +256,6 @@ internal object FileUtils {
 
     // add Image to gallery
     fun addMediaToGallery(file: File?, context: Context) {
-        file?.let {
-            Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-                val f = File(it.path)
-                mediaScanIntent.data = Uri.fromFile(f)
-                context.sendBroadcast(mediaScanIntent)
-            }
-        }
+        MediaScannerConnection.scanFile(context, arrayOf(file?.path), null, null)
     }
 }
