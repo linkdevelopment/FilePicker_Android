@@ -18,11 +18,17 @@ FilePicker allows you easily capture image, record video from camera or pick any
 
 ### Runtime permissions
 This library requires specific runtime permissions. Declare it in your `AndroidMnifest.xml`:
+
+For capture image or record video:
 ```xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.CAMERA" />
 ```
-**Note**: for devices running API 23 (Marshmallow) you have to request these permissions in the runtime, before calling `IPickFilesFactory.pickFiles()`. It's demonstrated in the sample app.
+For pick any type of files from document:
+```xml
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+```
+**Note**: for devices running API 23 (Marshmallow) and up you have to request these permissions in the runtime, before calling `IPickFilesFactory.pickFiles()`. It's demonstrated in the sample app.
 
 # **Usage**
 
@@ -34,10 +40,10 @@ private var pickFilesFactory: IPickFilesFactory? = null
 ```kotlin
 // folderName is the directory to save captured photo if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
-               private val fragment: Fragment,
+               private val caller: Any,
                private val requestCode: Int,
                private val folderName: String? = null
-            ).getInstance(FactoryFilesType.IMAGE_CAMERA)
+            ).getInstance(FileTypes.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
 
@@ -45,10 +51,10 @@ pickFilesFactory = PickFilesFactory(
 ```kotlin
 // folderName is the directory to save recorded videos if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
-               private val fragment: Fragment,
+               private val caller: Any,
                private val requestCode: Int,
                private val folderName: String? = null
-            ).getInstance(FactoryFilesType.VIDEO_CAMERA)
+            ).getInstance(FileTypes.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
 ### pick files from documents
@@ -56,10 +62,10 @@ pickFilesFactory = PickFilesFactory(
 // selectionMode is to allow multiple selection or not
 // mimeTypeList list of supported files mime types to be selected.
 pickFilesFactory = PickFilesFactory(
-               private val fragment: Fragment,
+               private val caller: Any,
                private val requestCode: Int,
                private val selectionMode: SelectionMode = SelectionMode.SINGLE
-            ).getInstance(FactoryFilesType.PICK_FILES)
+            ).getInstance(FileTypes.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
 ### Getting selected files list
@@ -82,6 +88,26 @@ fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     })
                 
  }
+```
+## Enums
+#### MimeType.kt
+```
+Is an enum class containing all possible mime types used when pick files from document. usage documented in the sample app.  
+```
+#### FileTypes.kt
+```
+Is an enum class containing three types CAPTURE_IMAGE, CAPTURE_VIDEO and PICK_FILES used to get instance of IPickFilesFactory based on usage:
+CAPTURE_IMAGE: passed when need to captured image. 
+CAPTURE_VIDEO: passed when need to record video. 
+PICK_FILES: passed when need to pick files from document.
+usage documented in sample app 
+```
+#### SelectionMode.kt
+```
+Is an enum class containing two types SINGLE, MULTIPLE used to detect if should allow multiple selection from document:
+SINGLE: will not allow multiple selection
+MULTIPLE: will allow multiple selection
+usage documented in sample app 
 ```
 # **License**
     Copyright 2020-present Link Development

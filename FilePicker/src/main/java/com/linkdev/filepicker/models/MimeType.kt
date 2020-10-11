@@ -64,7 +64,7 @@ enum class MimeType(val mimeTypeName: String, val fileExtension: ArrayList<Strin
     ALL_FILES("*/*", arrayListOf("*/*"));
 
     companion object {
-        fun getArrayOfMimeType(mimeTypeList: ArrayList<MimeType>): Array<String> {
+        internal fun getArrayOfMimeType(mimeTypeList: ArrayList<MimeType>): Array<String> {
             if (mimeTypeList.isEmpty()) return arrayOf(ALL_FILES.mimeTypeName)
             val mMimeTypeList = ArrayList<String>()
             for (mimeType: MimeType in mimeTypeList) {
