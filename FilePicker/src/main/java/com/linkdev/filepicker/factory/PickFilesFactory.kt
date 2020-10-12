@@ -40,6 +40,7 @@ import com.linkdev.filepicker.pickers.video.CaptureVideo
 class PickFilesFactory(
     private val caller: Any,
     private val requestCode: Int,
+    private val allowSyncWithGallery: Boolean = false,
     private val galleryFolderName: String? = null,
     private val selectionMode: SelectionMode = SelectionMode.SINGLE
 ) {
@@ -56,15 +57,19 @@ class PickFilesFactory(
         return when (fileTypes) {
             FileTypes.CAPTURE_IMAGE -> {
                 if (Platform.isAndroidQ())
-                    CaptureImageAndroidQ(caller, requestCode, galleryFolderName)
+                    CaptureImageAndroidQ(
+                        caller, requestCode, allowSyncWithGallery, galleryFolderName
+                    )
                 else
-                    CaptureImage(caller, requestCode, galleryFolderName)
+                    CaptureImage(caller, requestCode, allowSyncWithGallery, galleryFolderName)
             }
             FileTypes.CAPTURE_VIDEO -> {
                 if (Platform.isAndroidQ())
-                    CaptureVideoAndroidQ(caller, requestCode, galleryFolderName)
+                    CaptureVideoAndroidQ(
+                        caller, requestCode, allowSyncWithGallery, galleryFolderName
+                    )
                 else
-                    CaptureVideo(caller, requestCode, galleryFolderName)
+                    CaptureVideo(caller, requestCode, allowSyncWithGallery, galleryFolderName)
 
             }
             FileTypes.PICK_FILES -> PickFiles(caller, requestCode, selectionMode)

@@ -45,6 +45,7 @@ import com.linkdev.filepicker.utils.file.FileUtils.VID_PREFIX
 internal class CaptureVideoAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
+    private val allowSyncWithGallery: Boolean = false,
     private val folderName: String?
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null

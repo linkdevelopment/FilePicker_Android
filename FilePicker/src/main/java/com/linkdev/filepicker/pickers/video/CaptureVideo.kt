@@ -47,6 +47,7 @@ import java.io.File
 internal class CaptureVideo(
     private val caller: Caller,
     private val requestCode: Int,
+    private val allowSyncWithGallery: Boolean = false,
     private val folderName: String? = null
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null

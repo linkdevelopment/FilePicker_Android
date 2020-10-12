@@ -45,6 +45,7 @@ import com.linkdev.filepicker.utils.file.FileUtils
 internal class CaptureImageAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
+    private val allowSyncWithGallery: Boolean = false,
     private val folderName: String?
 ) : IPickFilesFactory {
     private var currentCapturedImageURI: Uri? = null

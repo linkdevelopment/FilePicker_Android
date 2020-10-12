@@ -46,6 +46,7 @@ import java.io.File
 internal class CaptureImage(
     private val caller: Caller,
     private var requestCode: Int,
+    private val allowSyncWithGallery: Boolean = false,
     private val folderName: String? = null
 ) : IPickFilesFactory {
     private var currentCapturedImagePath: String? = null
