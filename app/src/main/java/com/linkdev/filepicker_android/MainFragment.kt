@@ -132,6 +132,7 @@ class MainFragment : Fragment() {
      * check permission and open camera to capture photo
      * init [pickFilesFactory] by [PickFilesFactory.getInstance]
      * */
+    // TODO handle WRITE_EXTERNAL_STORAGE and CAMERA runtime permission
     private fun onCapturePhotoClicked() {
         if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
@@ -150,6 +151,7 @@ class MainFragment : Fragment() {
      * check permission and open camera to record video
      * init [pickFilesFactory] by [PickFilesFactory.getInstance]
      * */
+    // TODO handle WRITE_EXTERNAL_STORAGE and CAMERA runtime permission
     private fun onRecordVideoClicked() {
         if (checkPermissions(getCameraPermissionsList())) {
             pickFilesFactory = PickFilesFactory(
@@ -168,6 +170,7 @@ class MainFragment : Fragment() {
      * check storage permission and open documents
      * init [pickFilesFactory] by  [PickFilesFactory.getInstance]
      * */
+    // TODO handle READ_EXTERNAL_STORAGE runtime permission
     private fun onPickFilesClicked() {
         if (checkPermissions(getStoragePermissionList())) {
             pickFilesFactory = PickFilesFactory(
