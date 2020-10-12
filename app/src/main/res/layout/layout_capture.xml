@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2020 Link Development
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,7 +78,20 @@
         android:layout_marginBottom="@dimen/margin_15"
         android:visibility="gone"
         app:constraint_referenced_ids="btnCapturePhoto,btnRecordVideo"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/crdLayoutCapture"
         tools:visibility="visible" />
+
+    <CheckBox
+        android:id="@+id/chbAllowSyncWithGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginBottom="@dimen/margin_15"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/margin_5"
+        android:text="@string/allow_sync_with_gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/captureSection" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -137,7 +137,8 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = CAPTURE_IMAGE_REQUEST_CODE,
-                galleryFolderName = IMAGES_FOLDER_NAME
+                galleryFolderName = IMAGES_FOLDER_NAME,
+                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked
             ).getInstance(FileTypes.CAPTURE_IMAGE)
             pickFilesFactory?.pickFiles()
         } else {
@@ -154,7 +155,8 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = CAPTURE_VIDEO_REQUEST_CODE,
-                galleryFolderName = VIDEOS_FOLDER_NAME
+                galleryFolderName = VIDEOS_FOLDER_NAME,
+                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked
             ).getInstance(FileTypes.CAPTURE_VIDEO)
             pickFilesFactory?.pickFiles()
         } else {
