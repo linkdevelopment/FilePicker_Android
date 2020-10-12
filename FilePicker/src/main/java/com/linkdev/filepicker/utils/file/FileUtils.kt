@@ -148,7 +148,7 @@ internal object FileUtils {
                 "." + getExtensionFromUri(
                     context,
                     uri
-                ), context.externalCacheDir
+                ), context.cacheDir
             )
 
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
