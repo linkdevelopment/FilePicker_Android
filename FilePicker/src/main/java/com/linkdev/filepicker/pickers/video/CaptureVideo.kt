@@ -95,7 +95,7 @@ internal class CaptureVideo(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedVideoPath != null && currentCapturedVideoUri != null) {
-                    val fileData = generateFileData(data)
+                    val fileData = generateFileData()
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -121,19 +121,22 @@ internal class CaptureVideo(
         }
     }
 
-    private fun generateFileData(data: Intent?): FileData? {
-        val file = getFile()
-        val filePath = file?.path
-        val fileName = file?.name
+    private fun generateFileData(): FileData? {
+        val file = File(currentCapturedVideoPath!!)
+        val filePath = currentCapturedVideoPath
+        val fileName = file.name
         val mimeType = FileUtils.getFileMimeType(caller.context, currentCapturedVideoUri!!)
         val fileSize = FileUtils.getFileSize(caller.context, currentCapturedVideoUri!!)
-        return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
+        return if (filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
-        else
+        else {
+            if (allowSyncWithGallery)
+                syncWithGallery()
             FileData(currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize)
+        }
     }
 
-    private fun getFile(): File? {
+    private fun syncWithGallery() {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedVideoWithPrivateDir(
                 caller.context, currentCapturedVideoUri!!, currentCapturedVideoPath!!, folderName
@@ -144,7 +147,6 @@ internal class CaptureVideo(
         }
 
         FileUtils.addMediaToGallery(file, caller.context)
-        return file
     }
 
     private fun handleCapturedVideoWithPublicDir(context: Context, uri: Uri): File? {

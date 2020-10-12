@@ -96,7 +96,7 @@ internal class CaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedImagePath != null && currentCapturedImageURI != null) {
-                    val fileData = generateFileData(data)
+                    val fileData = generateFileData()
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -126,22 +126,25 @@ internal class CaptureImage(
      * generate file data object
      * @return [FileData]
      * */
-    private fun generateFileData(data: Intent?): FileData? {
-        val file = getFile()
-        val filePath = file?.path
-        val fileName = file?.name
+    private fun generateFileData(): FileData? {
+        val file = File(currentCapturedImagePath!!)
+        val filePath = currentCapturedImagePath
+        val fileName = file.name
         val mimeType = FileUtils.getFileMimeType(caller.context, currentCapturedImageURI!!)
         val fileSize = FileUtils.getFileSize(caller.context, currentCapturedImageURI!!)
-        return if (file == null || filePath.isNullOrBlank() || mimeType.isNullOrBlank())
+        return if (filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
-        else
+        else {
+            if (allowSyncWithGallery)
+                syncWithGallery()
             FileData(currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize)
+        }
     }
 
     /**
      * @return [File] saved file using [handleCapturedImageWithPublicDir] or [handleCapturedImageWithPrivateDir]
      * */
-    private fun getFile(): File? {
+    private fun syncWithGallery() {
         val file: File? = if (!folderName.isNullOrBlank()) {
             handleCapturedImageWithPrivateDir(
                 caller.context, currentCapturedImageURI!!, currentCapturedImagePath!!, folderName
@@ -152,7 +155,6 @@ internal class CaptureImage(
         }
 
         FileUtils.addMediaToGallery(file, caller.context)
-        return file
     }
 
     /**
