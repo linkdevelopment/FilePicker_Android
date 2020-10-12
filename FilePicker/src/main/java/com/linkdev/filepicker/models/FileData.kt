@@ -26,7 +26,7 @@ import java.io.File
 @Keep
 data class FileData(
     val uri: Uri? = null,
-    val filePath: String? = null,
+    val tempFilePath: String? = null,
     val tempFile: File? = null,
     val fileName: String? = null,
     val mimeType: String? = null,
