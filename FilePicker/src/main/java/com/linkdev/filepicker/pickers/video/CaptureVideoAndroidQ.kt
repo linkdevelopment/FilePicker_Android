@@ -33,7 +33,9 @@ import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
+import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.file.FileUtils.VID_PREFIX
+import java.io.File
 
 /**
  * AndroidQCaptureVideo is a piece of PickFile library to handle open camera action and save recorded video
@@ -49,6 +51,7 @@ internal class CaptureVideoAndroidQ(
     private val folderName: String?
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null
+    private var currentCapturedVideoPath: String? = null
 
     companion object {
         const val TAG = "FilePickerTag"
@@ -56,18 +59,27 @@ internal class CaptureVideoAndroidQ(
 
     //handle action to open camera and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
-        val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        if (captureVideoIntent.resolveActivity(caller.context.packageManager) != null) {
+        val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
+            val videoFile = FileUtils.createVideoFile(caller.context)
+
+            currentCapturedVideoPath = videoFile?.path
             currentCapturedVideoUri =
-                AndroidQFileUtils.getVideoUri(
-                    caller.context, VID_PREFIX, MimeType.MP4, folderName
-                )
+                currentCapturedVideoPath?.let {
+                    // get photo uri form content provider
+                    FileUtils.getFileUri(caller.context, it)
+                }
+
             currentCapturedVideoUri?.let {
-                captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentCapturedVideoUri)
-                try {
-                    caller.startActivityForResult(captureVideoIntent, requestCode)
-                } catch (ex: SecurityException) {
-                    logError(NOT_HANDLED_ERROR_MESSAGE, ex)
+                //read image from given URI
+                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
+                if (caller.isCameraPermissionsGranted()) {
+                    caller.startActivityForResult(captureImageIntent, requestCode)
+                } else {
+                    logError(
+                        PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE,
+                        SecurityException()
+                    )
                 }
             }
         }
@@ -85,8 +97,8 @@ internal class CaptureVideoAndroidQ(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (currentCapturedVideoUri != null) {
-                    val fileData = generateFileData(currentCapturedVideoUri!!, data)
+                if (currentCapturedVideoUri != null && currentCapturedVideoPath != null) {
+                    val fileData = generateFileData()
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -108,15 +120,18 @@ internal class CaptureVideoAndroidQ(
     }
 
     // create File data object
-    private fun generateFileData(uri: Uri, data: Intent?): FileData? {
-        val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
-        val file = FileUtils.getFileFromPath(filePath) // create file
-        val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
-        val mimeType = FileUtils.getFileMimeType(caller.context, uri)
-        val fileSize = FileUtils.getFileSize(caller.context, uri)
-        return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
+    private fun generateFileData(): FileData? {
+        val filePath = currentCapturedVideoPath
+        val file = File(currentCapturedVideoPath!!)
+        val fileName = file.name
+        val mimeType = FileUtils.getFileMimeType(caller.context, currentCapturedVideoUri!!)
+        val fileSize = FileUtils.getFileSize(caller.context, currentCapturedVideoUri!!)
+        return if (filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
-        else
-            FileData(uri, filePath, file, fileName, mimeType, fileSize)
+        else {
+            if (allowSyncWithGallery)
+                AndroidQFileUtils.saveVideoToGallery(caller.context, file, fileName, folderName)
+            FileData(currentCapturedVideoUri, filePath, file, fileName, mimeType, fileSize)
+        }
     }
 }

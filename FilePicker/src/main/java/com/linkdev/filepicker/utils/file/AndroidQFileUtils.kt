@@ -27,58 +27,35 @@ import java.io.FileOutputStream
 
 
 object AndroidQFileUtils {
-    internal fun getPhotoUri(
-        context: Context, prefix: String, mimeType: MimeType, folderName: String?
-    ): Uri? {
+
+    internal fun saveImageToGallery(
+        context: Context, file: File, imageName: String, folderName: String?
+    ) {
         val relativePath: String = if (folderName.isNullOrBlank()) {
             Environment.DIRECTORY_PICTURES
         } else {
             Environment.DIRECTORY_PICTURES + "/" + folderName
         }
         val contentValues = ContentValues()
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, FileUtils.getUniqueFileName(prefix))
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType.mimeTypeName)
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, imageName)
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, MimeType.JPEG.mimeTypeName)
         contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
         contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1)
         val resolver = context.contentResolver
         val collection =
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        val uriSavedPhoto = resolver.insert(collection, contentValues)
-        broadcastFile(context, uriSavedPhoto)
+        val galleryUri = resolver.insert(collection, contentValues)
+        broadcastFile(context, galleryUri, file)
         contentValues.clear()
         contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
-        uriSavedPhoto?.let {
+        galleryUri?.let {
             context.contentResolver.update(it, contentValues, null, null)
         }
-        return uriSavedPhoto
     }
 
-    fun savePublicImage(context: Context, file: File, fileName: String, folderName: String?) {
-        val relativePath: String = if (folderName.isNullOrBlank()) {
-            Environment.DIRECTORY_PICTURES
-        } else {
-            Environment.DIRECTORY_PICTURES + "/" + folderName
-        }
-        val values = ContentValues()
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-        values.put(MediaStore.Images.Media.MIME_TYPE, MimeType.JPEG.mimeTypeName)
-        values.put(MediaStore.Images.Media.RELATIVE_PATH, relativePath)
-        val item =
-            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        item?.let { uri ->
-            context.contentResolver.openFileDescriptor(uri, "w", null).use { pfd ->
-                pfd?.let {
-                    val output = FileOutputStream(it.fileDescriptor)
-                    output.write(file.readBytes())
-                    output.close()
-                }
-            }
-        }
-    }
-
-    internal fun getVideoUri(
-        context: Context, prefix: String, mimeType: MimeType, folderName: String?
-    ): Uri? {
+    internal fun saveVideoToGallery(
+        context: Context, file: File, videoName: String, folderName: String?
+    ) {
         val relativePath: String = if (folderName.isNullOrBlank()) {
             Environment.DIRECTORY_MOVIES
         } else {
@@ -86,29 +63,34 @@ object AndroidQFileUtils {
         }
 
         val contentValues = ContentValues()
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, FileUtils.getUniqueFileName(prefix))
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType.mimeTypeName)
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, videoName)
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, MimeType.MP4.mimeTypeName)
         contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
         contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1)
         val resolver = context.contentResolver
         val collection =
             MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         val uriSavedVideo = resolver.insert(collection, contentValues)
-        broadcastFile(context, uriSavedVideo)
+        broadcastFile(context, uriSavedVideo, file)
         contentValues.clear()
         contentValues.put(MediaStore.Video.Media.IS_PENDING, 0)
         uriSavedVideo?.let {
             context.contentResolver.update(it, contentValues, null, null)
         }
-        return uriSavedVideo
     }
 
-    // broadcast image to gallery
-    private fun broadcastFile(context: Context, uri: Uri?) {
+    // broadcast media to gallery
+    private fun broadcastFile(context: Context, galleryUri: Uri?, file: File) {
         try {
-            val let = uri?.let { context.contentResolver.openOutputStream(it) }
-            let?.flush()
-            let?.close()
+            galleryUri?.let { uri ->
+                context.contentResolver.openFileDescriptor(uri, "w", null).use { pfd ->
+                    pfd?.let {
+                        val output = FileOutputStream(it.fileDescriptor)
+                        output.write(file.readBytes())
+                        output.close()
+                    }
+                }
+            }
         } catch (exception: Throwable) {
             exception.printStackTrace()
         }

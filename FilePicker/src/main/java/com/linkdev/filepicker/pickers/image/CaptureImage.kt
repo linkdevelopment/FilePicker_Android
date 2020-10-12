@@ -61,7 +61,7 @@ internal class CaptureImage(
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent
         if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
-            // Create the File where the photo should go
+            // Create the temp File where the photo should saved
             val imageFile = FileUtils.createImageFile(caller.context)
 
             currentCapturedImagePath = imageFile?.path

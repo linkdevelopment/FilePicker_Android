@@ -62,6 +62,7 @@ internal class CaptureVideo(
         val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
             val videoFile = FileUtils.createVideoFile(caller.context)
+
             currentCapturedVideoPath = videoFile?.path
             currentCapturedVideoUri =
                 currentCapturedVideoPath?.let {
@@ -79,7 +80,6 @@ internal class CaptureVideo(
                 }
             }
         }
-
     }
 
     /**

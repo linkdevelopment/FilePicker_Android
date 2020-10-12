@@ -16,7 +16,6 @@
 
 package com.linkdev.filepicker.models
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import androidx.annotation.Keep
@@ -28,7 +27,7 @@ import java.io.File
 data class FileData(
     val uri: Uri? = null,
     val filePath: String? = null,
-    val file: File? = null,
+    val tempFile: File? = null,
     val fileName: String? = null,
     val mimeType: String? = null,
     val fileSize: Double? = null

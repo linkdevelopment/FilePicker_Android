@@ -29,11 +29,13 @@ import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
+import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.file.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.AndroidQFileUtils
 import com.linkdev.filepicker.utils.file.FileUtils
+import java.io.File
 
 /**
  * AndroidQCaptureImage is a piece of PickFile library to handle open camera action and save captured imaged
@@ -48,6 +50,8 @@ internal class CaptureImageAndroidQ(
     private val allowSyncWithGallery: Boolean = false,
     private val folderName: String?
 ) : IPickFilesFactory {
+
+    private var currentCapturedImagePath: String? = null
     private var currentCapturedImageURI: Uri? = null
 
     companion object {
@@ -57,19 +61,28 @@ internal class CaptureImageAndroidQ(
     //handle action to open camera and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Ensure that there's a camera activity to handle the intent
         if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
+            // Create the temp File where the photo should saved
+            val imageFile = FileUtils.createImageFile(caller.context)
+
+            currentCapturedImagePath = imageFile?.path
             currentCapturedImageURI =
-                AndroidQFileUtils.getPhotoUri(
-                    caller.context, IMAG_PREFIX, MimeType.JPEG, folderName
-                )
+                currentCapturedImagePath?.let {
+                    // get photo uri form content provider
+                    FileUtils.getFileUri(caller.context, it)
+                }
+
             currentCapturedImageURI?.let {
                 //read image from given URI
                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentCapturedImageURI)
-                try {
+                if (caller.isCameraPermissionsGranted()) {
                     caller.startActivityForResult(captureImageIntent, requestCode)
-                } catch (ex: SecurityException) {
-                    logError(NOT_HANDLED_ERROR_MESSAGE, ex)
-
+                } else {
+                    logError(
+                        PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE,
+                        SecurityException()
+                    )
                 }
             }
         }
@@ -87,8 +100,8 @@ internal class CaptureImageAndroidQ(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
-                if (currentCapturedImageURI != null) {
-                    val fileData = generateFileData(currentCapturedImageURI!!, data)
+                if (currentCapturedImageURI != null && currentCapturedImagePath != null) {
+                    val fileData = generateFileData()
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -110,15 +123,18 @@ internal class CaptureImageAndroidQ(
     }
 
     // create File data object
-    private fun generateFileData(uri: Uri, data: Intent?): FileData? {
-        val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
-        val file = FileUtils.getFileFromPath(filePath) // create file
-        val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
-        val mimeType = FileUtils.getFileMimeType(caller.context, uri)
-        val fileSize = FileUtils.getFileSize(caller.context, uri)
-        return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
+    private fun generateFileData(): FileData? {
+        val filePath = currentCapturedImagePath
+        val file = File(currentCapturedImagePath!!)
+        val fileName = file.name
+        val mimeType = FileUtils.getFileMimeType(caller.context, currentCapturedImageURI!!)
+        val fileSize = FileUtils.getFileSize(caller.context, currentCapturedImageURI!!)
+        return if (filePath.isNullOrBlank() || mimeType.isNullOrBlank())
             null
-        else
-            FileData(uri, filePath, file, fileName, mimeType, fileSize)
+        else {
+            if (allowSyncWithGallery)
+                AndroidQFileUtils.saveImageToGallery(caller.context, file, fileName, folderName)
+            FileData(currentCapturedImageURI, filePath, file, fileName, mimeType, fileSize)
+        }
     }
 }
