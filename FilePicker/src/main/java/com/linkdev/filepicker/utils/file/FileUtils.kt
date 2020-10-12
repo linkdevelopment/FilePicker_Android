@@ -304,4 +304,9 @@ internal object FileUtils {
     fun addMediaToGallery(file: File?, context: Context) {
         MediaScannerConnection.scanFile(context, arrayOf(file?.path), null, null)
     }
+
+    // delete file with given uri
+    fun deleteUri(context: Context, uri: Uri?) {
+        uri?.let { context.contentResolver.delete(it, null, null) }
+    }
 }

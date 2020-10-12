@@ -102,7 +102,8 @@ internal class CaptureVideoAndroidQ(
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(caller.context, currentCapturedVideoUri)
+            FileUtils.deleteUri(caller.context, currentCapturedVideoUri)
+            callback.onPickFileCanceled()
         }
     }
 

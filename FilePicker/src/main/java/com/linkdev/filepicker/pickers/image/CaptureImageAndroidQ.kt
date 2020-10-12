@@ -104,7 +104,8 @@ internal class CaptureImageAndroidQ(
                 }
             }
         } else {
-            AndroidQFileUtils.deleteUri(caller.context, currentCapturedImageURI)
+            FileUtils.deleteUri(caller.context, currentCapturedImageURI)
+            callback.onPickFileCanceled()
         }
     }
 

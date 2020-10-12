@@ -117,6 +117,7 @@ internal class CaptureImage(
                 )
             }
         } else {
+            FileUtils.deleteUri(caller.context, currentCapturedImageURI)
             callback.onPickFileCanceled()
         }
     }

@@ -114,9 +114,4 @@ object AndroidQFileUtils {
         }
     }
 
-    // delete file with given uri
-    fun deleteUri(context: Context, uri: Uri?) {
-        uri?.let { context.contentResolver.delete(it, null, null) }
-    }
-
 }

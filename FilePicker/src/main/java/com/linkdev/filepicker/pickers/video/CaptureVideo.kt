@@ -116,6 +116,7 @@ internal class CaptureVideo(
                 )
             }
         } else {
+            FileUtils.deleteUri(caller.context, currentCapturedVideoUri)
             callback.onPickFileCanceled()
         }
     }
