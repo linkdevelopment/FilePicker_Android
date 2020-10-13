@@ -38,11 +38,12 @@ private var pickFilesFactory: IPickFilesFactory? = null
 ```
 ### Capture photo
 ```kotlin
-// folderName is the directory to save captured photo if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
-               private val caller: Any,
-               private val requestCode: Int,
-               private val folderName: String? = null
+               caller: Any,
+               requestCode: Int,
+               galleryFolderName: String? = null,
+               allowSyncWithGallery: Boolean? = false,
+               thumbnailSize: Size
             ).getInstance(FileTypes.IMAGE_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
@@ -51,9 +52,11 @@ pickFilesFactory = PickFilesFactory(
 ```kotlin
 // folderName is the directory to save recorded videos if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
-               private val caller: Any,
-               private val requestCode: Int,
-               private val folderName: String? = null
+               caller: Any,
+               requestCode: Int,
+               galleryFolderName: String? = null,
+               allowSyncWithGallery: Boolean? = false,
+               thumbnailSize: Size
             ).getInstance(FileTypes.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
@@ -62,9 +65,10 @@ pickFilesFactory = PickFilesFactory(
 // selectionMode is to allow multiple selection or not
 // mimeTypeList list of supported files mime types to be selected.
 pickFilesFactory = PickFilesFactory(
-               private val caller: Any,
-               private val requestCode: Int,
-               private val selectionMode: SelectionMode = SelectionMode.SINGLE
+               caller: Any,
+               requestCode: Int,
+               selectionMode: SelectionMode = SelectionMode.SINGLE,
+               thumbnailSize: Size
             ).getInstance(FileTypes.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
