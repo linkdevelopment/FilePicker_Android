@@ -24,5 +24,11 @@ internal object PickFileConstants {
             "Please handle android.permission.READ_EXTERNAL_STORAGE runtime permission"
         const val NOT_HANDLED_CAMERA_ERROR_MESSAGE =
             "Please handle android.permission.CAMERA and android.permission.WRITE_EXTERNAL_STORAGE runtime permission"
+        const val NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE =
+            "No camera found to process this operation to avoid devices without camera to install your app, please add \n" +
+                    "<uses-feature\n" +
+                    "        android:name=\"android.hardware.camera\"\n" +
+                    "        android:required=\"true\" /> \n" +
+                    "to your manifest"
     }
 }

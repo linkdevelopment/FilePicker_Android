@@ -34,7 +34,9 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
+import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import java.io.File
 
 /**
@@ -79,6 +81,8 @@ internal class CaptureVideo(
                     logError(NOT_HANDLED_CAMERA_ERROR_MESSAGE, SecurityException())
                 }
             }
+        } else {
+            logError(NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE, RuntimeException())
         }
     }
 
