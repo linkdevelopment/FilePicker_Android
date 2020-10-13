@@ -44,13 +44,13 @@ import java.io.File
  * either in the Picture folder or given folder in the gallery
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param folderName the name of directory that captured image will saved into
+ * @param galleryFolderName the name of directory that captured image will saved into
  * */
 internal class CaptureVideo(
     private val caller: Caller,
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val folderName: String? = null
+    private val galleryFolderName: String? = null
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null
     private var currentCapturedVideoPath: String? = null
@@ -141,25 +141,25 @@ internal class CaptureVideo(
     }
 
     private fun syncWithGallery() {
-        val file: File? = if (!folderName.isNullOrBlank()) {
-            handleCapturedVideoWithPrivateDir(
-                caller.context, currentCapturedVideoUri!!, currentCapturedVideoPath!!, folderName
+        val file: File? = if (!galleryFolderName.isNullOrBlank()) {
+            copyCapturedVideoToGalleryFolder(
+                caller.context, currentCapturedVideoUri!!, currentCapturedVideoPath!!, galleryFolderName
             )
 
         } else {
-            handleCapturedVideoWithPublicDir(caller.context, currentCapturedVideoUri!!)
+            copyCapturedVideoToPictureFolder(caller.context, currentCapturedVideoUri!!)
         }
 
         FileUtils.addMediaToGallery(file, caller.context)
     }
 
-    private fun handleCapturedVideoWithPublicDir(context: Context, uri: Uri): File? {
+    private fun copyCapturedVideoToPictureFolder(context: Context, uri: Uri): File? {
         val fileNameWithExt =
             FileUtils.getUniqueFileNameWithExt(VID_PREFIX, CAMERA_VIDEO_TYPE)
         return FileUtils.writePublicFile(context, uri, fileNameWithExt)
     }
 
-    private fun handleCapturedVideoWithPrivateDir(
+    private fun copyCapturedVideoToGalleryFolder(
         context: Context, uri: Uri, currentCapturedPath: String, folderName: String
     ): File? {
         val currentFile = File(currentCapturedPath)

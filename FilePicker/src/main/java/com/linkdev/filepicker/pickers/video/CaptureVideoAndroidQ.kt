@@ -44,13 +44,13 @@ import java.io.File
  * either in the movie folder or given folder in the gallery for android 10
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param folderName the name of directory that captured image will saved into
+ * @param galleryFolderName the name of directory that captured image will saved into
  * */
 internal class CaptureVideoAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val folderName: String?
+    private val galleryFolderName: String?
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null
     private var currentCapturedVideoPath: String? = null
