@@ -313,8 +313,12 @@ internal object FileUtils {
             val openFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
             val decodeBitmap =
                 BitmapFactory.decodeFileDescriptor(openFileDescriptor?.fileDescriptor)
-            ThumbnailUtils
-                .extractThumbnail(decodeBitmap, thumbnailSize.width, thumbnailSize.height)
+            if (thumbnailSize.width == decodeBitmap?.width && thumbnailSize.height == decodeBitmap.height) {
+                decodeBitmap
+            } else {
+                ThumbnailUtils
+                    .extractThumbnail(decodeBitmap, thumbnailSize.width, thumbnailSize.height)
+            }
         } catch (ex: Exception) {
             ex.printStackTrace()
             null
@@ -326,8 +330,12 @@ internal object FileUtils {
             val mediaMetadataRetriever = MediaMetadataRetriever()
             mediaMetadataRetriever.setDataSource(context, uri)
             val frameAtTime = mediaMetadataRetriever.frameAtTime
-            ThumbnailUtils
-                .extractThumbnail(frameAtTime, thumbnailSize.width, thumbnailSize.height)
+            if (thumbnailSize.width == frameAtTime?.width && thumbnailSize.height == frameAtTime.height) {
+                frameAtTime
+            } else {
+                ThumbnailUtils
+                    .extractThumbnail(frameAtTime, thumbnailSize.width, thumbnailSize.height)
+            }
         } catch (ex: Exception) {
             ex.printStackTrace()
             null
