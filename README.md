@@ -37,6 +37,9 @@ Create IPickFileFactory instance like this:
 private var pickFilesFactory: IPickFilesFactory? = null
 ```
 ### Capture photo
+
+To capture image we need to get instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
+
 ```kotlin
 pickFilesFactory = PickFilesFactory(
                caller: Any,
@@ -45,10 +48,15 @@ pickFilesFactory = PickFilesFactory(
                allowSyncWithGallery: Boolean? = false,
                thumbnailSize: Size
             ).getInstance(FileTypes.IMAGE_CAMERA)
-            pickFilesFactory?.pickFiles()
+```
+To open camera by MediaStore.ACTION_IMAGE_CAPTURE and create image URI, need to call pickFilesFactory?.pickFiles()
+```kotlin
+pickFilesFactory?.pickFiles()
 ```
 
 ### Record video
+
+To record video we need to get instance of PickFilesFactory by passing FileTypes.VIDEO_CAMERA to getInstance() method.
 ```kotlin
 pickFilesFactory = PickFilesFactory(
                caller: Any,
@@ -59,7 +67,13 @@ pickFilesFactory = PickFilesFactory(
             ).getInstance(FileTypes.VIDEO_CAMERA)
             pickFilesFactory?.pickFiles()
 ```
+To open camera by MediaStore.ACTION_VIDEO_CAPTURE and create video URI, need to call pickFilesFactory?.pickFiles()
+```kotlin
+pickFilesFactory?.pickFiles()
+```
 ### pick files from documents
+To pick any type of file from document, we need to get instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
+
 ```kotlin
 pickFilesFactory = PickFilesFactory(
                caller: Any,
@@ -67,7 +81,10 @@ pickFilesFactory = PickFilesFactory(
                selectionMode: SelectionMode = SelectionMode.SINGLE,
                thumbnailSize: Size
             ).getInstance(FileTypes.PICK_FILES)
-            pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
+```
+To open document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass mime type list if need to allow specific mime types
+```
+pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
 ### PickFilesFactory attributes
 **caller**
