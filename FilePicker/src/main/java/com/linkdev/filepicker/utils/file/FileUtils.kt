@@ -19,14 +19,21 @@ package com.linkdev.filepicker.utils.file
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.OpenableColumns
+import android.util.Size
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -299,5 +306,31 @@ internal object FileUtils {
     // delete file with given uri
     fun deleteUri(context: Context, uri: Uri?) {
         uri?.let { context.contentResolver.delete(it, null, null) }
+    }
+
+    fun getImageThumbnail(context: Context, uri: Uri, thumbnailSize: Size): Bitmap? {
+        return try {
+            val openFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
+            val decodeBitmap =
+                BitmapFactory.decodeFileDescriptor(openFileDescriptor?.fileDescriptor)
+            ThumbnailUtils
+                .extractThumbnail(decodeBitmap, thumbnailSize.width, thumbnailSize.height)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
+    }
+
+    fun getVideoThumbnail(context: Context, uri: Uri?, thumbnailSize: Size): Bitmap? {
+        return try {
+            val mediaMetadataRetriever = MediaMetadataRetriever()
+            mediaMetadataRetriever.setDataSource(context, uri)
+            val frameAtTime = mediaMetadataRetriever.frameAtTime
+            ThumbnailUtils
+                .extractThumbnail(frameAtTime, thumbnailSize.width, thumbnailSize.height)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
     }
 }
