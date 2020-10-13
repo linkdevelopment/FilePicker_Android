@@ -21,6 +21,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -140,7 +141,8 @@ class MainFragment : Fragment() {
                 caller = this,
                 requestCode = CAPTURE_IMAGE_REQUEST_CODE,
                 galleryFolderName = IMAGES_FOLDER_NAME,
-                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked
+                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked,
+                thumbnailSize = Size(500, 500)
             ).getInstance(FileTypes.CAPTURE_IMAGE)
             pickFilesFactory?.pickFiles()
         } else {
@@ -159,7 +161,8 @@ class MainFragment : Fragment() {
                 caller = this,
                 requestCode = CAPTURE_VIDEO_REQUEST_CODE,
                 galleryFolderName = VIDEOS_FOLDER_NAME,
-                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked
+                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked,
+                thumbnailSize = Size(500, 500)
             ).getInstance(FileTypes.CAPTURE_VIDEO)
             pickFilesFactory?.pickFiles()
         } else {
@@ -177,7 +180,8 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = PICK_ALL_REQUEST_CODE,
-                selectionMode = getSelectionMode()
+                selectionMode = getSelectionMode(),
+                thumbnailSize = Size(500, 500)
             ).getInstance(fileTypes = FileTypes.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList = getMimeTypesList())
         } else {
