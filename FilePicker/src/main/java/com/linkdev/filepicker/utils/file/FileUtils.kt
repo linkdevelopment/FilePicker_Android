@@ -90,11 +90,7 @@ internal object FileUtils {
 
     // get file name
     fun getFileNameFromUri(context: Context, uri: Uri): String {
-        val name =
-            getFullFileNameFromUri(
-                context,
-                uri
-            )
+        val name = getFullFileNameFromUri(context, uri)
         return if (name.lastIndexOf('.') != -1)
             name.substring(0, name.lastIndexOf('.'))
         else
@@ -141,14 +137,9 @@ internal object FileUtils {
         val file: File?
         try {
             file = File.createTempFile(
-                getFileNameFromUri(
-                    context,
-                    uri
-                ),
-                "." + getExtensionFromUri(
-                    context,
-                    uri
-                ), context.cacheDir
+                getFileNameFromUri(context, uri),
+                "." + getExtensionFromUri(context, uri),
+                context.cacheDir
             )
 
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
