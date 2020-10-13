@@ -36,6 +36,7 @@ import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_WIDTH
  * Class used to provide instance of each pick file type by [getInstance] and check [FileTypes]
  * @param caller host Fragment/Activity
  * @param requestCode used to handle [Fragment.onActivityResult]/[android.app.Activity.onActivityResult]
+ * @param allowSyncWithGallery boolean to check if should copy captured image/video to the gallery
  * @param galleryFolderName for custom folder name to save camera/video files
  *                   by default null and captured files saved in default folders
  *@param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and

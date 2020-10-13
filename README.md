@@ -50,7 +50,6 @@ pickFilesFactory = PickFilesFactory(
 
 ### Record video
 ```kotlin
-// folderName is the directory to save recorded videos if it is null will save file in default directory.
 pickFilesFactory = PickFilesFactory(
                caller: Any,
                requestCode: Int,
@@ -62,8 +61,6 @@ pickFilesFactory = PickFilesFactory(
 ```
 ### pick files from documents
 ```kotlin
-// selectionMode is to allow multiple selection or not
-// mimeTypeList list of supported files mime types to be selected.
 pickFilesFactory = PickFilesFactory(
                caller: Any,
                requestCode: Int,
@@ -71,6 +68,33 @@ pickFilesFactory = PickFilesFactory(
                thumbnailSize: Size
             ).getInstance(FileTypes.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
+```
+### PickFilesFactory attributes
+**caller**
+```
+refers to host Fragment/Activity. Used to get context and startActivityForResult
+```
+**requestCode**
+```
+used to handle [Fragment.onActivityResult]/[android.app.Activity.onActivityResult]
+```
+**allowSyncWithGallery**
+```
+check if should copy captured image/video to the gallery
+```
+**galleryFolderName**
+```
+app specific folder name in gallery by default is null and captured image/video saved in default folder
+```
+**selectionMode**
+```
+refers to [SelectionMode] enum class. Used to check if should allow multiple selection or single selection
+```
+**thumbnailSize**
+ ```
+ refers to [Size] class. used for thumbnail custom size
+ ```
+  
 ```
 ### Getting selected files list
 ```kotlin
