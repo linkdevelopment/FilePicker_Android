@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Size
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.models.ErrorModel
@@ -29,14 +30,11 @@ import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.utils.file.AndroidQFileUtils
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
-import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_ERROR_MESSAGE
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
-import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
-import com.linkdev.filepicker.utils.file.FileUtils.VID_PREFIX
 import java.io.File
 
 /**
@@ -50,7 +48,8 @@ internal class CaptureVideoAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val galleryFolderName: String?
+    private val galleryFolderName: String?,
+    private val thumbnailSize: Size
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null
     private var currentCapturedVideoPath: String? = null
@@ -131,8 +130,25 @@ internal class CaptureVideoAndroidQ(
             null
         else {
             if (allowSyncWithGallery)
-                AndroidQFileUtils.saveVideoToGallery(caller.context, file, fileName, folderName)
-            FileData(currentCapturedVideoUri, filePath, file, fileName, mimeType, fileSize)
+                AndroidQFileUtils.saveVideoToGallery(
+                    caller.context,
+                    file,
+                    fileName,
+                    galleryFolderName
+                )
+            val videoThumbnail =
+                FileUtils.getVideoThumbnail(
+                    caller.context, currentCapturedVideoUri, filePath, thumbnailSize
+                )
+            FileData(
+                currentCapturedVideoUri,
+                filePath,
+                file,
+                fileName,
+                mimeType,
+                fileSize,
+                videoThumbnail
+            )
         }
     }
 }

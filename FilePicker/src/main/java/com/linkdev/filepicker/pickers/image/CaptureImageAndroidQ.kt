@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Size
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.R
@@ -47,7 +48,8 @@ internal class CaptureImageAndroidQ(
     private val caller: Caller,
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val galleryFolderName: String?
+    private val galleryFolderName: String?,
+    private val thumbnailSize: Size
 ) : IPickFilesFactory {
 
     private var currentCapturedImagePath: String? = null

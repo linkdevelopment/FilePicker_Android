@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2020 Link Development
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +22,24 @@
     app:cardCornerRadius="@dimen/card_radius"
     app:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/tvFileName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_15"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="File Name" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_15"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="File Name" />
+
+        <ImageView
+            android:id="@+id/imgThumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_15"/>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

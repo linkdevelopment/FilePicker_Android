@@ -16,6 +16,7 @@
 
 package com.linkdev.filepicker.models
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
 import androidx.annotation.Keep
@@ -30,5 +31,6 @@ data class FileData(
     val tempFile: File? = null,
     val fileName: String? = null,
     val mimeType: String? = null,
-    val fileSize: Double? = null
+    val fileSize: Double? = null,
+    val thumbnail: Bitmap? = null
 ) : Parcelable

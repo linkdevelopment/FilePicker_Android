@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Size
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.models.ErrorModel
@@ -34,7 +35,6 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
-import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import java.io.File
@@ -50,7 +50,8 @@ internal class CaptureVideo(
     private val caller: Caller,
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val galleryFolderName: String? = null
+    private val galleryFolderName: String? = null,
+    private val thumbnailSize: Size
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null
     private var currentCapturedVideoPath: String? = null

@@ -18,7 +18,9 @@ package com.linkdev.filepicker.pickers.pick_files
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Size
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.factory.IPickFilesFactory
@@ -38,7 +40,8 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 internal class PickFiles(
     private val caller: Caller,
     private val requestCode: Int,
-    private val selectionType: SelectionMode
+    private val selectionType: SelectionMode,
+    private val thumbnailSize: Size
 ) : IPickFilesFactory {
     companion object {
         const val TAG = "FilePickerTag"

@@ -16,6 +16,7 @@
 
 package com.linkdev.filepicker.utils.constant
 
-object Constants {
-    internal const val PROVIDER_AUTH = "com.linkdev.filepicker.provider"
+internal object Constants {
+    const val THUMBNAIL_WIDTH = 200
+    const val THUMBNAIL_HEIGHT = 200
 }

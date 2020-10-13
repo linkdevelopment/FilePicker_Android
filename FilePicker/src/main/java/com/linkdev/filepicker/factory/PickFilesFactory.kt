@@ -17,6 +17,7 @@
 package com.linkdev.filepicker.factory
 
 import android.content.Intent
+import android.util.Size
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.pickers.image.CaptureImageAndroidQ
 import com.linkdev.filepicker.pickers.image.CaptureImage
@@ -27,6 +28,7 @@ import com.linkdev.filepicker.pickers.pick_files.PickFiles
 import com.linkdev.filepicker.utils.version.Platform
 import com.linkdev.filepicker.pickers.video.CaptureVideoAndroidQ
 import com.linkdev.filepicker.pickers.video.CaptureVideo
+import com.linkdev.filepicker.utils.constant.Constants
 
 /**
  * Class used to provide instance of each pick file type by [getInstance] and check [FileTypes]
@@ -42,7 +44,8 @@ class PickFilesFactory(
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
     private val galleryFolderName: String? = null,
-    private val selectionMode: SelectionMode = SelectionMode.SINGLE
+    private val selectionMode: SelectionMode = SelectionMode.SINGLE,
+    private val thumbnailSize: Size = Size(Constants.THUMBNAIL_WIDTH, Constants.THUMBNAIL_HEIGHT)
 ) {
 
     /**
@@ -58,21 +61,25 @@ class PickFilesFactory(
             FileTypes.CAPTURE_IMAGE -> {
                 if (Platform.isAndroidQ())
                     CaptureImageAndroidQ(
-                        caller, requestCode, allowSyncWithGallery, galleryFolderName
+                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
                     )
                 else
-                    CaptureImage(caller, requestCode, allowSyncWithGallery, galleryFolderName)
+                    CaptureImage(
+                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
+                    )
             }
             FileTypes.CAPTURE_VIDEO -> {
                 if (Platform.isAndroidQ())
                     CaptureVideoAndroidQ(
-                        caller, requestCode, allowSyncWithGallery, galleryFolderName
+                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
                     )
                 else
-                    CaptureVideo(caller, requestCode, allowSyncWithGallery, galleryFolderName)
+                    CaptureVideo(
+                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
+                    )
 
             }
-            FileTypes.PICK_FILES -> PickFiles(caller, requestCode, selectionMode)
+            FileTypes.PICK_FILES -> PickFiles(caller, requestCode, selectionMode, thumbnailSize)
         }
     }
 }
