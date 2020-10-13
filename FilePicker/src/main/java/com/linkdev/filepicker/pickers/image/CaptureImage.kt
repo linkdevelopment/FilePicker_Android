@@ -42,13 +42,13 @@ import java.io.File
  * either in the Picture folder or given folder in the gallery
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param folderName the name of directory that captured image will saved into
+ * @param galleryFolderName the name of directory that captured image will saved into
  * */
 internal class CaptureImage(
     private val caller: Caller,
     private var requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val folderName: String? = null
+    private val galleryFolderName: String? = null
 ) : IPickFilesFactory {
     private var currentCapturedImagePath: String? = null
     private var currentCapturedImageURI: Uri? = null
@@ -145,16 +145,16 @@ internal class CaptureImage(
     }
 
     /**
-     * @return [File] saved file using [handleCapturedImageWithPublicDir] or [handleCapturedImageWithPrivateDir]
+     * @return [File] saved file using [copyCapturedPhotoToPictureFolder] or [copyCapturedPhotoToGalleryFolder]
      * */
     private fun syncWithGallery() {
-        val file: File? = if (!folderName.isNullOrBlank()) {
-            handleCapturedImageWithPrivateDir(
-                caller.context, currentCapturedImageURI!!, currentCapturedImagePath!!, folderName
+        val file: File? = if (!galleryFolderName.isNullOrBlank()) {
+            copyCapturedPhotoToGalleryFolder(
+                caller.context, currentCapturedImageURI!!, currentCapturedImagePath!!, galleryFolderName
             )
 
         } else {
-            handleCapturedImageWithPublicDir(caller.context, currentCapturedImageURI!!)
+            copyCapturedPhotoToPictureFolder(caller.context, currentCapturedImageURI!!)
         }
 
         FileUtils.addMediaToGallery(file, caller.context)
@@ -164,7 +164,7 @@ internal class CaptureImage(
      * save captured image in default folder
      * @return [File]
      * */
-    private fun handleCapturedImageWithPublicDir(context: Context, uri: Uri): File? {
+    private fun copyCapturedPhotoToPictureFolder(context: Context, uri: Uri): File? {
         val fileNameWithExt =
             FileUtils.getUniqueFileNameWithExt(IMAG_PREFIX, FileUtils.CAMERA_IMAGE_TYPE)
         return FileUtils.writePublicFile(context, uri, fileNameWithExt)
@@ -174,7 +174,7 @@ internal class CaptureImage(
      * save captured image in given folder name
      * @return [File]
      * */
-    private fun handleCapturedImageWithPrivateDir(
+    private fun copyCapturedPhotoToGalleryFolder(
         context: Context, uri: Uri, currentCapturedPath: String, folderName: String
     ): File? {
         val currentFile = File(currentCapturedPath)
