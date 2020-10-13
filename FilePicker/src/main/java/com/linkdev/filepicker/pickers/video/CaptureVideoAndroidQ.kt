@@ -136,18 +136,10 @@ internal class CaptureVideoAndroidQ(
                     fileName,
                     galleryFolderName
                 )
-            val videoThumbnail =
-                FileUtils.getVideoThumbnail(
-                    caller.context, currentCapturedVideoUri, filePath, thumbnailSize
-                )
+            val thumbnail =
+                FileUtils.getVideoThumbnail(caller.context, currentCapturedVideoUri, thumbnailSize)
             FileData(
-                currentCapturedVideoUri,
-                filePath,
-                file,
-                fileName,
-                mimeType,
-                fileSize,
-                videoThumbnail
+                currentCapturedVideoUri, filePath, file, fileName, mimeType, fileSize, thumbnail
             )
         }
     }

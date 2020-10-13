@@ -137,14 +137,21 @@ internal class CaptureVideo(
         else {
             if (allowSyncWithGallery)
                 syncWithGallery()
-            FileData(currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize)
+            val thumbnail =
+                FileUtils.getVideoThumbnail(caller.context, currentCapturedVideoUri, thumbnailSize)
+            FileData(
+                currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize, thumbnail
+            )
         }
     }
 
     private fun syncWithGallery() {
         val file: File? = if (!galleryFolderName.isNullOrBlank()) {
             copyCapturedVideoToGalleryFolder(
-                caller.context, currentCapturedVideoUri!!, currentCapturedVideoPath!!, galleryFolderName
+                caller.context,
+                currentCapturedVideoUri!!,
+                currentCapturedVideoPath!!,
+                galleryFolderName
             )
 
         } else {

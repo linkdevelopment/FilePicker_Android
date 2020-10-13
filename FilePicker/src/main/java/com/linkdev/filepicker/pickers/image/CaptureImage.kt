@@ -19,6 +19,7 @@ package com.linkdev.filepicker.pickers.image
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Size
@@ -31,6 +32,7 @@ import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
+import com.linkdev.filepicker.utils.constant.Constants.EXTRA_DATA
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.FileUtils
@@ -101,7 +103,7 @@ internal class CaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedImagePath != null && currentCapturedImageURI != null) {
-                    val fileData = generateFileData()
+                    val fileData = generateFileData(data)
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -131,7 +133,7 @@ internal class CaptureImage(
      * generate file data object
      * @return [FileData]
      * */
-    private fun generateFileData(): FileData? {
+    private fun generateFileData(data: Intent?): FileData? {
         val file = File(currentCapturedImagePath!!)
         val filePath = currentCapturedImagePath
         val fileName = file.name
@@ -142,7 +144,10 @@ internal class CaptureImage(
         else {
             if (allowSyncWithGallery)
                 syncWithGallery()
-            FileData(currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize)
+            val thumbnail = data?.extras?.get(EXTRA_DATA) as Bitmap
+            FileData(
+                currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, thumbnail
+            )
         }
     }
 
@@ -152,7 +157,10 @@ internal class CaptureImage(
     private fun syncWithGallery() {
         val file: File? = if (!galleryFolderName.isNullOrBlank()) {
             copyCapturedPhotoToGalleryFolder(
-                caller.context, currentCapturedImageURI!!, currentCapturedImagePath!!, galleryFolderName
+                caller.context,
+                currentCapturedImageURI!!,
+                currentCapturedImagePath!!,
+                galleryFolderName
             )
 
         } else {
