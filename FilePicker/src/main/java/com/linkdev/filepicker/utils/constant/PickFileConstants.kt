@@ -30,5 +30,6 @@ internal object PickFileConstants {
                     "        android:name=\"android.hardware.camera\"\n" +
                     "        android:required=\"true\" /> \n" +
                     "to your manifest"
+        const val REQUEST_CODE_ERROR_MESSAGE = "Incorrect request code"
     }
 }

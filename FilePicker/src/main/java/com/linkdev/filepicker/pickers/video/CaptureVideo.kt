@@ -35,8 +35,10 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
+import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import java.io.File
 
 /**
@@ -105,20 +107,15 @@ internal class CaptureVideo(
                         callback.onFilePicked(arrayListOf(fileData))
                     else
                         callback.onPickFileError(
-                            ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_general_error)
+                            ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
                         )
                 } else {
                     callback.onPickFileError(
-                        ErrorModel(ErrorStatus.URI_ERROR, R.string.file_picker_general_error)
+                        ErrorModel(ErrorStatus.FILE_ERROR, R.string.file_picker_file_error)
                     )
                 }
             } else {
-                callback.onPickFileError(
-                    ErrorModel(
-                        ErrorStatus.DATA_ERROR,
-                        R.string.file_picker_general_error
-                    )
-                )
+                logError(REQUEST_CODE_ERROR_MESSAGE, RuntimeException())
             }
         } else {
             FileUtils.deleteUri(caller.context, currentCapturedVideoUri)

@@ -28,6 +28,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -218,12 +219,14 @@ class MainFragment : Fragment() {
         }
 
         override fun onPickFileError(errorModel: ErrorModel) {
-            Log.e(LOG_TAG, "onPickFileError")
-            Toast.makeText(requireContext(), "Some error occurred", Toast.LENGTH_SHORT).show()
+            when (errorModel.errorStatus) {
+                ErrorStatus.DATA_ERROR -> showToastMessage(errorModel.defaultErrorMessage)
+                ErrorStatus.FILE_ERROR -> showToastMessage(errorModel.defaultErrorMessage)
+                ErrorStatus.PICK_ERROR -> showToastMessage(errorModel.defaultErrorMessage)
+            }
         }
 
         override fun onFilePicked(fileData: ArrayList<FileData>) {
-            Log.e(LOG_TAG, "onFilePicked: $fileData")
             attachedFilesAdapter.replaceFiles(fileData)
             layoutPickedFiles.visibility = VISIBLE
         }
@@ -303,5 +306,9 @@ class MainFragment : Fragment() {
             headerSection
                 .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0)
         }
+    }
+
+    private fun showToastMessage(@StringRes message: Int) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

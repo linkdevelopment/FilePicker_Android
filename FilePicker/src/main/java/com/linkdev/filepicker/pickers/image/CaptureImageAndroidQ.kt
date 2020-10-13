@@ -18,7 +18,6 @@ package com.linkdev.filepicker.pickers.image
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Size
@@ -31,10 +30,10 @@ import com.linkdev.filepicker.models.ErrorModel
 import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.models.FileData
 import com.linkdev.filepicker.models.MimeType
-import com.linkdev.filepicker.utils.constant.Constants
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.AndroidQFileUtils
 import com.linkdev.filepicker.utils.file.FileUtils
 import java.io.File
@@ -108,15 +107,15 @@ internal class CaptureImageAndroidQ(
                         callback.onFilePicked(arrayListOf(fileData))
                     else
                         callback.onPickFileError(
-                            ErrorModel(ErrorStatus.URI_ERROR, R.string.file_picker_general_error)
+                            ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
                         )
                 } else {
                     callback.onPickFileError(
-                        ErrorModel(
-                            ErrorStatus.URI_ERROR, R.string.file_picker_general_error
-                        )
+                        ErrorModel(ErrorStatus.FILE_ERROR, R.string.file_picker_file_error)
                     )
                 }
+            } else {
+                logError(REQUEST_CODE_ERROR_MESSAGE, RuntimeException())
             }
         } else {
             FileUtils.deleteUri(caller.context, currentCapturedImageURI)

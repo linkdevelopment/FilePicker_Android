@@ -18,6 +18,6 @@ package com.linkdev.filepicker.models
 
 enum class ErrorStatus {
     DATA_ERROR,
-    URI_ERROR,
-    ATTACH_ERROR
+    FILE_ERROR,
+    PICK_ERROR
 }

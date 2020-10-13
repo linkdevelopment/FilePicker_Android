@@ -28,6 +28,7 @@ import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.*
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_DOCUMENT_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 
@@ -82,9 +83,7 @@ internal class PickFiles(
                     onSingleSelection(data, callback)
                 }
             } else {
-                callback.onPickFileError(
-                    ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_general_error)
-                )
+                logError(REQUEST_CODE_ERROR_MESSAGE, RuntimeException())
             }
         } else {
             callback.onPickFileCanceled()
@@ -100,7 +99,7 @@ internal class PickFiles(
                 val fileData = generateFileData(uri, data)
                 if (fileData == null) {
                     callback.onPickFileError(
-                        ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.file_picker_general_error)
+                        ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
                     )
                 } else {
                     pickedFilesList.add(fileData)
@@ -109,7 +108,7 @@ internal class PickFiles(
             callback.onFilePicked(pickedFilesList)
         } else {
             callback.onPickFileError(
-                ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_general_error)
+                ErrorModel(ErrorStatus.PICK_ERROR, R.string.file_picker_general_error)
             )
         }
     }
@@ -121,16 +120,14 @@ internal class PickFiles(
             val fileData = generateFileData(uri, data)
             if (fileData == null) {
                 callback.onPickFileError(
-                    ErrorModel(ErrorStatus.ATTACH_ERROR, R.string.file_picker_general_error)
+                    ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
                 )
             } else {
-                val pickedFilesList = ArrayList<FileData>()
-                pickedFilesList.add(fileData)
-                callback.onFilePicked(pickedFilesList)
+                callback.onFilePicked(arrayListOf(fileData))
             }
         } else {
             callback.onPickFileError(
-                ErrorModel(ErrorStatus.URI_ERROR, R.string.file_picker_general_error)
+                ErrorModel(ErrorStatus.PICK_ERROR, R.string.file_picker_pick_error)
             )
         }
     }

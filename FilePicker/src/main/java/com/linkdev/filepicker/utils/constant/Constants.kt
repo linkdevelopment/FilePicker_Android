@@ -19,5 +19,4 @@ package com.linkdev.filepicker.utils.constant
 internal object Constants {
     const val THUMBNAIL_WIDTH = 200
     const val THUMBNAIL_HEIGHT = 200
-    const val EXTRA_DATA = "data"
 }
