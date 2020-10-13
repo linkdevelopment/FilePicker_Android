@@ -91,5 +91,15 @@ enum class MimeType(val mimeTypeName: String, val fileExtension: ArrayList<Strin
                 AUDIO_OGG, AUDIO_WAV
             )
         }
+
+        fun isImage(mimeType: String): Boolean {
+            return mimeType == JPEG.mimeTypeName || mimeType == PNG.mimeTypeName || mimeType == GIF.mimeTypeName
+                    || mimeType == BMP.mimeTypeName || mimeType == WEBP.mimeTypeName
+        }
+
+        fun isVideo(mimeType: String): Boolean {
+            return mimeType == MPEG.mimeTypeName || mimeType == MP4.mimeTypeName || mimeType == GPP2.mimeTypeName
+                    || mimeType == GPP.mimeTypeName || mimeType == AVI.mimeTypeName
+        }
     }
 }

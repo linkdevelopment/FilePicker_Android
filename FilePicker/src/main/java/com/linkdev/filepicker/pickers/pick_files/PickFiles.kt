@@ -145,6 +145,16 @@ internal class PickFiles(
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else
-            FileData(uri, filePath, file, fileName, mimeType, fileSize)
+            FileData(uri, filePath, file, fileName, mimeType, fileSize, getThumbnail(mimeType, uri))
+    }
+
+    private fun getThumbnail(mimeType: String, uri: Uri): Bitmap? {
+        return when {
+            MimeType.isImage(mimeType) ->
+                FileUtils.getImageThumbnail(caller.context, uri, thumbnailSize)
+            MimeType.isVideo(mimeType) ->
+                FileUtils.getVideoThumbnail(caller.context, uri, thumbnailSize)
+            else -> null
+        }
     }
 }

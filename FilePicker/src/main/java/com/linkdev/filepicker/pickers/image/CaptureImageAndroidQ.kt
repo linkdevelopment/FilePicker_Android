@@ -138,7 +138,8 @@ internal class CaptureImageAndroidQ(
                 AndroidQFileUtils.saveImageToGallery(
                     caller.context, file, fileName, galleryFolderName
                 )
-            val thumbnail = data?.extras?.get(Constants.EXTRA_DATA) as Bitmap
+            val thumbnail = FileUtils
+                .getImageThumbnail(caller.context, currentCapturedImageURI!!, thumbnailSize)
             FileData(
                 currentCapturedImageURI, filePath, file, fileName, mimeType, fileSize, thumbnail
             )

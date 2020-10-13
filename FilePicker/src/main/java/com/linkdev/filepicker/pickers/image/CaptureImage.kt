@@ -144,7 +144,8 @@ internal class CaptureImage(
         else {
             if (allowSyncWithGallery)
                 syncWithGallery()
-            val thumbnail = data?.extras?.get(EXTRA_DATA) as Bitmap
+            val thumbnail = FileUtils
+                .getImageThumbnail(caller.context, currentCapturedImageURI!!, thumbnailSize)
             FileData(
                 currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, thumbnail
             )
