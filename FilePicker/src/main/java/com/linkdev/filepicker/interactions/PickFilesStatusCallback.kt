@@ -23,9 +23,12 @@ interface PickFilesStatusCallback {
     // used when user cancel picking files from document, capture photo or record video
     fun onPickFileCanceled()
 
-    // used when an error occur while picking files
+    /** used when an error occur while picking files
+     * @param errorModel is a data class contain error status and string resource message
+     */
     fun onPickFileError(errorModel: ErrorModel)
 
-    // used when files are picked successfully, will return the list of files*/
+    /** used when files are picked successfully
+     * @param fileData list of [FileData] refer to file specific information*/
     fun onFilePicked(fileData: ArrayList<FileData>)
 }

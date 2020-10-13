@@ -44,7 +44,9 @@ import java.io.File
  * either in the movie folder or given folder in the gallery for android 10
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param galleryFolderName the name of directory that captured image will saved into
+ * @param allowSyncWithGallery boolean to check if should copy captured video to the gallery
+ * @param galleryFolderName the name of directory that captured video will saved into
+ * @param thumbnailSize refers to [Size] class for thumbnail custom size
  * */
 internal class CaptureVideoAndroidQ(
     private val caller: Caller,

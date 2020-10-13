@@ -35,7 +35,6 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.ErrorStatus
-import com.linkdev.filepicker.utils.constant.PickFileConstants
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
@@ -46,7 +45,9 @@ import java.io.File
  * either in the Picture folder or given folder in the gallery
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param galleryFolderName the name of directory that captured image will saved into
+ * @param allowSyncWithGallery boolean to check if should copy captured video to the gallery
+ * @param galleryFolderName the name of directory that captured video will saved into
+ * @param thumbnailSize refers to [Size] class for thumbnail custom size
  * */
 internal class CaptureVideo(
     private val caller: Caller,
@@ -64,8 +65,8 @@ internal class CaptureVideo(
 
     //handle action to open camera and saved temporary file and get saved URI
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
-        val captureImageIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        if (captureImageIntent.resolveActivity(caller.context.packageManager) != null) {
+        val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        if (captureVideoIntent.resolveActivity(caller.context.packageManager) != null) {
             val videoFile = FileUtils.createVideoFile(caller.context)
 
             currentCapturedVideoPath = videoFile?.path
@@ -76,10 +77,9 @@ internal class CaptureVideo(
                 }
 
             currentCapturedVideoUri?.let {
-                //read image from given URI
-                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
+                captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
                 if (caller.isCameraPermissionsGranted()) {
-                    caller.startActivityForResult(captureImageIntent, requestCode)
+                    caller.startActivityForResult(captureVideoIntent, requestCode)
                 } else {
                     logError(NOT_HANDLED_CAMERA_ERROR_MESSAGE, SecurityException())
                 }

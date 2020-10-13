@@ -37,7 +37,9 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
  * @param caller host view fragment/Activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param selectionType refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
- *                   by default is single selection*/
+ *                   by default is single selection
+ * @param thumbnailSize refers to [Size] class for thumbnail custom size
+ */
 internal class PickFiles(
     private val caller: Caller,
     private val requestCode: Int,
@@ -96,7 +98,7 @@ internal class PickFiles(
             val pickedFilesList = ArrayList<FileData>()
             for (i in 0 until clipData.itemCount) {
                 val uri = clipData.getItemAt(i).uri
-                val fileData = generateFileData(uri, data)
+                val fileData = generateFileData(uri)
                 if (fileData == null) {
                     callback.onPickFileError(
                         ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
@@ -117,7 +119,7 @@ internal class PickFiles(
     private fun onSingleSelection(data: Intent, callback: PickFilesStatusCallback) {
         val uri = data.data
         if (uri != null) {
-            val fileData = generateFileData(uri, data)
+            val fileData = generateFileData(uri)
             if (fileData == null) {
                 callback.onPickFileError(
                     ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
@@ -133,7 +135,7 @@ internal class PickFiles(
     }
 
     // create File data object
-    private fun generateFileData(uri: Uri, data: Intent): FileData? {
+    private fun generateFileData(uri: Uri): FileData? {
         val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
         val file = FileUtils.getFileFromPath(filePath) // create file
         val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)

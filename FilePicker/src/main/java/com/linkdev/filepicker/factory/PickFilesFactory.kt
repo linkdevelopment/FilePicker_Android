@@ -38,6 +38,7 @@ import com.linkdev.filepicker.utils.constant.Constants
  *                   by default null and captured files saved in default folders
  *@param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
  *                   by default is single selection
+ *@param thumbnailSize refers to [Size] class for thumbnail custom size
  * */
 class PickFilesFactory(
     private val caller: Any,

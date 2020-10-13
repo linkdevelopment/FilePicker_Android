@@ -45,7 +45,9 @@ import java.io.File
  * either in the Picture folder or given folder in the gallery
  * @param caller for host fragment/activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
+ * @param allowSyncWithGallery boolean to check if should copy captured image to the gallery
  * @param galleryFolderName the name of directory that captured image will saved into
+ * @param thumbnailSize refers to [Size] class for thumbnail custom size
  * */
 internal class CaptureImage(
     private val caller: Caller,
@@ -103,7 +105,7 @@ internal class CaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedImagePath != null && currentCapturedImageURI != null) {
-                    val fileData = generateFileData(data)
+                    val fileData = generateFileData()
                     if (fileData != null)
                         callback.onFilePicked(arrayListOf(fileData))
                     else
@@ -128,7 +130,7 @@ internal class CaptureImage(
      * generate file data object
      * @return [FileData]
      * */
-    private fun generateFileData(data: Intent?): FileData? {
+    private fun generateFileData(): FileData? {
         val file = File(currentCapturedImagePath!!)
         val filePath = currentCapturedImagePath
         val fileName = file.name

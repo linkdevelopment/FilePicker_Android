@@ -26,7 +26,8 @@ import androidx.fragment.app.Fragment
 import java.security.Permission
 
 /**
- * Caller is a mapper class to get context and startActivityForResult based on base caller is fragment or activity
+ * Caller is a mapper class to get context and startActivityForResult based on caller is fragment or activity
+ * and check runtime permission grated
  * @param fragment for host fragment
  * @param activity for host activity
  */
