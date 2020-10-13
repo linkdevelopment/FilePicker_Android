@@ -17,6 +17,24 @@
 package com.linkdev.filepicker.utils.constant
 
 internal object Constants {
-    const val THUMBNAIL_WIDTH = 200
-    const val THUMBNAIL_HEIGHT = 200
+    object Thumbnail {
+        const val THUMBNAIL_WIDTH = 200
+        const val THUMBNAIL_HEIGHT = 200
+    }
+
+    object ErrorMessages {
+        const val NOT_HANDLED_ERROR_MESSAGE =
+            "Please check the exception and handle suitable runtime permission"
+        const val NOT_HANDLED_DOCUMENT_ERROR_MESSAGE =
+            "Please handle android.permission.READ_EXTERNAL_STORAGE runtime permission"
+        const val NOT_HANDLED_CAMERA_ERROR_MESSAGE =
+            "Please handle android.permission.CAMERA and android.permission.WRITE_EXTERNAL_STORAGE runtime permission"
+        const val NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE =
+            "No camera found to process this operation to avoid devices without camera to install your app, please add \n" +
+                    "<uses-feature\n" +
+                    "        android:name=\"android.hardware.camera\"\n" +
+                    "        android:required=\"true\" /> \n" +
+                    "to your manifest"
+        const val REQUEST_CODE_ERROR_MESSAGE = "Incorrect request code"
+    }
 }

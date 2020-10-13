@@ -27,8 +27,8 @@ import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.*
-import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.NOT_HANDLED_DOCUMENT_ERROR_MESSAGE
-import com.linkdev.filepicker.utils.constant.PickFileConstants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NOT_HANDLED_DOCUMENT_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 

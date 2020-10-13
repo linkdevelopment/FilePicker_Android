@@ -29,6 +29,8 @@ import com.linkdev.filepicker.utils.version.Platform
 import com.linkdev.filepicker.pickers.video.CaptureVideoAndroidQ
 import com.linkdev.filepicker.pickers.video.CaptureVideo
 import com.linkdev.filepicker.utils.constant.Constants
+import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_HEIGHT
+import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_WIDTH
 
 /**
  * Class used to provide instance of each pick file type by [getInstance] and check [FileTypes]
@@ -46,7 +48,7 @@ class PickFilesFactory(
     private val allowSyncWithGallery: Boolean = false,
     private val galleryFolderName: String? = null,
     private val selectionMode: SelectionMode = SelectionMode.SINGLE,
-    private val thumbnailSize: Size = Size(Constants.THUMBNAIL_WIDTH, Constants.THUMBNAIL_HEIGHT)
+    private val thumbnailSize: Size = Size(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT)
 ) {
 
     /**
