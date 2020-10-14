@@ -116,8 +116,9 @@ refers to [SelectionMode] enum class. Used to check if should allow multiple sel
  refers to [Size] class. used for thumbnail custom size
  ```
 
-```
+
 ### Getting selected files list
+In caller view we need to call **pickFilesFactory?.handleActivityResult()**
 ```kotlin
 fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -137,6 +138,16 @@ fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     })
                 
  }
+```
+
+### PickFilesStatusCallback
+An interface to handle captured/picked file status as action canceled, some error occurred or files picked successfully.
+
+**Methods**
+```
+fun onPickFileCanceled() : fired when action is canceled
+fun onPickFileError(errorModel: ErrorModel) : fired when error occurred, containing error model usage documented in the sample.
+fun onFilePicked(fileData: ArrayList<FileData>): fired when files picked successfully and return list of files
 ```
 #### FileData.kt
 ```
@@ -193,6 +204,13 @@ Is an enum class containing two types SINGLE, MULTIPLE used to detect if should 
 SINGLE: will not allow multiple selections
 MULTIPLE: will allow multiple selections
 usage documented in the sample app 
+```
+#### ErrorStatus.kt
+```
+Is an enum class describe errors may happened when pick files. To be check to handle each error, usage documented in the sample.
+DATA_ERROR: refers to some required data (file,mime type,..etc) is corrupted.
+FILE_ERROR: refers to error occurred while capturing file and/or save the file
+PICK_ERROR: refers to data retrieved is null or empty while picking files from document  
 ```
 # **License**
     Copyright 2020-present Link Development
