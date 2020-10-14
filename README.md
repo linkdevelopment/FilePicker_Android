@@ -5,6 +5,10 @@
 # **What is it?**
 FilePicker allows you easily capture images, record videos from the camera, or pick any type of files from a document with custom Mime types without creating lots of boilerplate.
 
+![](images/file_picker_sample_1.gif)
+![](images/file_picker_sample_2.gif)
+![](images/file_picker_sample_3.gif)
+
 # **Setup**
 
 ### To Import FilePicker to your project:
