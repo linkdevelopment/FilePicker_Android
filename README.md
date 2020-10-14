@@ -3,15 +3,15 @@
 ![API](https://img.shields.io/badge/Min--SDK-21-yellowgreen)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 # **What is it?**
-FilePicker allows you easily capture image, record video from camera or pick any type of files from document with custom Mime types without creating lots of boilerplate.
+FilePicker allows you easily capture images, record videos from the camera, or pick any type of files from a document with custom Mime types without creating lots of boilerplate.
 
 # **Setup**
 
 ### To Import FilePicker to your project:
 1. Open your project in Android Studio
 2. Download the library (using Git, or a zip archive to unzip)
-3. Go to File > Import Module and import the library as a module
-4. Right-click on app in your project view and select "Open Module Settings"
+3. Go to File > Import-Module and import the library as a module
+4. Right-click on the app in your project view and select "Open Module Settings"
 5. Click the "Dependencies" tab and then the '+' button
 6. Select "Module Dependency"
 7. Select "FilePicker"
@@ -38,7 +38,7 @@ private var pickFilesFactory: IPickFilesFactory? = null
 ```
 ### Capture photo
 
-To capture image we need to get instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
+To capture images we need to get an instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
 
 ```kotlin
 pickFilesFactory = PickFilesFactory(
@@ -72,7 +72,7 @@ To open camera by MediaStore.ACTION_VIDEO_CAPTURE and create video URI, need to 
 pickFilesFactory?.pickFiles()
 ```
 ### pick files from documents
-To pick any type of file from document, we need to get instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
+To pick any type of file from a document, we need to get an instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
 
 ```kotlin
 pickFilesFactory = PickFilesFactory(
@@ -82,7 +82,7 @@ pickFilesFactory = PickFilesFactory(
                thumbnailSize: Size
             ).getInstance(FileTypes.PICK_FILES)
 ```
-To open document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass mime type list if need to allow specific mime types
+To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass mime type list if need to allow specific mime types
 ```
 pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
@@ -97,11 +97,11 @@ used to handle [Fragment.onActivityResult]/[android.app.Activity.onActivityResul
 ```
 **allowSyncWithGallery**
 ```
-check if should copy captured image/video to the gallery
+check if should copy the captured image/video to the gallery
 ```
 **galleryFolderName**
 ```
-app specific folder name in gallery by default is null and captured image/video saved in default folder
+app-specific folder name in the gallery by default is null and captured image/video saved in the default folder
 ```
 **selectionMode**
 ```
@@ -111,7 +111,7 @@ refers to [SelectionMode] enum class. Used to check if should allow multiple sel
  ```
  refers to [Size] class. used for thumbnail custom size
  ```
-  
+
 ```
 ### Getting selected files list
 ```kotlin
@@ -144,26 +144,26 @@ file saved uri.
 ```
 **tempFilePath:**
 ```
-file path in storage
+file-path in the storage
 ```
 **tempFile:**
 ```
-captured / picked file
+captured/picked file
 ```
 
 **fileName:**
 ```
-captured / picked file name
+captured/picked file name
 ```
 
 **mimeType:**
 ```
-captured / picked file mime type
+captured/picked file mime type
 ```
 
 **fileSize:**
 ```
-captured / picked file size in bytes
+captured/picked file size in bytes
 ```
 
 **thumbnail:**
@@ -173,22 +173,22 @@ thumbnail bitmap for captured/selected image/video
 ## Enums
 #### MimeType.kt
 ```
-Is an enum class containing all possible mime types used when pick files from document. usage documented in the sample app.  
+Is an enum class containing all possible mime types used when picking files from the document. usage documented in the sample app.  
 ```
 #### FileTypes.kt
 ```
-Is an enum class containing three types CAPTURE_IMAGE, CAPTURE_VIDEO and PICK_FILES used to get instance of IPickFilesFactory based on usage:
-CAPTURE_IMAGE: passed when need to captured image. 
-CAPTURE_VIDEO: passed when need to record video. 
-PICK_FILES: passed when need to pick files from document.
-usage documented in sample app 
+Is an enum class containing three types CAPTURE_IMAGE, CAPTURE_VIDEO, and PICK_FILES used to get an instance of IPickFilesFactory based on usage:
+CAPTURE_IMAGE: passed when need to capture an image. 
+CAPTURE_VIDEO: passed when need to record a video. 
+PICK_FILES: passed when need to pick files from the document.
+usage documented in the sample app 
 ```
 #### SelectionMode.kt
 ```
-Is an enum class containing two types SINGLE, MULTIPLE used to detect if should allow multiple selection from document:
-SINGLE: will not allow multiple selection
-MULTIPLE: will allow multiple selection
-usage documented in sample app 
+Is an enum class containing two types SINGLE, MULTIPLE used to detect if should allow multiple selections from the document:
+SINGLE: will not allow multiple selections
+MULTIPLE: will allow multiple selections
+usage documented in the sample app 
 ```
 # **License**
     Copyright 2020-present Link Development
