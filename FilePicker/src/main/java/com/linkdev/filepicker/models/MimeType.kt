@@ -19,7 +19,7 @@ package com.linkdev.filepicker.models
 /**
  * include all available mime types
  * @param mimeTypeName for mime type pass to action
- * @param fileExtension form file extension*/
+ * @param fileExtension for file extension*/
 enum class MimeType(val mimeTypeName: String, val fileExtension: ArrayList<String>) {
     // ============== IMAGES ==============
     JPEG("image/jpeg", arrayListOf("jpg", "jpeg")),

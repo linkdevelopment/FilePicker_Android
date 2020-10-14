@@ -134,6 +134,42 @@ fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
                 
  }
 ```
+#### FileData.kt
+```
+Is a data class containing captured/picked file information
+```
+**uri:**
+```
+file saved uri.
+```
+**tempFilePath:**
+```
+file path in storage
+```
+**tempFile:**
+```
+captured / picked file
+```
+
+**fileName:**
+```
+captured / picked file name
+```
+
+**mimeType:**
+```
+captured / picked file mime type
+```
+
+**fileSize:**
+```
+captured / picked file size in bytes
+```
+
+**thumbnail:**
+```
+thumbnail bitmap for captured/selected image/video
+```
 ## Enums
 #### MimeType.kt
 ```
