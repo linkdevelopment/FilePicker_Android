@@ -2,8 +2,8 @@
 [![Platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 ![API](https://img.shields.io/badge/Min--SDK-21-yellowgreen)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-# **What is it?**
-FilePicker allows you easily capture images, record videos from the camera, or pick any type of files from a document with custom Mime types without creating lots of boilerplate.
+
+FilePicker allows you to easily capture an image, record a video or pick any file from the document library.
 
 ![](images/file_picker_sample_1.gif)
 ![](images/file_picker_sample_2.gif)
@@ -23,12 +23,12 @@ FilePicker allows you easily capture images, record videos from the camera, or p
 ### Runtime permissions
 This library requires specific runtime permissions. Declare it in your `AndroidMnifest.xml`:
 
-For capture image or record video:
+For capturing an image or recording a video:
 ```xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.CAMERA" />
 ```
-For pick any type of files from document:
+For picking files from the document library:
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 ```
@@ -36,7 +36,7 @@ For pick any type of files from document:
 
 # **Usage**
 
-Create IPickFileFactory instance like this:
+Create IPickFileFactory instance:
 ```kotlin
 private var pickFilesFactory: IPickFilesFactory? = null
 ```
@@ -46,14 +46,14 @@ To capture images we need to get an instance of PickFilesFactory by passing File
 
 ```kotlin
 pickFilesFactory = PickFilesFactory(
-               caller: Any,
-               requestCode: Int,
-               galleryFolderName: String? = null,
-               allowSyncWithGallery: Boolean? = false,
-               thumbnailSize: Size
-            ).getInstance(FileTypes.IMAGE_CAMERA)
+                caller = this,
+                requestCode = 1001,
+                galleryFolderName = "File Picker_Images",
+                allowSyncWithGallery = true,
+                thumbnailSize = Size(200, 200)
+            ).getInstance(FileTypes.CAPTURE_IMAGE)
 ```
-To open camera by MediaStore.ACTION_IMAGE_CAPTURE and create image URI, need to call pickFilesFactory?.pickFiles()
+To start capturing images, call
 ```kotlin
 pickFilesFactory?.pickFiles()
 ```
@@ -63,30 +63,29 @@ pickFilesFactory?.pickFiles()
 To record video we need to get instance of PickFilesFactory by passing FileTypes.VIDEO_CAMERA to getInstance() method.
 ```kotlin
 pickFilesFactory = PickFilesFactory(
-               caller: Any,
-               requestCode: Int,
-               galleryFolderName: String? = null,
-               allowSyncWithGallery: Boolean? = false,
-               thumbnailSize: Size
-            ).getInstance(FileTypes.VIDEO_CAMERA)
-            pickFilesFactory?.pickFiles()
+                caller = this,
+                requestCode = 1003,
+                galleryFolderName = "File Picker_Videos",
+                allowSyncWithGallery = true,
+                thumbnailSize = Size(200, 200)
+            ).getInstance(FileTypes.CAPTURE_VIDEO)
 ```
-To open camera by MediaStore.ACTION_VIDEO_CAPTURE and create video URI, need to call pickFilesFactory?.pickFiles()
+To start capturing videos, call
 ```kotlin
 pickFilesFactory?.pickFiles()
 ```
 ### pick files from documents
-To pick any type of file from a document, we need to get an instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
+To pick any type of file from a document, we need to get an instance of PickFilesFactory by passing FileTypes.PICK_FILES to getInstance() method.
 
 ```kotlin
 pickFilesFactory = PickFilesFactory(
-               caller: Any,
-               requestCode: Int,
-               selectionMode: SelectionMode = SelectionMode.SINGLE,
-               thumbnailSize: Size
-            ).getInstance(FileTypes.PICK_FILES)
+                caller = this,
+                requestCode = 1004,
+                selectionMode = SelectionMode.MULTIPLE,
+                thumbnailSize = Size(200, 200)
+            ).getInstance(fileTypes = FileTypes.PICK_FILES)
 ```
-To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass mime type list if need to allow specific mime types
+To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass the mime types to allow specific file types
 ```
 pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
 ```
@@ -101,15 +100,15 @@ used to handle [Fragment.onActivityResult]/[android.app.Activity.onActivityResul
 ```
 **allowSyncWithGallery**
 ```
-check if should copy the captured image/video to the gallery
+Set to true, if you would like the captured images and videos to be added to the Gallery.
 ```
 **galleryFolderName**
 ```
-app-specific folder name in the gallery by default is null and captured image/video saved in the default folder
+Set it to a name if you would like the captured images and videos to be added to the Gallery inside a folder specific to your app. If not sent, the files will be saved in the default folder.
 ```
 **selectionMode**
 ```
-refers to [SelectionMode] enum class. Used to check if should allow multiple selection or single selection
+In case of picking files, you can set the selection mode to be single or multiple.
 ```
 **thumbnailSize**
  ```
@@ -118,7 +117,7 @@ refers to [SelectionMode] enum class. Used to check if should allow multiple sel
 
 
 ### Getting selected files list
-In caller view we need to call **pickFilesFactory?.handleActivityResult()**
+In your caller Activity/Fragment you need to call **pickFilesFactory?.handleActivityResult()** inside the Activity's or the fragment's onActivityResult callback to be able to get the list of selected files by passing an instance of the PickFilesStatusCallback interface .
 ```kotlin
 fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -196,18 +195,16 @@ Is an enum class containing three types CAPTURE_IMAGE, CAPTURE_VIDEO, and PICK_F
 CAPTURE_IMAGE: passed when need to capture an image. 
 CAPTURE_VIDEO: passed when need to record a video. 
 PICK_FILES: passed when need to pick files from the document.
-usage documented in the sample app 
 ```
 #### SelectionMode.kt
 ```
 Is an enum class containing two types SINGLE, MULTIPLE used to detect if should allow multiple selections from the document:
 SINGLE: will not allow multiple selections
 MULTIPLE: will allow multiple selections
-usage documented in the sample app 
 ```
 #### ErrorStatus.kt
 ```
-Is an enum class describe errors may happened when pick files. To be check to handle each error, usage documented in the sample.
+An enum describing the type of error occurred.
 DATA_ERROR: refers to some required data (file,mime type,..etc) is corrupted.
 FILE_ERROR: refers to error occurred while capturing file and/or save the file
 PICK_ERROR: refers to data retrieved is null or empty while picking files from document  
