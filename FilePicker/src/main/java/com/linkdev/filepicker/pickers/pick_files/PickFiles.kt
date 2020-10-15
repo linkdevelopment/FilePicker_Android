@@ -38,7 +38,7 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
  * @param caller host view fragment/Activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param selectionMode refers to [SelectionMode] including two types [SelectionMode.SINGLE] and [SelectionMode.MULTIPLE]
- *used to indicate that an [Intent.ACTION_OPEN_DOCUMENT] can allow the user to select and return multiple items
+ * used to indicate that an [Intent.ACTION_OPEN_DOCUMENT] can allow the user to select and return multiple items
  * @param thumbnailSize refers to [Size] class for thumbnail custom size
  */
 internal class PickFiles(
@@ -51,7 +51,8 @@ internal class PickFiles(
         const val TAG = "FilePickerTag"
     }
 
-    /** open document library with acceptable MIME types and handle the option of multiple and
+    /**
+     *  open document library with acceptable MIME types and handle the option of multiple and
      *  single selection and throw exception if required runtime permission not handled.
      *
      * @param mimeTypeList used to communicate a set of acceptable MIME types
@@ -99,7 +100,8 @@ internal class PickFiles(
         }
     }
 
-    /** used when allow the user to select and return multiple items.
+    /**
+     * used when allow the user to select and return multiple items.
      *
      * @param data return result data to the caller. use [Intent.getClipData] to return array of URIs
      * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
@@ -128,7 +130,8 @@ internal class PickFiles(
         }
     }
 
-    /** used when allow the user to select and return only one item.
+    /**
+     * used when allow the user to select and return only one item.
      *
      * @param data return result data to the caller. use [Intent.getClipData] to return array of URIs
      * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
@@ -152,7 +155,8 @@ internal class PickFiles(
         }
     }
 
-    /**Return [FileData] that contains selected file-specific information. If there is error occurred
+    /**
+     * Return [FileData] that contains selected file-specific information. If there is error occurred
      * while retrieving file data returns null
      */
     private fun generateFileData(uri: Uri): FileData? {
