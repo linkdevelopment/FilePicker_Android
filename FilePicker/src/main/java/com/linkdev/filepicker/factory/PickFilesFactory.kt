@@ -39,7 +39,7 @@ import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_WIDTH
  * @param allowSyncWithGallery boolean to check if should copy captured image/video to the gallery
  * @param galleryFolderName for custom folder name to save camera/video files
  *                   by default null and captured files saved in default folders
- *@param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
+ *@param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection mode and
  *                   by default is single selection
  *@param thumbnailSize refers to [Size] class for thumbnail custom size
  * */

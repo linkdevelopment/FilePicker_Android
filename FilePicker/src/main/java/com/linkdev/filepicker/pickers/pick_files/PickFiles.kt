@@ -36,14 +36,14 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
  * Class used to open document, select files and handle selected file status
  * @param caller host view fragment/Activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param selectionType refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection type and
+ * @param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection mode and
  *                   by default is single selection
  * @param thumbnailSize refers to [Size] class for thumbnail custom size
  */
 internal class PickFiles(
     private val caller: Caller,
     private val requestCode: Int,
-    private val selectionType: SelectionMode,
+    private val selectionMode: SelectionMode,
     private val thumbnailSize: Size
 ) : IPickFilesFactory {
     companion object {
@@ -57,7 +57,7 @@ internal class PickFiles(
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pickIntent.type = MimeType.ALL_FILES.mimeTypeName
         pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
-        if (selectionType == SelectionMode.MULTIPLE)
+        if (selectionMode == SelectionMode.MULTIPLE)
             pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
         // start activity for result
@@ -79,7 +79,7 @@ internal class PickFiles(
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null && mRequestCode == requestCode) {
-                if (selectionType == SelectionMode.MULTIPLE && data.clipData != null) {
+                if (selectionMode == SelectionMode.MULTIPLE && data.clipData != null) {
                     onMultipleSelection(data, callback)
                 } else {
                     onSingleSelection(data, callback)

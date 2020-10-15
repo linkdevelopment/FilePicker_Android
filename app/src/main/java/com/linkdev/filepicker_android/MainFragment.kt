@@ -190,7 +190,7 @@ class MainFragment : Fragment() {
     }
 
     /**
-     * selection type [com.linkdev.filepicker.models.SelectionMode]
+     * return selection mode [com.linkdev.filepicker.models.SelectionMode]
      * */
     private fun getSelectionMode(): SelectionMode {
         return if (rbMultipleSelection.isChecked)

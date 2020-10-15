@@ -26,7 +26,7 @@
     <string name="pick">Pick</string>
     <string name="single_selection">Single Selection</string>
     <string name="multiple_selection">Multiple selection</string>
-    <string name="selection_types">Selection types</string>
+    <string name="selection_types">Selection mode</string>
     <string name="mime_types">Mime types</string>
     <string name="selected_files">Selected files</string>
     <string name="allow_sync_with_gallery">Allow sync with gallery</string>
