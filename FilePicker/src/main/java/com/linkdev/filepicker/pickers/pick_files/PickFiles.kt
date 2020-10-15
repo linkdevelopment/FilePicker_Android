@@ -63,8 +63,10 @@ internal class PickFiles(
         // start activity for result
         if (caller.isDocumentPermissionsGranted())
             caller.startActivityForResult(pickIntent, requestCode)
-        else
-            logError(NOT_HANDLED_DOCUMENT_ERROR_MESSAGE, Throwable(SecurityException()))
+        else {
+            logError(NOT_HANDLED_DOCUMENT_ERROR_MESSAGE)
+            throw (Throwable(SecurityException(NOT_HANDLED_DOCUMENT_ERROR_MESSAGE)))
+        }
     }
 
     /**

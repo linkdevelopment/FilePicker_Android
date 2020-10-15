@@ -23,4 +23,8 @@ internal object LoggerUtils {
     fun logError(message: String, cause: Throwable?) {
         Log.e(TAG, message, cause)
     }
+
+    fun logError(message: String) {
+        Log.e(TAG, message)
+    }
 }
