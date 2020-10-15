@@ -81,11 +81,13 @@ internal class CaptureVideo(
                 if (caller.isCameraPermissionsGranted()) {
                     caller.startActivityForResult(captureVideoIntent, requestCode)
                 } else {
-                    logError(NOT_HANDLED_CAMERA_ERROR_MESSAGE, SecurityException())
+                    logError(NOT_HANDLED_CAMERA_ERROR_MESSAGE)
+                    throw(SecurityException(NOT_HANDLED_CAMERA_ERROR_MESSAGE))
                 }
             }
         } else {
-            logError(NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE, RuntimeException())
+            logError(NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE)
+            throw(RuntimeException(NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE))
         }
     }
 
