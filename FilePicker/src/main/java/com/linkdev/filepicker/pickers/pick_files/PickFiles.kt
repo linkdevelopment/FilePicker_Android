@@ -16,6 +16,7 @@
 
 package com.linkdev.filepicker.pickers.pick_files
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -36,8 +37,8 @@ import com.linkdev.filepicker.utils.log.LoggerUtils.logError
  * Class used to open document, select files and handle selected file status
  * @param caller host view fragment/Activity
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
- * @param selectionMode refers to [SelectionMode] for [Intent.ACTION_OPEN_DOCUMENT] selection mode and
- *                   by default is single selection
+ * @param selectionMode refers to [SelectionMode] including two types [SelectionMode.SINGLE] and [SelectionMode.MULTIPLE]
+ *used to indicate that an [Intent.ACTION_OPEN_DOCUMENT] can allow the user to select and return multiple items
  * @param thumbnailSize refers to [Size] class for thumbnail custom size
  */
 internal class PickFiles(
@@ -50,31 +51,35 @@ internal class PickFiles(
         const val TAG = "FilePickerTag"
     }
 
-    // used to handle action open document
+    /** open document library with acceptable MIME types and handle the option of multiple and
+     *  single selection and throw exception if required runtime permission not handled.
+     *
+     * @param mimeTypeList used to communicate a set of acceptable MIME types
+     * @throws SecurityException Throw exception if [Manifest.permission.READ_EXTERNAL_STORAGE] not handled in runtime or not allowed.
+     */
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val mimeType = MimeType.getArrayOfMimeType(mimeTypeList)// get mime type strings
-        // make action and set types
         val pickIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pickIntent.type = MimeType.ALL_FILES.mimeTypeName
         pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
         if (selectionMode == SelectionMode.MULTIPLE)
             pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
-        // start activity for result
-        if (caller.isDocumentPermissionsGranted())
+        if (caller.isDocumentPermissionsGranted()) {
             caller.startActivityForResult(pickIntent, requestCode)
-        else {
+        } else {
             logError(NOT_HANDLED_DOCUMENT_ERROR_MESSAGE)
             throw (Throwable(SecurityException(NOT_HANDLED_DOCUMENT_ERROR_MESSAGE)))
         }
     }
 
     /**
-     * used to handle Activity result called on the host view [Fragment.onActivityResult]/[Activity.onActivityResult]
+     * used to handle Activity result called on the caller [Fragment.onActivityResult]/[Activity.onActivityResult]
      * @param mRequestCode to identify who this result came from
      * @param resultCode to identify if operation succeeded or canceled
      * @param data return result data to the caller
-     * @param callback handle file status
+     * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
+     * error occurred while picking the data or done successfully and data retrieved.
      */
     override fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
@@ -94,6 +99,12 @@ internal class PickFiles(
         }
     }
 
+    /** used when allow the user to select and return multiple items.
+     *
+     * @param data return result data to the caller. use [Intent.getClipData] to return array of URIs
+     * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
+     * error occurred while retrieving the data or done successfully and data retrieved.
+     */
     private fun onMultipleSelection(data: Intent, callback: PickFilesStatusCallback) {
         val clipData = data.clipData!!
         if (clipData.itemCount > 0) {
@@ -117,7 +128,12 @@ internal class PickFiles(
         }
     }
 
-    // handle single Selection logic
+    /** used when allow the user to select and return only one item.
+     *
+     * @param data return result data to the caller. use [Intent.getClipData] to return array of URIs
+     * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
+     * error occurred while retrieving the data or done successfully and data retrieved.
+     */
     private fun onSingleSelection(data: Intent, callback: PickFilesStatusCallback) {
         val uri = data.data
         if (uri != null) {
@@ -136,7 +152,9 @@ internal class PickFiles(
         }
     }
 
-    // create File data object
+    /**Return [FileData] that contains selected file-specific information. If there is error occurred
+     * while retrieving file data returns null
+     */
     private fun generateFileData(uri: Uri): FileData? {
         val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
         val file = FileUtils.getFileFromPath(filePath) // create file
@@ -149,6 +167,7 @@ internal class PickFiles(
             FileData(uri, filePath, file, fileName, mimeType, fileSize, getThumbnail(mimeType, uri))
     }
 
+    /** Returns [Bitmap] thumbnail if selected file is Image or Video and return null if not.*/
     private fun getThumbnail(mimeType: String, uri: Uri): Bitmap? {
         return when {
             MimeType.isImage(mimeType) ->
