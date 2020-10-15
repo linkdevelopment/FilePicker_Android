@@ -53,7 +53,6 @@ class MainFragment : Fragment() {
 
     companion object {
         const val TAG = "MainFragment"
-        const val LOG_TAG = "FilePickerTag"
         const val CAPTURE_IMAGE_REQUEST_CODE = 1001
         const val CAPTURE_VIDEO_REQUEST_CODE = 1003
         const val PICK_ALL_REQUEST_CODE = 1004

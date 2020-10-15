@@ -49,7 +49,12 @@ class AttachedFilesAdapter(private val context: Context) :
         RecyclerView.ViewHolder(itemView) {
         fun onBind(fileData: FileData) {
             itemView.tvFileName.text = fileData.fileName
-            itemView.imgThumbnail.setImageBitmap(fileData.thumbnail)
+            if (fileData.thumbnail != null) {
+                itemView.imgThumbnail.setImageBitmap(fileData.thumbnail)
+                itemView.imgThumbnail.visibility = View.VISIBLE
+            } else {
+                itemView.imgThumbnail.visibility = View.GONE
+            }
         }
     }
 }

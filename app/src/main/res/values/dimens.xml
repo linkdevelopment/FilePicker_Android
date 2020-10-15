@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2020 Link Development
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,4 +28,5 @@
     <dimen name="font_large">16sp</dimen>
     <dimen name="btns_height">40dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
+    <dimen name="thumbnail_size">90dp</dimen>
 </resources>
