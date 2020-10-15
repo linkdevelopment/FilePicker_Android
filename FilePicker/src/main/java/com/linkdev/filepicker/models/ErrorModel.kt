@@ -16,4 +16,4 @@
 
 package com.linkdev.filepicker.models
 
-data class ErrorModel(var errorStatus: ErrorStatus, var defaultErrorMessage: Int)
+data class ErrorModel(var errorStatus: ErrorStatus, var errorMessage: Int)

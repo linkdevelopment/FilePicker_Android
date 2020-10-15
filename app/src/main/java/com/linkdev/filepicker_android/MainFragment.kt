@@ -20,7 +20,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -223,9 +222,9 @@ class MainFragment : Fragment() {
 
         override fun onPickFileError(errorModel: ErrorModel) {
             when (errorModel.errorStatus) {
-                ErrorStatus.DATA_ERROR -> showToastMessage(errorModel.defaultErrorMessage)
-                ErrorStatus.FILE_ERROR -> showToastMessage(errorModel.defaultErrorMessage)
-                ErrorStatus.PICK_ERROR -> showToastMessage(errorModel.defaultErrorMessage)
+                ErrorStatus.DATA_ERROR -> showToastMessage(errorModel.errorMessage)
+                ErrorStatus.FILE_ERROR -> showToastMessage(errorModel.errorMessage)
+                ErrorStatus.PICK_ERROR -> showToastMessage(errorModel.errorMessage)
             }
         }
 

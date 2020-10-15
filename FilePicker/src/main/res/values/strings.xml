@@ -16,7 +16,7 @@
 
 <resources>
     <string name="file_picker_general_error">An error occurred while processing</string>
-    <string name="file_picker_data_error">An error occurred while retrieve required data, please try again</string>
+    <string name="file_picker_data_error">An error occurred while retrieving required data, please try again</string>
     <string name="file_picker_file_error">An error occurred while creating or saving the file, please try again</string>
-    <string name="file_picker_pick_error">An error occurred while pick files, please try again</string>
+    <string name="file_picker_pick_error">An error occurred while picking files, please try again</string>
 </resources>

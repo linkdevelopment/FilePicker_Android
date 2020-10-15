@@ -23,8 +23,6 @@ internal object Constants {
     }
 
     object ErrorMessages {
-        const val NOT_HANDLED_ERROR_MESSAGE =
-            "Please check the exception and handle suitable runtime permission"
         const val NOT_HANDLED_DOCUMENT_ERROR_MESSAGE =
             "Please handle android.permission.READ_EXTERNAL_STORAGE runtime permission"
         const val NOT_HANDLED_CAMERA_ERROR_MESSAGE =
