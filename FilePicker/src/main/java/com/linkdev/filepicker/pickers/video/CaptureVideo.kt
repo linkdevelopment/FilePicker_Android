@@ -38,7 +38,9 @@ import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.file.AndroidQFileUtils
 import com.linkdev.filepicker.utils.file.FileUtilsBelowAndroidQ
+import com.linkdev.filepicker.utils.version.Platform
 import java.io.File
 
 /**
@@ -136,13 +138,22 @@ internal class CaptureVideo(
             null
         else {
             if (allowSyncWithGallery)
-                FileUtilsBelowAndroidQ.saveVideoToGallery(
-                    caller.context, currentCapturedVideoUri!!, filePath, galleryFolderName
-                )
+                syncWithGallery(file, filePath, fileName)
+
             val thumbnail =
                 FileUtils.getVideoThumbnail(caller.context, currentCapturedVideoUri, thumbnailSize)
             FileData(
                 currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize, thumbnail
+            )
+        }
+    }
+
+    private fun syncWithGallery(file: File, filePath: String, videoName: String) {
+        if (Platform.isAndroidQ()) {
+            AndroidQFileUtils.saveVideoToGallery(caller.context, file, videoName, galleryFolderName)
+        } else {
+            FileUtilsBelowAndroidQ.saveVideoToGallery(
+                caller.context, currentCapturedVideoUri!!, filePath, galleryFolderName
             )
         }
     }

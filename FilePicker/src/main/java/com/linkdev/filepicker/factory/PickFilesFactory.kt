@@ -24,8 +24,6 @@ import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.FileTypes
 import com.linkdev.filepicker.models.SelectionMode
 import com.linkdev.filepicker.pickers.pick_files.PickFiles
-import com.linkdev.filepicker.utils.version.Platform
-import com.linkdev.filepicker.pickers.video.CaptureVideoAndroidQ
 import com.linkdev.filepicker.pickers.video.CaptureVideo
 import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_HEIGHT
 import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_WIDTH
@@ -66,15 +64,9 @@ class PickFilesFactory(
                 )
             }
             FileTypes.CAPTURE_VIDEO -> {
-                if (Platform.isAndroidQ())
-                    CaptureVideoAndroidQ(
-                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
-                    )
-                else
-                    CaptureVideo(
-                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
-                    )
-
+                CaptureVideo(
+                    caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
+                )
             }
             FileTypes.PICK_FILES -> PickFiles(caller, requestCode, selectionMode, thumbnailSize)
         }

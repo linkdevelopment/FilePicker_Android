@@ -144,7 +144,7 @@ internal class CaptureImage(
             null
         else {
             if (allowSyncWithGallery)
-                syncWithGallery(file, currentCapturedImageURI!!, filePath, fileName)
+                syncWithGallery(file, filePath, fileName)
             val thumbnail = FileUtils
                 .getImageThumbnail(caller.context, currentCapturedImageURI!!, thumbnailSize)
             FileData(
@@ -153,14 +153,14 @@ internal class CaptureImage(
         }
     }
 
-    private fun syncWithGallery(file: File, uri: Uri, filePath: String, imageName: String) {
+    private fun syncWithGallery(file: File, filePath: String, imageName: String) {
         if (Platform.isAndroidQ()) {
             AndroidQFileUtils.saveImageToGallery(
                 caller.context, file, imageName, galleryFolderName
             )
         } else {
             FileUtilsBelowAndroidQ.saveImageToGallery(
-                caller.context, uri, filePath, galleryFolderName
+                caller.context, currentCapturedImageURI!!, filePath, galleryFolderName
             )
         }
     }
