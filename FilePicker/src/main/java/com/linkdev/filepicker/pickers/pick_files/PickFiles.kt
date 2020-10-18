@@ -32,6 +32,7 @@ import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NOT_HANDLED
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
+import java.io.File
 
 /**
  * Class used to open document, select files and handle selected file status
@@ -161,7 +162,7 @@ internal class PickFiles(
      */
     private fun generateFileData(uri: Uri): FileData? {
         val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
-        val file = FileUtils.getFileFromPath(filePath) // create file
+        val file = filePath?.let { File(it) }
         val fileName = FileUtils.getFullFileNameFromUri(caller.context, uri)
         val mimeType = FileUtils.getFileMimeType(caller.context, uri)
         val fileSize = FileUtils.getFileSize(caller.context, uri)

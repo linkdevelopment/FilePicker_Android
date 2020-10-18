@@ -25,6 +25,13 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 object FileUtilsBelowAndroidQ {
+    /**
+     * Copy image to public external storage and scan to gallery
+     * @param context caller caller activity/fragment context
+     * @param uri image URI
+     * @param currentCapturedPath image file path in external storage
+     * @param folderName desired gallery folder name
+     * */
     fun saveImageToGallery(
         context: Context, uri: Uri, currentCapturedPath: String?, folderName: String?
     ) {
@@ -37,11 +44,18 @@ object FileUtilsBelowAndroidQ {
                     FileUtils.IMAG_PREFIX,
                     FileUtils.CAMERA_IMAGE_TYPE
                 )
-            writePublicFile(context, uri, fileNameWithExt)
+            writePublicFile(context, Environment.DIRECTORY_PICTURES, uri, fileNameWithExt)
         }
         file?.let { broadcastFile(it, context) }
     }
 
+    /**
+     * Copy video to public external storage and scan to gallery
+     * @param context caller caller activity/fragment context
+     * @param uri video URI
+     * @param currentCapturedPath video file path in external
+     * @param folderName desired gallery folder name
+     * */
     fun saveVideoToGallery(
         context: Context, uri: Uri, currentCapturedPath: String?, folderName: String?
     ) {
@@ -54,17 +68,29 @@ object FileUtilsBelowAndroidQ {
                     FileUtils.VID_PREFIX,
                     FileUtils.CAMERA_VIDEO_TYPE
                 )
-            writePublicFile(context, uri, fileNameWithExt)
+            writePublicFile(context, Environment.DIRECTORY_MOVIES, uri, fileNameWithExt)
         }
         file?.let { broadcastFile(file, context) }
     }
 
+    /** scan given file from public storage to gallery app
+     * @param file file to be scanned
+     * @param context caller activity/fragment context
+     * */
     private fun broadcastFile(file: File?, context: Context) {
-        MediaScannerConnection.scanFile(context, arrayOf(file?.path), null, null)
+        file?.let { MediaScannerConnection.scanFile(context, arrayOf(it.path), null, null) }
     }
 
-    // Write file
-    fun writeMedia(context: Context, uri: Uri, fileName: String, folderName: String): File? {
+    /**
+     * create file in public external storage in given directory [folderName]
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     * @param fileName desired file name
+     * @param folderName app specific folder name
+     * */
+    private fun writeMedia(
+        context: Context, uri: Uri, fileName: String, folderName: String
+    ): File? {
         return try {
             val file = createAppFile(fileName, folderName)
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
@@ -81,9 +107,18 @@ object FileUtilsBelowAndroidQ {
         }
     }
 
-    fun writePublicFile(context: Context, uri: Uri, fileName: String): File? {
+    /**
+     * create file in public external storage in given public directory e.g [Environment.DIRECTORY_PICTURES]
+     * @param context caller activity/fragment context
+     * @param directory a public directory
+     * @param uri file uri
+     * @param fileName desired file name
+     * */
+    private fun writePublicFile(
+        context: Context, directory: String, uri: Uri, fileName: String
+    ): File? {
         return try {
-            val filePath = getPublicStorageDirPath(Environment.DIRECTORY_PICTURES) + "/" + fileName
+            val filePath = getPublicStorageDirPath(directory) + "/" + fileName
             val file = File(filePath)
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             if (inputStream != null) {
@@ -99,7 +134,10 @@ object FileUtilsBelowAndroidQ {
         }
     }
 
-    // create external directory
+    private fun createAppFile(fileName: String?, folderName: String): File =
+        File(getFilePath(fileName, folderName))
+
+
     private fun makeDirectory(folderName: String): String {
         val folder = File(Environment.getExternalStorageDirectory().absolutePath + "/" + folderName)
         if (!folder.exists())
@@ -107,18 +145,16 @@ object FileUtilsBelowAndroidQ {
         return folder.path
     }
 
-    // get file path in directory
     private fun getFilePath(fileName: String?, folderName: String) =
         makeDirectory(folderName) + "/" + fileName
-
-    // get saved file in created path
-    private fun createAppFile(fileName: String?, folderName: String): File =
-        File(getFilePath(fileName, folderName))
-
 
     private fun getUniqueFileNameWithExt(prefix: String, extension: String): String =
         FileUtils.getUniqueFileName(prefix) + extension
 
+    /**
+     * Returns absolute path for external storage with given public directory
+     * @param directory desired public directory e.g [Environment.DIRECTORY_PICTURES]
+     * */
     private fun getPublicStorageDirPath(directory: String): String {
         return Environment.getExternalStoragePublicDirectory(directory).absolutePath
     }

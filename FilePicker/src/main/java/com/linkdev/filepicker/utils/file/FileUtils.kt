@@ -33,7 +33,9 @@ import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
+import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,24 +46,31 @@ internal object FileUtils {
     const val CAMERA_VIDEO_TYPE = ".mp4"
     const val IMAG_PREFIX = "IMG_"
     const val VID_PREFIX = "VID_"
-    const val DATE_PATTERN = "yyyyMMdd_HHmmss"
+    private const val DATE_PATTERN = "yyyyMMdd_HHmmss"
     private const val GENERAL_PREFIX = "FILE_"
     private const val BUFFER_SIZE = 4096
 
-    // get file extension
+    /**
+     * Return file extension
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     */
     fun getExtensionFromUri(context: Context?, uri: Uri?): String? {
         val mimeType: String?
         mimeType = if (uri?.scheme == ContentResolver.SCHEME_CONTENT) {
-            //If scheme is a content
             val mime = MimeTypeMap.getSingleton()
             mime.getExtensionFromMimeType(context?.contentResolver?.getType(uri))
-        } else
+        } else {
             MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-
+        }
         return mimeType
     }
 
-    // get file mimeType
+    /**
+     * Returns file mime type
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     */
     fun getFileMimeType(context: Context, uri: Uri): String? {
         return if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
             context.contentResolver.getType(uri)
@@ -71,7 +80,11 @@ internal object FileUtils {
         }
     }
 
-    // return file name with extension
+    /**
+     * Return full file name with extension
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     */
     fun getFullFileNameFromUri(context: Context, uri: Uri): String {
         var cursor: Cursor? = null
         return try {
@@ -95,7 +108,11 @@ internal object FileUtils {
         }
     }
 
-    // get file name
+    /**
+     * Returns file name without extension
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     */
     fun getFileNameFromUri(context: Context, uri: Uri): String {
         val name = getFullFileNameFromUri(context, uri)
         return if (name.lastIndexOf('.') != -1)
@@ -104,10 +121,12 @@ internal object FileUtils {
             name.substring(0)
     }
 
-    fun getFileFromPath(filePath: String?): File? {
-        return filePath?.let { File(it) }
-    }
-
+    /**
+     * returns file size in bytes
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     * @return file size in bytes or -1 if uri is invalid
+     */
     fun getFileSize(context: Context, uri: Uri): Double {
         val mCursor = context.contentResolver
             .query(uri, null, null, null, null, null)
@@ -124,6 +143,10 @@ internal object FileUtils {
         return -1.0
     }
 
+    /** helper class copy stream
+     * @param inputStream
+     * @param outputStream
+     */
     @Throws(Exception::class)
     fun copyStream(inputStream: InputStream, outputStream: FileOutputStream) {
         val bytes = ByteArray(BUFFER_SIZE)
@@ -139,7 +162,12 @@ internal object FileUtils {
         outputStream.close()
     }
 
-    // Retrieves String file path from a document schemed Uri
+    /**
+     * create a temp file in cache dir in the cache subdirectory of your app's internal storage area
+     * @param context caller activity/fragment context
+     * @param uri file uri
+     * @return file path from a document schemed Uri, the value returned by [android.content.Context.getCacheDir]
+     * or null if uri is invalid*/
     fun getFilePathFromUri(context: Context, uri: Uri): String? {
         val file: File?
         try {
@@ -152,10 +180,7 @@ internal object FileUtils {
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             if (inputStream != null && file != null) {
                 val outputStream = FileOutputStream(file)
-                copyStream(
-                    inputStream,
-                    outputStream
-                )
+                copyStream(inputStream, outputStream)
             } else {
                 return null
             }
@@ -167,47 +192,52 @@ internal object FileUtils {
         }
     }
 
-    // create image file
+    /**
+     * Returns temp file created in the root of your app's external storage area
+     * @param context caller activity/fragment context
+     * @return Temp file the value returned by [android.content.Context.getExternalFilesDir]
+     * in [Environment.DIRECTORY_PICTURES], or null
+     * if some error occurred while creating a temp file.
+     */
     fun createImageFile(context: Context): File? {
-        try {
-            val uniqueFileName =
-                getUniqueFileName(
-                    IMAG_PREFIX
-                )
-            val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                ?: return null
-            return File.createTempFile(
-                uniqueFileName,
-                CAMERA_IMAGE_TYPE, storageDir
-            )
+        return try {
+            val uniqueFileName = getUniqueFileName(IMAG_PREFIX)
+            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            File.createTempFile(uniqueFileName, CAMERA_IMAGE_TYPE, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
-            return null
+            null
         }
     }
 
-    // create video file
+    /**
+     * Returns temp file created in the root of your app's external storage area
+     * @param context caller activity/fragment context
+     * @return Temp file the value returned by [android.content.Context.getExternalFilesDir]
+     * in [Environment.DIRECTORY_MOVIES], or null if some error occurred while creating a temp file.
+     */
     fun createVideoFile(context: Context): File? {
-        try {
+        return try {
             val uniqueFileName =
-                getUniqueFileName(
-                    VID_PREFIX
-                )
-            val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                ?: return null
-            return File.createTempFile(
-                uniqueFileName,
-                CAMERA_VIDEO_TYPE, storageDir
-            )
+                getUniqueFileName(VID_PREFIX)
+            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+            File.createTempFile(uniqueFileName, CAMERA_VIDEO_TYPE, storageDir)
         } catch (e: Exception) {
             e.printStackTrace()
-            return null
+            null
         }
     }
 
     fun getUniqueFileName(prefix: String): String =
         prefix + SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH).format(Date())
 
+    /**
+     * Returns file URI from file Path
+     * @param context caller activity/fragment context
+     * @param fileUrl file path in storage
+     * @return uri using file provider if [Build.VERSION_CODES.N] or higher
+     * or using [Uri.fromFile] for below versions
+     * */
     fun getFileUri(context: Context, fileUrl: String): Uri {
         val packageName = context.applicationContext.packageName
         val authorities = "$packageName.filepicker.provider"
@@ -218,11 +248,26 @@ internal object FileUtils {
         }
     }
 
-    // delete file with given uri
+    /**
+     * delete given uri if exist and valid
+     * @param context caller activity/fragment context
+     * @param uri saved uri
+     * */
     fun deleteUri(context: Context, uri: Uri?) {
-        uri?.let { context.contentResolver.delete(it, null, null) }
+        try {
+            uri?.let { context.contentResolver.delete(it, null, null) }
+        } catch (ex: IllegalArgumentException) {
+            ex.printStackTrace()
+        }
     }
 
+    /**
+     * create thumbnail for the given [Uri] of image.
+     * @param context caller activity/fragment context
+     * @param uri saved URI
+     * @param thumbnailSize desired thumbnail size
+     * @return resized bitmap as desired or null
+     * */
     fun getImageThumbnail(context: Context, uri: Uri, thumbnailSize: Size): Bitmap? {
         return try {
             val openFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
@@ -243,6 +288,13 @@ internal object FileUtils {
         }
     }
 
+    /**
+     * create thumbnail for the given [Uri] of video.
+     * @param context caller activity/fragment context
+     * @param uri saved URI
+     * @param thumbnailSize desired thumbnail size
+     * @return resized bitmap as desired or null
+     * */
     fun getVideoThumbnail(context: Context, uri: Uri?, thumbnailSize: Size): Bitmap? {
         return try {
             val mediaMetadataRetriever = MediaMetadataRetriever()

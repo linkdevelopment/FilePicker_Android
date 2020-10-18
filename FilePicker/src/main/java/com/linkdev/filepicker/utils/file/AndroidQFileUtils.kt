@@ -28,6 +28,12 @@ import java.io.FileOutputStream
 
 object AndroidQFileUtils {
 
+    /** save image to gallery
+     * @param context caller activity/fragment context
+     * @param file desired file to be scanned
+     * @param imageName file displayed name
+     * @param folderName app specific gallery folder name
+     * */
     internal fun saveImageToGallery(
         context: Context, file: File, imageName: String, folderName: String?
     ) {
@@ -53,6 +59,12 @@ object AndroidQFileUtils {
         }
     }
 
+    /** save video to gallery
+     * @param context caller activity/fragment context
+     * @param file desired file to be scanned
+     * @param videoName file displayed name
+     * @param folderName app specific gallery folder name
+     * */
     internal fun saveVideoToGallery(
         context: Context, file: File, videoName: String, folderName: String?
     ) {
@@ -79,7 +91,11 @@ object AndroidQFileUtils {
         }
     }
 
-    // broadcast media to gallery
+    /** scan given file from public storage to gallery app
+     * @param context caller activity/fragment context
+     * @param galleryUri saved uri after insert file values to content resolver
+     * @param file file to be scanned
+     * */
     private fun broadcastFile(context: Context, galleryUri: Uri?, file: File) {
         try {
             galleryUri?.let { uri ->
