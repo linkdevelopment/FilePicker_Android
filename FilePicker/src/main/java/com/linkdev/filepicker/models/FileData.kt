@@ -23,12 +23,25 @@ import androidx.annotation.Keep
 import kotlinx.android.parcel.Parcelize
 import java.io.File
 
+/**
+ *Data class to hold the information about captured image/video or picked file from the document library.
+ * @param uri file Content URI
+ * @param filePath in case pick file from the document library represents files in the cache subdirectory
+ * of your app's internal storage area, the value returned by [android.content.Context.getCacheDir].
+ * in case capture image/video represents files in the root of your app's external storage area,
+ * the value returned by [android.content.Context.getExternalFilesDir].
+ * @param file picked/captured file
+ * @param fileName picked/captured file name in the device
+ * @param mimeType the mime type of the file e.g image/jpeg, video/mp4, application/pdf
+ * @param fileSize the size of the file in bytes
+ * @param thumbnail
+ *  */
 @Parcelize
 @Keep
 data class FileData(
     val uri: Uri? = null,
-    val tempFilePath: String? = null,
-    val tempFile: File? = null,
+    val filePath: String? = null,
+    val file: File? = null,
     val fileName: String? = null,
     val mimeType: String? = null,
     val fileSize: Double? = null,
