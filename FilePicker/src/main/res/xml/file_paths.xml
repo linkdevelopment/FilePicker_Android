@@ -15,10 +15,12 @@
   -->
 
 <paths>
+    <!--Represents files in the cache subdirectory of your app's internal storage area. -->
     <cache-path
         name="cache_files"
         path="." />
 
+    <!--Represents files in the root of your app's external storage area-->
     <external-files-path
         name="external_files"
         path="." />
