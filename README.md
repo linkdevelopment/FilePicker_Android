@@ -98,7 +98,26 @@ To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFacto
 ```kotlin
 pickFilesFactory?.pickFiles(mimeTypeList = arrayListOf(MimeType.ALL_FILES))
 ```
-**MimeType**
+**SelectionMode.kt**
+
+Is an enum class  used to detect if should allow multiple selections from the document:
+
+SINGLE: Select if you need to allow multiple selections
+
+MULTIPLE: Select if you need to allow multiple selections
+
+
+**FileTypes.kt**
+
+Is an enum class used to get an instance of IPickFilesFactory based on usage:
+
+CAPTURE_IMAGE: Select if you need to capture an image.
+
+CAPTURE_VIDEO: Select if you need to record a video.
+
+PICK_FILES: Select if you need to pick files from the document.
+
+**MimeType.kt**
 
 Is an enum class containing all possible mime types used when picking files from the document. usage documented in the sample app.
 
@@ -160,6 +179,16 @@ fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
                 
  }
 ```
+**ErrorStatus.kt**
+
+An enum describing the type of error occurred.
+
+DATA_ERROR: refers to some required data (file,mime type,..etc) is corrupted.
+
+FILE_ERROR: refers to error occurred while capturing file and/or save the file
+
+PICK_ERROR: refers to data retrieved is null or empty while picking files from document
+
 
 ### PickFilesStatusCallback
 An interface to handle captured/picked file status as action canceled, some error occurred or files picked successfully.
@@ -206,26 +235,6 @@ Captured/picked file size in bytes
 
 Thumbnail bitmap for captured/picked image/video
 
-#### FileTypes.kt
-```
-Is an enum class used to get an instance of IPickFilesFactory based on usage:
-CAPTURE_IMAGE: Select if you need to capture an image. 
-CAPTURE_VIDEO: Select if you need to record a video. 
-PICK_FILES: Select if you need to pick files from the document.
-```
-#### SelectionMode.kt
-```
-Is an enum class containing two types SINGLE, MULTIPLE used to detect if should allow multiple selections from the document:
-SINGLE: will not allow multiple selections
-MULTIPLE: will allow multiple selections
-```
-#### ErrorStatus.kt
-```
-An enum describing the type of error occurred.
-DATA_ERROR: refers to some required data (file,mime type,..etc) is corrupted.
-FILE_ERROR: refers to error occurred while capturing file and/or save the file
-PICK_ERROR: refers to data retrieved is null or empty while picking files from document  
-```
 # **License**
     Copyright 2020-present Link Development
 
