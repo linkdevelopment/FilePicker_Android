@@ -74,6 +74,15 @@ To start capturing videos, call
 ```kotlin
 pickFilesFactory?.pickFiles()
 ```
+
+**Note** Please add below lines to your manifest file if an essential function of your application is taking pictures,  
+ then restrict its visibility on Google Play to devices that have a camera. If accidentally forget to add <uses-feature..>
+ and device without camera try to capture image/video library will throw RuntimeException.
+```xml
+<uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+```
 ### pick files from documents
 To pick any type of file from a document, we need to get an instance of PickFilesFactory by passing FileTypes.PICK_FILES to getInstance() method.
 
@@ -91,29 +100,29 @@ pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(Mime
 ```
 ### PickFilesFactory attributes
 **caller**
-```
+
 refers to host Fragment/Activity. Used to get context and startActivityForResult
-```
+
 **requestCode**
-```
-used to handle [Fragment.onActivityResult]/[android.app.Activity.onActivityResult]
-```
+
+used to handle Fragment.onActivityResult/Activity.onActivityResult
+
 **allowSyncWithGallery**
-```
+
 Set to true, if you would like the captured images and videos to be added to the Gallery.
-```
+
 **galleryFolderName**
-```
+
 Set it to a name if you would like the captured images and videos to be added to the Gallery inside a folder specific to your app. If not sent, the files will be saved in the default folder.
-```
+
 **selectionMode**
-```
+
 In case of picking files, you can set the selection mode to be single or multiple.
-```
+
 **thumbnailSize**
- ```
- refers to [Size] class. used for thumbnail custom size
- ```
+
+Set this value if you would like to get a thumbnail for the captured image or video.
+
 
 
 ### Getting selected files list
@@ -149,41 +158,38 @@ fun onPickFileError(errorModel: ErrorModel) : fired when error occurred, contain
 fun onFilePicked(fileData: ArrayList<FileData>): fired when files picked successfully and return list of files
 ```
 #### FileData.kt
-```
+
 Is a data class containing captured/picked file information
-```
-**uri:**
-```
+
+**uri**
+
 file saved uri.
-```
-**tempFilePath:**
-```
+
+**tempFilePath**
+
 file-path in the storage
-```
-**tempFile:**
-```
+
+**tempFile**
+
 captured/picked file
-```
 
-**fileName:**
-```
+**fileName**
+
 captured/picked file name
-```
 
-**mimeType:**
-```
+**mimeType**
+
 captured/picked file mime type
-```
 
-**fileSize:**
-```
+
+**fileSize**
+
 captured/picked file size in bytes
-```
 
-**thumbnail:**
-```
+**thumbnail**
+
 thumbnail bitmap for captured/selected image/video
-```
+
 ## Enums
 #### MimeType.kt
 ```
