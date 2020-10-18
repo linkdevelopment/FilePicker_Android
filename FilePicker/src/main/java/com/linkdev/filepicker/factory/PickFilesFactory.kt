@@ -19,7 +19,6 @@ package com.linkdev.filepicker.factory
 import android.content.Intent
 import android.util.Size
 import androidx.fragment.app.Fragment
-import com.linkdev.filepicker.pickers.image.CaptureImageAndroidQ
 import com.linkdev.filepicker.pickers.image.CaptureImage
 import com.linkdev.filepicker.mapper.Caller
 import com.linkdev.filepicker.models.FileTypes
@@ -28,7 +27,6 @@ import com.linkdev.filepicker.pickers.pick_files.PickFiles
 import com.linkdev.filepicker.utils.version.Platform
 import com.linkdev.filepicker.pickers.video.CaptureVideoAndroidQ
 import com.linkdev.filepicker.pickers.video.CaptureVideo
-import com.linkdev.filepicker.utils.constant.Constants
 import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_HEIGHT
 import com.linkdev.filepicker.utils.constant.Constants.Thumbnail.THUMBNAIL_WIDTH
 
@@ -63,14 +61,9 @@ class PickFilesFactory(
         val caller = Caller.getInstance(caller)
         return when (fileTypes) {
             FileTypes.CAPTURE_IMAGE -> {
-                if (Platform.isAndroidQ())
-                    CaptureImageAndroidQ(
-                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
-                    )
-                else
-                    CaptureImage(
-                        caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
-                    )
+                CaptureImage(
+                    caller, requestCode, allowSyncWithGallery, galleryFolderName, thumbnailSize
+                )
             }
             FileTypes.CAPTURE_VIDEO -> {
                 if (Platform.isAndroidQ())

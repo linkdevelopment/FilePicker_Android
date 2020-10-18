@@ -34,10 +34,12 @@ import com.linkdev.filepicker.models.MimeType
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.file.AndroidQFileUtils
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.file.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker.utils.file.FileUtilsBelowAndroidQ
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
+import com.linkdev.filepicker.utils.version.Platform
 import java.io.File
 
 /**
@@ -142,13 +144,23 @@ internal class CaptureImage(
             null
         else {
             if (allowSyncWithGallery)
-                FileUtilsBelowAndroidQ.saveImageToGallery(
-                    caller.context, currentCapturedImageURI!!, filePath, galleryFolderName
-                )
+                syncWithGallery(file, currentCapturedImageURI!!, filePath, fileName)
             val thumbnail = FileUtils
                 .getImageThumbnail(caller.context, currentCapturedImageURI!!, thumbnailSize)
             FileData(
                 currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, thumbnail
+            )
+        }
+    }
+
+    private fun syncWithGallery(file: File, uri: Uri, filePath: String, imageName: String) {
+        if (Platform.isAndroidQ()) {
+            AndroidQFileUtils.saveImageToGallery(
+                caller.context, file, imageName, galleryFolderName
+            )
+        } else {
+            FileUtilsBelowAndroidQ.saveImageToGallery(
+                caller.context, uri, filePath, galleryFolderName
             )
         }
     }
