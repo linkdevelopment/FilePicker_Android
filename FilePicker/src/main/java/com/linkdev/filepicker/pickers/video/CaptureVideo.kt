@@ -38,6 +38,7 @@ import com.linkdev.filepicker.models.ErrorStatus
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NOT_HANDLED_CAMERA_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NO_CAMERA_HARDWARE_AVAILABLE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
+import com.linkdev.filepicker.utils.file.FileUtilsBelowAndroidQ
 import java.io.File
 
 /**
@@ -135,7 +136,9 @@ internal class CaptureVideo(
             null
         else {
             if (allowSyncWithGallery)
-                syncWithGallery()
+                FileUtilsBelowAndroidQ.saveVideoToGallery(
+                    caller.context, currentCapturedVideoUri!!, filePath, galleryFolderName
+                )
             val thumbnail =
                 FileUtils.getVideoThumbnail(caller.context, currentCapturedVideoUri, thumbnailSize)
             FileData(
@@ -143,34 +146,4 @@ internal class CaptureVideo(
             )
         }
     }
-
-    private fun syncWithGallery() {
-        val file: File? = if (!galleryFolderName.isNullOrBlank()) {
-            copyCapturedVideoToGalleryFolder(
-                caller.context,
-                currentCapturedVideoUri!!,
-                currentCapturedVideoPath!!,
-                galleryFolderName
-            )
-
-        } else {
-            copyCapturedVideoToPictureFolder(caller.context, currentCapturedVideoUri!!)
-        }
-
-        FileUtils.addMediaToGallery(file, caller.context)
-    }
-
-    private fun copyCapturedVideoToPictureFolder(context: Context, uri: Uri): File? {
-        val fileNameWithExt =
-            FileUtils.getUniqueFileNameWithExt(VID_PREFIX, CAMERA_VIDEO_TYPE)
-        return FileUtils.writePublicFile(context, uri, fileNameWithExt)
-    }
-
-    private fun copyCapturedVideoToGalleryFolder(
-        context: Context, uri: Uri, currentCapturedPath: String, folderName: String
-    ): File? {
-        val currentFile = File(currentCapturedPath)
-        return FileUtils.writeMedia(context, uri, currentFile.name, folderName)
-    }
-
 }

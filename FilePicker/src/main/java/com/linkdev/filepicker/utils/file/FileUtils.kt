@@ -205,88 +205,8 @@ internal object FileUtils {
         }
     }
 
-    // Write file
-    fun writeMedia(context: Context, uri: Uri, fileName: String, folderName: String): File? {
-        return try {
-            val file = createAppFile(
-                fileName,
-                folderName
-            )
-            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-            if (inputStream != null) {
-                val outputStream = FileOutputStream(file)
-                copyStream(
-                    inputStream,
-                    outputStream
-                )
-                file
-            } else {
-                null
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            null
-        }
-    }
-
-    fun writePublicFile(context: Context, uri: Uri, fileName: String): File? {
-        return try {
-            val filePath = getPublicStorageDirPath(
-                Environment.DIRECTORY_PICTURES
-            ) + "/" + fileName
-            val file = File(filePath)
-            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-            if (inputStream != null) {
-                val outputStream = FileOutputStream(file)
-                copyStream(
-                    inputStream,
-                    outputStream
-                )
-                file
-            } else {
-                null
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            null
-        }
-    }
-
-    // create external directory
-    private fun makeDirectory(folderName: String): String {
-        val folder = File(
-            Environment.getExternalStorageDirectory().absolutePath
-                    + "/"
-                    + folderName
-        )
-        if (!folder.exists())
-            folder.mkdirs()
-        return folder.path
-    }
-
-    // get file path in directory
-    private fun getFilePath(fileName: String?, folderName: String) =
-        makeDirectory(folderName) + "/" + fileName
-
-    // get saved file in created path
-    private fun createAppFile(fileName: String?, folderName: String): File =
-        File(
-            getFilePath(
-                fileName,
-                folderName
-            )
-        )
-
     fun getUniqueFileName(prefix: String): String =
         prefix + SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH).format(Date())
-
-    fun getUniqueFileNameWithExt(prefix: String, extension: String): String =
-        getUniqueFileName(prefix) + extension
-
-    fun getPublicStorageDirPath(directory: String): String {
-        return Environment.getExternalStoragePublicDirectory(directory)
-            .absolutePath
-    }
 
     fun getFileUri(context: Context, fileUrl: String): Uri {
         val packageName = context.applicationContext.packageName
@@ -296,11 +216,6 @@ internal object FileUtils {
         } else {
             Uri.fromFile(File(fileUrl))
         }
-    }
-
-    // add Image to gallery
-    fun addMediaToGallery(file: File?, context: Context) {
-        MediaScannerConnection.scanFile(context, arrayOf(file?.path), null, null)
     }
 
     // delete file with given uri
@@ -319,6 +234,9 @@ internal object FileUtils {
                 ThumbnailUtils
                     .extractThumbnail(decodeBitmap, thumbnailSize.width, thumbnailSize.height)
             }
+        } catch (ex: OutOfMemoryError) {
+            ex.printStackTrace()
+            null
         } catch (ex: Exception) {
             ex.printStackTrace()
             null
@@ -336,6 +254,9 @@ internal object FileUtils {
                 ThumbnailUtils
                     .extractThumbnail(frameAtTime, thumbnailSize.width, thumbnailSize.height)
             }
+        } catch (ex: OutOfMemoryError) {
+            ex.printStackTrace()
+            null
         } catch (ex: Exception) {
             ex.printStackTrace()
             null

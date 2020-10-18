@@ -36,6 +36,7 @@ import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NO_CAMERA_H
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.FileUtils
 import com.linkdev.filepicker.utils.file.FileUtils.IMAG_PREFIX
+import com.linkdev.filepicker.utils.file.FileUtilsBelowAndroidQ
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import java.io.File
 
@@ -141,52 +142,14 @@ internal class CaptureImage(
             null
         else {
             if (allowSyncWithGallery)
-                syncWithGallery()
+                FileUtilsBelowAndroidQ.saveImageToGallery(
+                    caller.context, currentCapturedImageURI!!, filePath, galleryFolderName
+                )
             val thumbnail = FileUtils
                 .getImageThumbnail(caller.context, currentCapturedImageURI!!, thumbnailSize)
             FileData(
                 currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, thumbnail
             )
         }
-    }
-
-    /**
-     * @return [File] saved file using [copyCapturedPhotoToPictureFolder] or [copyCapturedPhotoToGalleryFolder]
-     * */
-    private fun syncWithGallery() {
-        val file: File? = if (!galleryFolderName.isNullOrBlank()) {
-            copyCapturedPhotoToGalleryFolder(
-                caller.context,
-                currentCapturedImageURI!!,
-                currentCapturedImagePath!!,
-                galleryFolderName
-            )
-
-        } else {
-            copyCapturedPhotoToPictureFolder(caller.context, currentCapturedImageURI!!)
-        }
-
-        FileUtils.addMediaToGallery(file, caller.context)
-    }
-
-    /**
-     * save captured image in default folder
-     * @return [File]
-     * */
-    private fun copyCapturedPhotoToPictureFolder(context: Context, uri: Uri): File? {
-        val fileNameWithExt =
-            FileUtils.getUniqueFileNameWithExt(IMAG_PREFIX, FileUtils.CAMERA_IMAGE_TYPE)
-        return FileUtils.writePublicFile(context, uri, fileNameWithExt)
-    }
-
-    /**
-     * save captured image in given folder name
-     * @return [File]
-     * */
-    private fun copyCapturedPhotoToGalleryFolder(
-        context: Context, uri: Uri, currentCapturedPath: String, folderName: String
-    ): File? {
-        val currentFile = File(currentCapturedPath)
-        return FileUtils.writeMedia(context, uri, currentFile.name, folderName)
     }
 }
