@@ -193,47 +193,73 @@ PICK_ERROR: refers to data retrieved is null or empty while picking files from d
 ### PickFilesStatusCallback
 An interface to handle captured/picked file status as action canceled, some error occurred or files picked successfully.
 
-**Methods**
-```
-fun onPickFileCanceled() : fired when action is canceled
-fun onPickFileError(errorModel: ErrorModel) : fired when error occurred, containing error model usage documented in the sample.
-fun onFilePicked(fileData: ArrayList<FileData>): fired when files picked successfully and return list of files
-```
-#### FileData.kt
+### Methods
+### onPickFileCanceled
+A method fired to be informed that the action is canceled.
 
+**Example**:
+```kotlin
+object : PickFilesStatusCallback {
+        override fun onPickFileCanceled() {
+            Toast.makeText(requireContext(), "Action canceled", Toast.LENGTH_SHORT).show()
+            // show toast with friendly message, includes that action has been canceled
+        }
+        ...
+    }
+```
+### onPickFileError
+A method fired to be informed that an error occurred.
+
+**Params**:
+* `errorModel` {data class}: Data class hold ErrorStatus the describing the type of error occurred, and friendly message that
+
+**Example**:
+```kotlin
+object : PickFilesStatusCallback {
+        ...
+        override fun onPickFileError(errorModel: ErrorModel) {
+            when (errorModel.errorStatus) {
+                ErrorStatus.DATA_ERROR -> showToastMessage(errorModel.errorMessage)
+                ErrorStatus.FILE_ERROR -> showToastMessage(errorModel.errorMessage)
+                ErrorStatus.PICK_ERROR -> showToastMessage(errorModel.errorMessage)
+            }
+        }
+        // check every error status and show friendly message describe the error.
+        ...
+     }
+```
+### onFilePicked
+A method fired to be informed that data retrieved successfully.
+
+**Params**:
+* `errorModel` {ArrayList}: A list of files.
+
+**Example**:
+```kotlin
+object : PickFilesStatusCallback {
+        ...
+        override fun onFilePicked(fileData: ArrayList<FileData>) {
+            attachedFilesAdapter.replaceFiles(fileData)
+            // show selected files into recycler view
+        }
+    }
+```
+
+### FileData.kt
 Data class to hold the information about captured image/video or picked file from the document library.
 
-**uri**
+**params**:
 
-File Content URI
-
-**filePath**
-
-In case pick file from the document library represents file in the cache subdirectory
+* `uri`: File Content URI
+* `filePath`: In case pick file from the document library represents file in the cache subdirectory
 of your app's internal storage area, the value returned by android.content.Context.getCacheDir.
 In case capture image/video represents files in the root of your app's external storage area,
 the value returned by android.content.Context.getExternalFilesDir.
-
-**file**
-
-Captured/picked file
-
-**fileName**
-
-Captured/picked file name
-
-**mimeType**
-
-The mime type of the file e.g image/jpeg, video/mp4, application/pdf
-
-
-**fileSize**
-
-Captured/picked file size in bytes
-
-**thumbnail**
-
-Thumbnail bitmap for captured/picked image/video
+* `file`: Captured/picked file
+* `fileName`: Captured/picked file name
+* `mimeType`: The mime type of the file e.g image/jpeg, video/mp4, application/pdf
+* `fileSize`: Captured/picked file size in bytes
+* `thumbnail`: Thumbnail bitmap for captured/picked image/video
 
 # **License**
     Copyright 2020-present Link Development
