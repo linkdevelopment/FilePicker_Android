@@ -95,9 +95,22 @@ pickFilesFactory = PickFilesFactory(
             ).getInstance(fileTypes = FileTypes.PICK_FILES)
 ```
 To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass the mime types to allow specific file types
+```kotlin
+pickFilesFactory?.pickFiles(mimeTypeList = arrayListOf(MimeType.ALL_FILES))
 ```
-pickFilesFactory?.pickFiles(mimeTypeList: ArrayList<MimeType> = arrayListOf(MimeType.ALL_FILES))
-```
+**MimeType**
+
+Is an enum class containing all possible mime types used when picking files from the document. usage documented in the sample app.
+
+<table>
+  <thead>
+    <tr><th align="center">Images</th><th align="center">Videos</th><th align="center">Text files</th><th align="center">Audio</th><th align="center">All files</th></tr>
+  </thead>
+  <tbody>
+    <tr><td align="center"> &quot;image/jpeg&quot;, &quot;image/png&quot;, &quot;image/gif&quot;, &quot;image/x-ms-bmp&quot;, &quot;image/webp&quot;, &quot;image/*&quot; </td><td align="center"> &quot;video/mpeg&quot;, &quot;video/mp4&quot;, &quot;video/3gpp&quot;, &quot;video/3gpp2&quot;, &quot;video/avi&quot;, &quot;video/*&quot; </td><td align="center"> &quot;text/plain&quot;, &quot;application/pdf&quot;, &quot;application/msword&quot;, &quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;, &quot;application/vnd.ms-excel&quot;, &quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;, &quot;application/vnd.ms-powerpoint&quot;, &quot;application/vnd.openxmlformats-officedocument.presentationml.presentation&quot; </td><td align="center"> &quot;audio/mpeg&quot;, &quot;audio/3gpp&quot;, &quot;audio/mp4&quot;, &quot;audio/amr&quot;, &quot;audio/midi&quot;, &quot;audio/x-midi&quot;, &quot;application/ogg&quot;, &quot;audio/wav&quot;, &quot;audio/*&quot; </td><td align="center"> &quot;*/* &quot;  </td></tr>
+  </tbody>
+</table>
+
 ### PickFilesFactory attributes
 **caller**
 
@@ -159,48 +172,46 @@ fun onFilePicked(fileData: ArrayList<FileData>): fired when files picked success
 ```
 #### FileData.kt
 
-Is a data class containing captured/picked file information
+Data class to hold the information about captured image/video or picked file from the document library.
 
 **uri**
 
-file saved uri.
+File Content URI
 
-**tempFilePath**
+**filePath**
 
-file-path in the storage
+In case pick file from the document library represents file in the cache subdirectory
+of your app's internal storage area, the value returned by android.content.Context.getCacheDir.
+In case capture image/video represents files in the root of your app's external storage area,
+the value returned by android.content.Context.getExternalFilesDir.
 
-**tempFile**
+**file**
 
-captured/picked file
+Captured/picked file
 
 **fileName**
 
-captured/picked file name
+Captured/picked file name
 
 **mimeType**
 
-captured/picked file mime type
+The mime type of the file e.g image/jpeg, video/mp4, application/pdf
 
 
 **fileSize**
 
-captured/picked file size in bytes
+Captured/picked file size in bytes
 
 **thumbnail**
 
-thumbnail bitmap for captured/selected image/video
+Thumbnail bitmap for captured/picked image/video
 
-## Enums
-#### MimeType.kt
-```
-Is an enum class containing all possible mime types used when picking files from the document. usage documented in the sample app.  
-```
 #### FileTypes.kt
 ```
-Is an enum class containing three types CAPTURE_IMAGE, CAPTURE_VIDEO, and PICK_FILES used to get an instance of IPickFilesFactory based on usage:
-CAPTURE_IMAGE: passed when need to capture an image. 
-CAPTURE_VIDEO: passed when need to record a video. 
-PICK_FILES: passed when need to pick files from the document.
+Is an enum class used to get an instance of IPickFilesFactory based on usage:
+CAPTURE_IMAGE: Select if you need to capture an image. 
+CAPTURE_VIDEO: Select if you need to record a video. 
+PICK_FILES: Select if you need to pick files from the document.
 ```
 #### SelectionMode.kt
 ```
