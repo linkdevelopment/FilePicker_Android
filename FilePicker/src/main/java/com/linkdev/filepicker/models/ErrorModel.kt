@@ -17,7 +17,7 @@
 package com.linkdev.filepicker.models
 
 /**
- * Data class hold [ErrorStatus] the describing the type of error occurred, and friendly message that
+ * Data class hold [ErrorStatus] that describing the type of error occurred, and friendly message that
  * describing the error
  * @param errorStatus Enum class describing the type of error
  * @param errorMessage String resource friendly error message

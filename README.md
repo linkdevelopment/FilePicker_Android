@@ -98,24 +98,32 @@ To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFacto
 ```kotlin
 pickFilesFactory?.pickFiles(mimeTypeList = arrayListOf(MimeType.ALL_FILES))
 ```
+### PickFilesFactory
+Class used to provide instance of each pick file type.
+
+**params**:
+* `caller` {Any}: host Fragment/Activity. Used to get context and to startActivityForResult
+* `requestCode` {Int}: handle host Fragment/Activity onActivityResult
+* `allowSyncWithGallery` {Boolean}: Set to true, if you would like the captured images and videos to be added to the Gallery.
+* `galleryFolderName` {@Nullable String}: Set it to a name if you would like the captured images and videos to be added to the Gallery inside a folder specific to your app. If not sent, the files will be saved in the default folder.
+* `selectionMode` {SelectionMode}: In case of picking files, you can set the selection mode to be single or multiple.
+* `thumbnailSize` {Size}: Set this value if you would like to get a thumbnail for the captured image or video.
+
 **SelectionMode.kt**
 
 Is an enum class  used to detect if should allow multiple selections from the document:
 
-SINGLE: Select if you need to allow multiple selections
-
-MULTIPLE: Select if you need to allow multiple selections
+* `SINGLE`: Select if you need to allow multiple selections
+* `MULTIPLE`: Select if you need to allow multiple selections
 
 
 **FileTypes.kt**
 
 Is an enum class used to get an instance of IPickFilesFactory based on usage:
 
-CAPTURE_IMAGE: Select if you need to capture an image.
-
-CAPTURE_VIDEO: Select if you need to record a video.
-
-PICK_FILES: Select if you need to pick files from the document.
+* `CAPTURE_IMAGE`: Select if you need to capture an image.
+* `CAPTURE_VIDEO`: Select if you need to record a video.
+* `PICK_FILES`: Select if you need to pick files from the document.
 
 **MimeType.kt**
 
@@ -129,32 +137,6 @@ Is an enum class containing all possible mime types used when picking files from
     <tr><td align="center"> &quot;image/jpeg&quot;, &quot;image/png&quot;, &quot;image/gif&quot;, &quot;image/x-ms-bmp&quot;, &quot;image/webp&quot;, &quot;image/*&quot; </td><td align="center"> &quot;video/mpeg&quot;, &quot;video/mp4&quot;, &quot;video/3gpp&quot;, &quot;video/3gpp2&quot;, &quot;video/avi&quot;, &quot;video/*&quot; </td><td align="center"> &quot;text/plain&quot;, &quot;application/pdf&quot;, &quot;application/msword&quot;, &quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;, &quot;application/vnd.ms-excel&quot;, &quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;, &quot;application/vnd.ms-powerpoint&quot;, &quot;application/vnd.openxmlformats-officedocument.presentationml.presentation&quot; </td><td align="center"> &quot;audio/mpeg&quot;, &quot;audio/3gpp&quot;, &quot;audio/mp4&quot;, &quot;audio/amr&quot;, &quot;audio/midi&quot;, &quot;audio/x-midi&quot;, &quot;application/ogg&quot;, &quot;audio/wav&quot;, &quot;audio/*&quot; </td><td align="center"> &quot;*/* &quot;  </td></tr>
   </tbody>
 </table>
-
-### PickFilesFactory attributes
-**caller**
-
-refers to host Fragment/Activity. Used to get context and startActivityForResult
-
-**requestCode**
-
-used to handle Fragment.onActivityResult/Activity.onActivityResult
-
-**allowSyncWithGallery**
-
-Set to true, if you would like the captured images and videos to be added to the Gallery.
-
-**galleryFolderName**
-
-Set it to a name if you would like the captured images and videos to be added to the Gallery inside a folder specific to your app. If not sent, the files will be saved in the default folder.
-
-**selectionMode**
-
-In case of picking files, you can set the selection mode to be single or multiple.
-
-**thumbnailSize**
-
-Set this value if you would like to get a thumbnail for the captured image or video.
-
 
 
 ### Getting selected files list
@@ -179,16 +161,6 @@ fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
                 
  }
 ```
-**ErrorStatus.kt**
-
-An enum describing the type of error occurred.
-
-DATA_ERROR: refers to some required data (file,mime type,..etc) is corrupted.
-
-FILE_ERROR: refers to error occurred while capturing file and/or save the file
-
-PICK_ERROR: refers to data retrieved is null or empty while picking files from document
-
 
 ### PickFilesStatusCallback
 An interface to handle captured/picked file status as action canceled, some error occurred or files picked successfully.
@@ -211,7 +183,7 @@ object : PickFilesStatusCallback {
 A method fired to be informed that an error occurred.
 
 **Params**:
-* `errorModel` {data class}: Data class hold ErrorStatus the describing the type of error occurred, and friendly message that
+* `errorModel` {data class}: Data class hold ErrorStatus that describing the type of error occurred, and friendly message that
 
 **Example**:
 ```kotlin
@@ -228,6 +200,22 @@ object : PickFilesStatusCallback {
         ...
      }
 ```
+**ErrorModel.kt**
+
+Data class hold ErrorStatus that describing the type of error occurred, and friendly message that
+
+**params**:
+* `errorStatus` {ErrorStatus}: Enum class describing the type of error
+* `errorMessage` {Int}: String resource friendly error message
+
+**ErrorStatus.kt**
+
+An enum describing the type of error occurred.
+
+* `DATA_ERROR`: refers to some required data (file,mime type,..etc) is corrupted.
+* `FILE_ERROR`: refers to error occurred while capturing file and/or save the file
+* `PICK_ERROR`: refers to data retrieved is null or empty while picking files from document
+
 ### onFilePicked
 A method fired to be informed that data retrieved successfully.
 
@@ -245,7 +233,8 @@ object : PickFilesStatusCallback {
     }
 ```
 
-### FileData.kt
+**FileData.kt**
+
 Data class to hold the information about captured image/video or picked file from the document library.
 
 **params**:
