@@ -49,8 +49,7 @@ pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = 1001,
                 galleryFolderName = "File Picker_Images",
-                allowSyncWithGallery = true,
-                thumbnailSize = Size(200, 200)
+                allowSyncWithGallery = true
             ).getInstance(FileTypes.CAPTURE_IMAGE)
 ```
 To start capturing images, call
@@ -66,8 +65,7 @@ pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = 1003,
                 galleryFolderName = "File Picker_Videos",
-                allowSyncWithGallery = true,
-                thumbnailSize = Size(200, 200)
+                allowSyncWithGallery = true
             ).getInstance(FileTypes.CAPTURE_VIDEO)
 ```
 To start capturing videos, call
@@ -90,8 +88,7 @@ To pick any type of file from a document, we need to get an instance of PickFile
 pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = 1004,
-                selectionMode = SelectionMode.MULTIPLE,
-                thumbnailSize = Size(200, 200)
+                selectionMode = SelectionMode.MULTIPLE
             ).getInstance(fileTypes = FileTypes.PICK_FILES)
 ```
 To open the document by Intent.ACTION_OPEN_DOCUMENT, need to call pickFilesFactory?.pickFiles() and pass the mime types to allow specific file types
@@ -107,7 +104,6 @@ Class used to provide instance of each pick file type.
 * `allowSyncWithGallery` {Boolean}: Set to true, if you would like the captured images and videos to be added to the Gallery.
 * `galleryFolderName` {@Nullable String}: Set it to a name if you would like the captured images and videos to be added to the Gallery inside a folder specific to your app. If not sent, the files will be saved in the default folder.
 * `selectionMode` {SelectionMode}: In case of picking files, you can set the selection mode to be single or multiple.
-* `thumbnailSize` {Size}: Set this value if you would like to get a thumbnail for the captured image or video.
 
 **SelectionMode.kt**
 
@@ -239,17 +235,36 @@ Data class to hold the information about captured image/video or picked file fro
 
 **params**:
 
-* `uri`: File Content URI
-* `filePath`: In case pick file from the document library represents file in the cache subdirectory
+* `uri` {Uri}: File Content URI
+* `filePath` {String}: In case pick file from the document library represents file in the cache subdirectory
 of your app's internal storage area, the value returned by android.content.Context.getCacheDir.
 In case capture image/video represents files in the root of your app's external storage area,
 the value returned by android.content.Context.getExternalFilesDir.
-* `file`: Captured/picked file
-* `fileName`: Captured/picked file name
-* `mimeType`: The mime type of the file e.g image/jpeg, video/mp4, application/pdf
-* `fileSize`: Captured/picked file size in bytes
-* `thumbnail`: Thumbnail bitmap for captured/picked image/video
+* `file` {File}: Captured/picked file
+* `fileName` {String}: Captured/picked file name
+* `mimeType` {String}: The mime type of the file e.g image/jpeg, video/mp4, application/pdf
+* `fileSize` {Double}: Captured/picked file size in bytes
 
+**Methods**
+
+
+**.getThumbnail**
+
+A way to get desired resized thumbnail.
+
+**Params**:
+
+* `context` {Context}: Caller Activity/Fragment context.
+* `thumbnailSize` {Size}: Desired size of the thumbnail
+* `return` {Bitmap}: Resized bitmap or null
+
+**Example**:
+```kotlin
+ val thumbnail = fileData.getThumbnail(context, Size(200, 200))
+ imgThumbnail.setImageBitmap(thumbnail)
+ 
+// get thumbnail with desired size and set it to image view.
+```
 # **License**
     Copyright 2020-present Link Development
 
