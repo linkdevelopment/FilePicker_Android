@@ -24,7 +24,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
-object FileUtilsBelowAndroidQ {
+internal object FileUtilsBelowAndroidQ {
     /**
      * Copy image to public external storage and scan to gallery
      * @param context caller caller activity/fragment context

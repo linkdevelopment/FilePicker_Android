@@ -139,8 +139,7 @@ class MainFragment : Fragment() {
                 caller = this,
                 requestCode = CAPTURE_IMAGE_REQUEST_CODE,
                 galleryFolderName = IMAGES_FOLDER_NAME,
-                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked,
-                thumbnailSize = Size(200, 200)
+                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked
             ).getInstance(FileTypes.CAPTURE_IMAGE)
             pickFilesFactory?.pickFiles()
         } else {
@@ -159,8 +158,7 @@ class MainFragment : Fragment() {
                 caller = this,
                 requestCode = CAPTURE_VIDEO_REQUEST_CODE,
                 galleryFolderName = VIDEOS_FOLDER_NAME,
-                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked,
-                thumbnailSize = Size(200, 200)
+                allowSyncWithGallery = chbAllowSyncWithGallery.isChecked
             ).getInstance(FileTypes.CAPTURE_VIDEO)
             pickFilesFactory?.pickFiles()
         } else {
@@ -178,8 +176,7 @@ class MainFragment : Fragment() {
             pickFilesFactory = PickFilesFactory(
                 caller = this,
                 requestCode = PICK_ALL_REQUEST_CODE,
-                selectionMode = getSelectionMode(),
-                thumbnailSize = Size(200, 200)
+                selectionMode = getSelectionMode()
             ).getInstance(fileTypes = FileTypes.PICK_FILES)
             pickFilesFactory?.pickFiles(mimeTypeList = getMimeTypesList())
         } else {

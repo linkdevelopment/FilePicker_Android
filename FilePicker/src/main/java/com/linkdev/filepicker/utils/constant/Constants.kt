@@ -17,11 +17,6 @@
 package com.linkdev.filepicker.utils.constant
 
 internal object Constants {
-    object Thumbnail {
-        const val THUMBNAIL_WIDTH = 200
-        const val THUMBNAIL_HEIGHT = 200
-    }
-
     object ErrorMessages {
         const val NOT_HANDLED_DOCUMENT_ERROR_MESSAGE =
             "Please handle android.permission.READ_EXTERNAL_STORAGE runtime permission"

@@ -17,6 +17,7 @@
 package com.linkdev.filepicker_android.adapters
 
 import android.content.Context
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,8 +50,9 @@ class AttachedFilesAdapter(private val context: Context) :
         RecyclerView.ViewHolder(itemView) {
         fun onBind(fileData: FileData) {
             itemView.tvFileName.text = fileData.fileName
-            if (fileData.thumbnail != null) {
-                itemView.imgThumbnail.setImageBitmap(fileData.thumbnail)
+            val thumbnail = fileData.getThumbnail(context, Size(200, 200))
+            if (thumbnail != null) {
+                itemView.imgThumbnail.setImageBitmap(thumbnail)
                 itemView.imgThumbnail.visibility = View.VISIBLE
             } else {
                 itemView.imgThumbnail.visibility = View.GONE

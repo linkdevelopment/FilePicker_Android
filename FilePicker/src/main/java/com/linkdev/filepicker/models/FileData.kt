@@ -16,10 +16,13 @@
 
 package com.linkdev.filepicker.models
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
+import android.util.Size
 import androidx.annotation.Keep
+import com.linkdev.filepicker.utils.file.FileUtils
 import kotlinx.android.parcel.Parcelize
 import java.io.File
 
@@ -34,7 +37,6 @@ import java.io.File
  * @param fileName captured/picked file name
  * @param mimeType the mime type of the file e.g image/jpeg, video/mp4, application/pdf
  * @param fileSize captured/picked file size in bytes
- * @param thumbnail thumbnail bitmap for captured/picked image/video
  *  */
 @Parcelize
 @Keep
@@ -44,6 +46,21 @@ data class FileData(
     val file: File? = null,
     val fileName: String? = null,
     val mimeType: String? = null,
-    val fileSize: Double? = null,
-    val thumbnail: Bitmap? = null
-) : Parcelable
+    val fileSize: Double? = null
+) : Parcelable {
+
+    /** Returns [Bitmap] thumbnail if selected file is Image or Video and return null if not.
+     * @param context caller Activity/Fragment context
+     * @param thumbnailSize desired size of thumbnail
+     * */
+    fun getThumbnail(context: Context, thumbnailSize: Size): Bitmap? {
+        return when {
+            uri == null || mimeType == null -> null
+            MimeType.isImage(mimeType) ->
+                FileUtils.getImageThumbnail(context, uri, thumbnailSize)
+            MimeType.isVideo(mimeType) ->
+                FileUtils.getVideoThumbnail(context, uri, thumbnailSize)
+            else -> null
+        }
+    }
+}

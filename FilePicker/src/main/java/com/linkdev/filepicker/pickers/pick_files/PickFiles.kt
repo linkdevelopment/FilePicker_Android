@@ -40,13 +40,11 @@ import java.io.File
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param selectionMode refers to [SelectionMode] including two types [SelectionMode.SINGLE] and [SelectionMode.MULTIPLE]
  * used to indicate that an [Intent.ACTION_OPEN_DOCUMENT] can allow the user to select and return multiple items
- * @param thumbnailSize refers to [Size] class for thumbnail custom size
  */
 internal class PickFiles(
     private val caller: Caller,
     private val requestCode: Int,
-    private val selectionMode: SelectionMode,
-    private val thumbnailSize: Size
+    private val selectionMode: SelectionMode
 ) : IPickFilesFactory {
     companion object {
         const val TAG = "FilePickerTag"
@@ -169,17 +167,6 @@ internal class PickFiles(
         return if (filePath.isNullOrBlank() || file == null || mimeType.isNullOrBlank())
             null
         else
-            FileData(uri, filePath, file, fileName, mimeType, fileSize, getThumbnail(mimeType, uri))
-    }
-
-    /** Returns [Bitmap] thumbnail if selected file is Image or Video and return null if not.*/
-    private fun getThumbnail(mimeType: String, uri: Uri): Bitmap? {
-        return when {
-            MimeType.isImage(mimeType) ->
-                FileUtils.getImageThumbnail(caller.context, uri, thumbnailSize)
-            MimeType.isVideo(mimeType) ->
-                FileUtils.getVideoThumbnail(caller.context, uri, thumbnailSize)
-            else -> null
-        }
+            FileData(uri, filePath, file, fileName, mimeType, fileSize)
     }
 }

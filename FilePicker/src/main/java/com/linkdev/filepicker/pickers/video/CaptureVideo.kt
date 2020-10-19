@@ -50,14 +50,12 @@ import java.io.File
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param allowSyncWithGallery boolean to check if should copy captured video to the gallery
  * @param galleryFolderName the name of directory that captured video will saved into
- * @param thumbnailSize refers to [Size] class for thumbnail custom size
  * */
 internal class CaptureVideo(
     private val caller: Caller,
     private val requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val galleryFolderName: String? = null,
-    private val thumbnailSize: Size
+    private val galleryFolderName: String? = null
 ) : IPickFilesFactory {
     private var currentCapturedVideoUri: Uri? = null
     private var currentCapturedVideoPath: String? = null
@@ -140,11 +138,7 @@ internal class CaptureVideo(
             if (allowSyncWithGallery)
                 syncWithGallery(file, filePath, fileName)
 
-            val thumbnail =
-                FileUtils.getVideoThumbnail(caller.context, currentCapturedVideoUri, thumbnailSize)
-            FileData(
-                currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize, thumbnail
-            )
+            FileData(currentCapturedVideoUri!!, filePath, file, fileName, mimeType, fileSize)
         }
     }
 

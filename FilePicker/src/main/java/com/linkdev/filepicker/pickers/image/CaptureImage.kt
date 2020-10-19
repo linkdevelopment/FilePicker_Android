@@ -49,14 +49,12 @@ import java.io.File
  * @param requestCode to handle [Fragment.onActivityResult]/[Activity.onActivityResult] request code
  * @param allowSyncWithGallery boolean to check if should copy captured image to the gallery
  * @param galleryFolderName the name of directory that captured image will saved into
- * @param thumbnailSize refers to [Size] class for thumbnail custom size
  * */
 internal class CaptureImage(
     private val caller: Caller,
     private var requestCode: Int,
     private val allowSyncWithGallery: Boolean = false,
-    private val galleryFolderName: String? = null,
-    private val thumbnailSize: Size
+    private val galleryFolderName: String? = null
 ) : IPickFilesFactory {
     private var currentCapturedImagePath: String? = null
     private var currentCapturedImageURI: Uri? = null
@@ -145,11 +143,7 @@ internal class CaptureImage(
         else {
             if (allowSyncWithGallery)
                 syncWithGallery(file, filePath, fileName)
-            val thumbnail = FileUtils
-                .getImageThumbnail(caller.context, currentCapturedImageURI!!, thumbnailSize)
-            FileData(
-                currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize, thumbnail
-            )
+            FileData(currentCapturedImageURI!!, filePath, file, fileName, mimeType, fileSize)
         }
     }
 
