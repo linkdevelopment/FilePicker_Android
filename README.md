@@ -42,7 +42,7 @@ private var pickFilesFactory: IPickFilesFactory? = null
 ```
 ### Capture photo
 
-To capture images we need to get an instance of PickFilesFactory by passing FileTypes.IMAGE_CAMERA to getInstance() method.
+To capture images we need to get an instance of PickFilesFactory by passing FileTypes.CAPTURE_IMAGE to getInstance() method.
 
 ```kotlin
 pickFilesFactory = PickFilesFactory(
@@ -59,7 +59,7 @@ pickFilesFactory?.pickFiles()
 
 ### Record video
 
-To record video we need to get instance of PickFilesFactory by passing FileTypes.VIDEO_CAMERA to getInstance() method.
+To record video we need to get instance of PickFilesFactory by passing FileTypes.CAPTURE_VIDEO to getInstance() method.
 ```kotlin
 pickFilesFactory = PickFilesFactory(
                 caller = this,
@@ -99,7 +99,7 @@ pickFilesFactory?.pickFiles(mimeTypeList = arrayListOf(MimeType.ALL_FILES))
 Class used to provide instance of each pick file type.
 
 **params**:
-* `caller` {Any}: host Fragment/Activity. Used to get context and to startActivityForResult
+* `caller` {Any}: host Fragment/Activity. Used to get context and to call startActivityForResult
 * `requestCode` {Int}: handle host Fragment/Activity onActivityResult
 * `allowSyncWithGallery` {Boolean}: Set to true, if you would like the captured images and videos to be added to the Gallery.
 * `galleryFolderName` {@Nullable String}: Set it to a name if you would like the captured images and videos to be added to the Gallery inside a folder specific to your app. If not sent, the files will be saved in the default folder.
@@ -216,7 +216,7 @@ An enum describing the type of error occurred.
 A method fired to be informed that data retrieved successfully.
 
 **Params**:
-* `errorModel` {ArrayList}: A list of files.
+* `fileData` {ArrayList}: A list of files.
 
 **Example**:
 ```kotlin
@@ -236,10 +236,11 @@ Data class to hold the information about captured image/video or picked file fro
 **params**:
 
 * `uri` {Uri}: File Content URI
-* `filePath` {String}: In case pick file from the document library represents file in the cache subdirectory
-of your app's internal storage area, the value returned by android.content.Context.getCacheDir.
-In case capture image/video represents files in the root of your app's external storage area,
-the value returned by android.content.Context.getExternalFilesDir.
+* `filePath` {String}: in case of picking file from the document library, this attribute will hold
+the file path in the cache subdirectory of your app's internal storage area,
+the value returned by android.content.Context.getCacheDir.
+in case of capturing image/video, this attribute will hold the file's path in the root of your app's external storage area,
+the value returned by android.content.Context.getExternalFilesDir
 * `file` {File}: Captured/picked file
 * `fileName` {String}: Captured/picked file name
 * `mimeType` {String}: The mime type of the file e.g image/jpeg, video/mp4, application/pdf
@@ -250,7 +251,7 @@ the value returned by android.content.Context.getExternalFilesDir.
 
 **.getThumbnail**
 
-A way to get desired resized thumbnail.
+Call this method, if you would like to get a thumbnail image for the captured image or video
 
 **Params**:
 

@@ -100,7 +100,8 @@ internal class PickFiles(
     }
 
     /**
-     * used when allow the user to select and return multiple items.
+     * Will be called in case of multiple selections to process the data in the result intent and
+     * return the metadata of the selected file to the calling app .
      *
      * @param data return result data to the caller. use [Intent.getClipData] to return array of URIs
      * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
@@ -130,11 +131,12 @@ internal class PickFiles(
     }
 
     /**
-     * used when allow the user to select and return only one item.
+     * Will be called in case of single selection to process the data in the result intent and
+     * return the metadata of the selected file to the calling app
      *
      * @param data return result data to the caller. use [Intent.getClipData] to return array of URIs
-     * @param callback refers to [PickFilesStatusCallback] used to get the status of the Action canceled by the user ,
-     * error occurred while retrieving the data or done successfully and data retrieved.
+     * @param callback refers to [PickFilesStatusCallback] which will fire with the file picking
+     * status whether it is canceled, successful or an error occurred.
      */
     private fun onSingleSelection(data: Intent, callback: PickFilesStatusCallback) {
         val uri = data.data
@@ -155,9 +157,9 @@ internal class PickFiles(
     }
 
     /**
-     * Return [FileData] that contains selected file-specific information. If there is error occurred
-     * while retrieving file data returns null
-     */
+     * Generates the file data object which will contain all the needed meta data about the captured file.
+     * @return [FileData]
+     * */
     private fun generateFileData(uri: Uri): FileData? {
         val filePath = FileUtils.getFilePathFromUri(caller.context, uri)
         val file = filePath?.let { File(it) }

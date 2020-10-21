@@ -228,6 +228,10 @@ internal object FileUtils {
         }
     }
 
+    /**
+     * create a unique file name using given prefix and current date.
+     * @param prefix file name prefix
+     */
     fun getUniqueFileName(prefix: String): String =
         prefix + SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH).format(Date())
 

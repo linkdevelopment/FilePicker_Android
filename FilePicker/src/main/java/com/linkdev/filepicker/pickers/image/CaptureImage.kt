@@ -99,7 +99,8 @@ internal class CaptureImage(
      * @param mRequestCode to identify who this result came from
      * @param resultCode to identify if operation succeeded or canceled
      * @param data return result data to the caller
-     * @param callback handle file status
+     * @param callback refers to [PickFilesStatusCallback] which will fire with the file picking
+     * status whether it is canceled, successful or an error occurred.
      */
     override fun handleActivityResult(
         mRequestCode: Int, resultCode: Int, data: Intent?, callback: PickFilesStatusCallback
@@ -129,7 +130,7 @@ internal class CaptureImage(
     }
 
     /**
-     * generate file data object
+     * Generates the file data object which will contain all the needed meta data about the captured file.
      * @return [FileData]
      * */
     private fun generateFileData(): FileData? {
@@ -147,6 +148,12 @@ internal class CaptureImage(
         }
     }
 
+    /**
+     * Scan given file to the gallery
+     * @param file a file to be scanned
+     * @param filePath a file path to be scanned
+     * @param imageName file name
+     **/
     private fun syncWithGallery(file: File, filePath: String, imageName: String) {
         if (Platform.isAndroidQ()) {
             AndroidQFileUtils.saveImageToGallery(
