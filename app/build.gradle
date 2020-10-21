@@ -31,7 +31,7 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     defaultConfig {
-        applicationId "com.linkdev.filepicker_android"
+        applicationId "com.linkdev.filepickersample"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1

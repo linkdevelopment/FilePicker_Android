@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker_android
+package com.linkdev.filepickersample
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -37,8 +36,8 @@ import com.linkdev.filepicker.factory.IPickFilesFactory
 import com.linkdev.filepicker.factory.PickFilesFactory
 import com.linkdev.filepicker.interactions.PickFilesStatusCallback
 import com.linkdev.filepicker.models.*
-import com.linkdev.filepicker_android.adapters.AttachedFilesAdapter
-import com.linkdev.filepicker_android.adapters.MimeTypesAdapter
+import com.linkdev.filepickersample.adapters.AttachedFilesAdapter
+import com.linkdev.filepickersample.adapters.MimeTypesAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_capture.*
 import kotlinx.android.synthetic.main.layout_pick.*

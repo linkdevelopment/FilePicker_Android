@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker_android.adapters
+package com.linkdev.filepickersample.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.linkdev.filepicker.models.MimeType
-import com.linkdev.filepicker_android.R
+import com.linkdev.filepickersample.R
 import kotlinx.android.synthetic.main.item_mime_types.view.*
 
 class MimeTypesAdapter(private val context: Context) :

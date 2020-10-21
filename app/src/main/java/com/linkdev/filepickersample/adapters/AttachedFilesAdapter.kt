@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker_android.adapters
+package com.linkdev.filepickersample.adapters
 
 import android.content.Context
 import android.util.Size
@@ -23,7 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.linkdev.filepicker.models.FileData
-import com.linkdev.filepicker_android.R
+import com.linkdev.filepickersample.R
 import kotlinx.android.synthetic.main.item_attached_file.view.*
 
 class AttachedFilesAdapter(private val context: Context) :

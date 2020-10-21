@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.linkdev.filepicker_android
+package com.linkdev.filepickersample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
