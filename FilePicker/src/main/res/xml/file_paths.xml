@@ -13,7 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
+<!--used to specify a directory, specify its storage area and path, To allow a FileProvider to
+    generate a content URI for files in directories that you specify beforehand-->
 <paths>
     <!--Represents files in the cache subdirectory of your app's internal storage area. -->
     <cache-path
