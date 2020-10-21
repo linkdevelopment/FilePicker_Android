@@ -16,12 +16,14 @@
 <!--used to specify a directory, specify its storage area and path, To allow a FileProvider to
     generate a content URI for files in directories that you specify beforehand-->
 <paths>
-    <!--Represents files in the cache subdirectory of your app's internal storage area. -->
+    <!--Represents files in the cache subdirectory of your app's internal storage area.
+    Used to get content URI when pick files-->
     <cache-path
         name="cache_files"
         path="." />
 
-    <!--Represents files in the root of your app's external storage area-->
+    <!--Represents files in the root of your app's external storage area.
+    Used to get content URI when capture images/videos-->
     <external-files-path
         name="external_files"
         path="." />
