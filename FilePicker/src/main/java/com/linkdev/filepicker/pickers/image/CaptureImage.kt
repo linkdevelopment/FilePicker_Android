@@ -16,6 +16,7 @@
 
 package com.linkdev.filepicker.pickers.image
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -66,6 +67,8 @@ internal class CaptureImage(
     /**
      * handle action to open camera and saved temporary file and get saved URI
      * @param mimeTypeList not used
+     * @throws SecurityException Throw exception if [Manifest.permission.WRITE_EXTERNAL_STORAGE] or
+     * [Manifest.permission.CAMERA] or both are not handled in runtime or not allowed.
      */
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
