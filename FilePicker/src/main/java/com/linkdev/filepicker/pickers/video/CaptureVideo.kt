@@ -64,7 +64,10 @@ internal class CaptureVideo(
         const val TAG = "FilePickerTag"
     }
 
-    //handle action to open camera and saved temporary file and get saved URI
+    /**
+     * handle action to open camera and saved temporary file and get saved URI
+     * @param mimeTypeList not used
+     * */
     override fun pickFiles(mimeTypeList: ArrayList<MimeType>) {
         val captureVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (captureVideoIntent.resolveActivity(caller.context.packageManager) != null) {

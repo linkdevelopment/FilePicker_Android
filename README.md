@@ -125,13 +125,20 @@ Is an enum class used to get an instance of IPickFilesFactory based on usage:
 
 Is an enum class containing all possible mime types used when picking files from the document. usage documented in the sample app.
 
-<table>
-  <thead>
-    <tr><th align="center">Images</th><th align="center">Videos</th><th align="center">Text files</th><th align="center">Audio</th><th align="center">All files</th></tr>
-  </thead>
-  <tbody>
-    <tr><td align="center"> &quot;image/jpeg&quot;, &quot;image/png&quot;, &quot;image/gif&quot;, &quot;image/x-ms-bmp&quot;, &quot;image/webp&quot;, &quot;image/*&quot; </td><td align="center"> &quot;video/mpeg&quot;, &quot;video/mp4&quot;, &quot;video/3gpp&quot;, &quot;video/3gpp2&quot;, &quot;video/avi&quot;, &quot;video/*&quot; </td><td align="center"> &quot;text/plain&quot;, &quot;application/pdf&quot;, &quot;application/msword&quot;, &quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;, &quot;application/vnd.ms-excel&quot;, &quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;, &quot;application/vnd.ms-powerpoint&quot;, &quot;application/vnd.openxmlformats-officedocument.presentationml.presentation&quot; </td><td align="center"> &quot;audio/mpeg&quot;, &quot;audio/3gpp&quot;, &quot;audio/mp4&quot;, &quot;audio/amr&quot;, &quot;audio/midi&quot;, &quot;audio/x-midi&quot;, &quot;application/ogg&quot;, &quot;audio/wav&quot;, &quot;audio/*&quot; </td><td align="center"> &quot;*/* &quot;  </td></tr>
-  </tbody>
+<table style="width: 605px; margin-left: auto; margin-right: auto;" border="1">
+<thead>
+<tr>
+<th style="width: 65px;" align="center">Media</th>
+<th style="width: 524px;" align="center">MIME Type</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="width: 65px;" align="center">Image</td><td style="width: 524px;" align="center">"image/jpeg", "image/png", "image/gif", "image/x-ms-bmp", "image/webp", "image/*"</td></tr>
+<tr><td style="width: 65px;" align="center">Videos</td><td style="width: 524px;" align="center">"video/mpeg", "video/mp4", "video/3gpp", "video/3gpp2", "video/avi", "video/*"</td></tr>
+<tr><td style="width: 65px;" align="center">Text files</td><td style="width: 524px;" align="center">"text/plain", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"</td></tr>
+<tr><td style="width: 65px;" align="center">Audio</td><td style="width: 524px;" align="center">"audio/mpeg", "audio/3gpp", "audio/mp4", "audio/amr", "audio/midi", "audio/x-midi", "application/ogg", "audio/wav", "audio/*"</td></tr>
+<tr><td style="width: 65px;" align="center">All files</td><td style="width: 524px;" align="center">*/*</td></tr>
+</tbody>
 </table>
 
 
