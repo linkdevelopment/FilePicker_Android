@@ -21,6 +21,8 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
 import android.media.ThumbnailUtils
@@ -272,11 +274,9 @@ internal object FileUtils {
      * @param thumbnailSize desired thumbnail size
      * @return resized bitmap as desired or null
      * */
-    fun getImageThumbnail(context: Context, uri: Uri, thumbnailSize: Size): Bitmap? {
+    fun getImageThumbnail(filePath: String, thumbnailSize: Size): Bitmap? {
         return try {
-            val openFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
-            val decodeBitmap =
-                BitmapFactory.decodeFileDescriptor(openFileDescriptor?.fileDescriptor)
+            val decodeBitmap = getAdjustedBitmap(filePath)
             if (thumbnailSize.width == decodeBitmap?.width && thumbnailSize.height == decodeBitmap.height) {
                 decodeBitmap
             } else {
@@ -315,6 +315,58 @@ internal object FileUtils {
             null
         } catch (ex: Exception) {
             ex.printStackTrace()
+            null
+        }
+    }
+
+    private fun getAdjustedBitmap(filePath: String): Bitmap? {
+        try {
+            val orientation: Int = getOrientation(filePath)
+            var adjustedBitmap: Bitmap? = BitmapFactory.decodeFile(filePath)
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 ->
+                    adjustedBitmap = rotateImage(adjustedBitmap, 90f)
+
+                ExifInterface.ORIENTATION_ROTATE_180 ->
+                    adjustedBitmap = rotateImage(adjustedBitmap, 180f)
+
+                ExifInterface.ORIENTATION_ROTATE_270 ->
+                    adjustedBitmap = rotateImage(adjustedBitmap, 270f)
+
+            }
+            return adjustedBitmap
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            outOfMemoryError.printStackTrace()
+            return null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    private fun getOrientation(filePath: String): Int {
+        try {
+            val ei = ExifInterface(filePath)
+            return ei.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return ExifInterface.ORIENTATION_UNDEFINED
+    }
+
+    private fun rotateImage(source: Bitmap?, angle: Float): Bitmap? {
+        if (source == null)
+            return null
+        return try {
+            val matrix = Matrix()
+            matrix.postRotate(angle)
+            Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+        } catch (error: OutOfMemoryError) {
+            error.printStackTrace()
             null
         }
     }
