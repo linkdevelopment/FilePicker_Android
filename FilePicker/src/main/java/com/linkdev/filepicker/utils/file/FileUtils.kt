@@ -24,7 +24,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.media.MediaMetadataRetriever
-import android.media.MediaScannerConnection
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
@@ -268,9 +267,8 @@ internal object FileUtils {
     }
 
     /**
-     * create thumbnail for the given [Uri] of image.
-     * @param context caller activity/fragment context
-     * @param uri saved URI
+     * create thumbnail for the given file path of image.
+     * @param filePath image file path
      * @param thumbnailSize desired thumbnail size
      * @return resized bitmap as desired or null
      * */
@@ -319,6 +317,11 @@ internal object FileUtils {
         }
     }
 
+    /**
+     * create rotated bitmap based on file rotation
+     * @param filePath image file Path
+     * @return return adjusted bitmap
+     * */
     private fun getAdjustedBitmap(filePath: String): Bitmap? {
         try {
             val orientation: Int = getOrientation(filePath)
@@ -344,6 +347,10 @@ internal object FileUtils {
         }
     }
 
+    /**
+     * Return file rotation
+     * @param filePath image file path
+     * */
     private fun getOrientation(filePath: String): Int {
         try {
             val ei = ExifInterface(filePath)
@@ -358,6 +365,11 @@ internal object FileUtils {
         return ExifInterface.ORIENTATION_UNDEFINED
     }
 
+    /**
+     * Return rotated bitmap by given angel
+     * @param source the original bitmap
+     * @param angle the angel to rotate the bitmap
+     * */
     private fun rotateImage(source: Bitmap?, angle: Float): Bitmap? {
         if (source == null)
             return null
