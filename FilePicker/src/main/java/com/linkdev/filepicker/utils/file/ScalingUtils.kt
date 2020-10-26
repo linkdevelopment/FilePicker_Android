@@ -35,11 +35,15 @@ object ScalingUtils {
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
             BitmapFactory.decodeFile(path, this)
-            inJustDecodeBounds = false
-            inSampleSize =
-                calculateSampleSize(outWidth, outHeight, dstWidth, dstHeight)
         }
-        return BitmapFactory.decodeFile(path, options)
+        return if (options.outWidth <= dstWidth || options.outHeight <= dstHeight) {
+            BitmapFactory.decodeFile(path)
+        } else {
+            options.inJustDecodeBounds = false
+            options.inSampleSize =
+                calculateSampleSize(options.outWidth, options.outHeight, dstWidth, dstHeight)
+            BitmapFactory.decodeFile(path, options)
+        }
     }
 
     /**
