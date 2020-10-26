@@ -32,6 +32,7 @@ import android.provider.OpenableColumns
 import android.util.Size
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.linkdev.filepicker.utils.ScalingUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -274,12 +275,14 @@ internal object FileUtils {
      * */
     fun getImageThumbnail(filePath: String, thumbnailSize: Size): Bitmap? {
         return try {
-            val decodeBitmap = getAdjustedBitmap(filePath)
-            if (thumbnailSize.width == decodeBitmap?.width && thumbnailSize.height == decodeBitmap.height) {
-                decodeBitmap
+            val decodedBitmap =
+                ScalingUtils.decodeFile(filePath, thumbnailSize.width, thumbnailSize.height)
+            val adjustedBitmap = getAdjustedBitmap(filePath, decodedBitmap)
+            if (thumbnailSize.width == adjustedBitmap?.width && thumbnailSize.height == adjustedBitmap.height) {
+                adjustedBitmap
             } else {
                 ThumbnailUtils
-                    .extractThumbnail(decodeBitmap, thumbnailSize.width, thumbnailSize.height)
+                    .extractThumbnail(adjustedBitmap, thumbnailSize.width, thumbnailSize.height)
             }
         } catch (ex: OutOfMemoryError) {
             ex.printStackTrace()
@@ -322,22 +325,20 @@ internal object FileUtils {
      * @param filePath image file Path
      * @return return adjusted bitmap
      * */
-    private fun getAdjustedBitmap(filePath: String): Bitmap? {
+    fun getAdjustedBitmap(filePath: String, decodedBitmap: Bitmap): Bitmap? {
         try {
-            val orientation: Int = getOrientation(filePath)
-            var adjustedBitmap: Bitmap? = BitmapFactory.decodeFile(filePath)
-            when (orientation) {
+            return when (getOrientation(filePath)) {
                 ExifInterface.ORIENTATION_ROTATE_90 ->
-                    adjustedBitmap = rotateImage(adjustedBitmap, 90f)
+                    rotateImage(decodedBitmap, 90f)
 
                 ExifInterface.ORIENTATION_ROTATE_180 ->
-                    adjustedBitmap = rotateImage(adjustedBitmap, 180f)
+                    rotateImage(decodedBitmap, 180f)
 
                 ExifInterface.ORIENTATION_ROTATE_270 ->
-                    adjustedBitmap = rotateImage(adjustedBitmap, 270f)
-
+                    rotateImage(decodedBitmap, 270f)
+                else ->
+                    decodedBitmap
             }
-            return adjustedBitmap
         } catch (outOfMemoryError: OutOfMemoryError) {
             outOfMemoryError.printStackTrace()
             return null
