@@ -20,7 +20,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.media.MediaMetadataRetriever
@@ -32,7 +31,6 @@ import android.provider.OpenableColumns
 import android.util.Size
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.linkdev.filepicker.utils.ScalingUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -40,6 +38,10 @@ import java.io.InputStream
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 internal object FileUtils {
@@ -380,6 +382,53 @@ internal object FileUtils {
             Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
         } catch (error: OutOfMemoryError) {
             error.printStackTrace()
+            null
+        }
+    }
+
+    /** Return true if given file path is not in normal orientation
+     * @param filePath image file Path
+     * */
+    fun shouldRotate(filePath: String): Boolean {
+        val orientation = getOrientation(filePath)
+        return orientation == ExifInterface.ORIENTATION_ROTATE_90
+                || orientation == ExifInterface.ORIENTATION_ROTATE_270
+                || orientation == ExifInterface.ORIENTATION_ROTATE_180
+    }
+
+    /**
+     * Overwrite the image in the given path in given [CoroutineContext] by default
+     * in [Dispatchers.IO]
+     * @param bitmap Image to be saved
+     * @param filePath The file or null if something error happened
+     * @return The file or null if something error happened
+     * */
+    suspend fun overwriteBitmapToFileInBackground(
+        bitmap: Bitmap?,
+        filePath: String,
+        coroutineContext: CoroutineContext = Dispatchers.IO
+    ) = withContext(coroutineContext) {
+        overwriteBitmapToFile(bitmap, filePath)
+    }
+
+    /**
+     * Compress image file in full quality and save it in given path
+     * @param bitmap Image to be saved
+     * @param filePath The path to which the image is saved
+     * @return The file or null if something error happened
+     * */
+    private fun overwriteBitmapToFile(bitmap: Bitmap?, filePath: String): File? {
+        return try {
+            val file = File(filePath)
+            if (file.exists()) file.delete()
+
+            val fOut = FileOutputStream(file)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            fOut.flush()
+            fOut.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }

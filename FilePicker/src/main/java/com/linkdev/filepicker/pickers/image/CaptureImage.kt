@@ -18,11 +18,10 @@ package com.linkdev.filepicker.pickers.image
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Size
 import androidx.fragment.app.Fragment
 import com.linkdev.filepicker.R
 import com.linkdev.filepicker.factory.IPickFilesFactory
@@ -37,10 +36,10 @@ import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.NO_CAMERA_H
 import com.linkdev.filepicker.utils.constant.Constants.ErrorMessages.REQUEST_CODE_ERROR_MESSAGE
 import com.linkdev.filepicker.utils.file.AndroidQFileUtils
 import com.linkdev.filepicker.utils.file.FileUtils
-import com.linkdev.filepicker.utils.file.FileUtils.IMAG_PREFIX
 import com.linkdev.filepicker.utils.file.FileUtilsBelowAndroidQ
 import com.linkdev.filepicker.utils.log.LoggerUtils.logError
 import com.linkdev.filepicker.utils.version.Platform
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -114,13 +113,11 @@ internal class CaptureImage(
         if (resultCode == Activity.RESULT_OK) {
             if (mRequestCode == requestCode) {
                 if (currentCapturedImagePath != null && currentCapturedImageURI != null) {
-                    val fileData = generateFileData()
-                    if (fileData != null)
-                        callback.onFilePicked(arrayListOf(fileData))
-                    else
-                        callback.onPickFileError(
-                            ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
-                        )
+                    if (FileUtils.shouldRotate(currentCapturedImagePath!!)) {
+                        adjustAndOverwriteCapturedImage(callback)
+                    } else {
+                        generateAndEmitFileStatus(callback)
+                    }
                 } else {
                     callback.onPickFileError(
                         ErrorModel(ErrorStatus.FILE_ERROR, R.string.file_picker_file_error)
@@ -133,6 +130,39 @@ internal class CaptureImage(
             FileUtils.deleteUri(caller.context, currentCapturedImageURI)
             callback.onPickFileCanceled()
         }
+    }
+
+    /**
+     * Get captured image in correct orientation and overwrite it in the same place
+     * @param callback refers to [PickFilesStatusCallback] which will fire with the file picking
+     * status whether it is canceled, successful or an error occurred.
+     * */
+    private fun adjustAndOverwriteCapturedImage(callback: PickFilesStatusCallback) {
+        caller.lifecycleScope.launch {
+            val adjustedBitmap = FileUtils.getAdjustedBitmap(
+                currentCapturedImagePath!!,
+                BitmapFactory.decodeFile(currentCapturedImagePath)
+            )
+            FileUtils.overwriteBitmapToFileInBackground(
+                adjustedBitmap, currentCapturedImagePath!!
+            )
+            generateAndEmitFileStatus(callback)
+        }
+    }
+
+    /**
+     * Generates the file data object and emit file status
+     * @param callback refers to [PickFilesStatusCallback] which will fire with the file picking
+     * status whether it is canceled, successful or an error occurred.
+     * */
+    private fun generateAndEmitFileStatus(callback: PickFilesStatusCallback) {
+        val fileData = generateFileData()
+        if (fileData != null)
+            callback.onFilePicked(arrayListOf(fileData))
+        else
+            callback.onPickFileError(
+                ErrorModel(ErrorStatus.DATA_ERROR, R.string.file_picker_data_error)
+            )
     }
 
     /**
