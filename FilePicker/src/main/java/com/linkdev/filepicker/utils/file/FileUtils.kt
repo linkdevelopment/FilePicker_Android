@@ -40,7 +40,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 
@@ -279,7 +278,7 @@ internal object FileUtils {
         return try {
             val decodedBitmap =
                 ScalingUtils.decodeFile(filePath, thumbnailSize.width, thumbnailSize.height)
-            val adjustedBitmap = getAdjustedBitmap(filePath, decodedBitmap)
+            val adjustedBitmap = getRotatedBitmap(filePath, decodedBitmap)
             if (thumbnailSize.width == adjustedBitmap?.width && thumbnailSize.height == adjustedBitmap.height) {
                 adjustedBitmap
             } else {
@@ -323,11 +322,11 @@ internal object FileUtils {
     }
 
     /**
-     * create rotated bitmap based on file rotation
+     * create rotated bitmap based on file orientation
      * @param filePath image file Path
      * @return return adjusted bitmap
      * */
-    fun getAdjustedBitmap(filePath: String, decodedBitmap: Bitmap): Bitmap? {
+    fun getRotatedBitmap(filePath: String, decodedBitmap: Bitmap): Bitmap? {
         try {
             return when (getOrientation(filePath)) {
                 ExifInterface.ORIENTATION_ROTATE_90 ->
@@ -351,7 +350,7 @@ internal object FileUtils {
     }
 
     /**
-     * Return file rotation
+     * Return file orientation
      * @param filePath image file path
      * */
     private fun getOrientation(filePath: String): Int {
@@ -403,21 +402,23 @@ internal object FileUtils {
      * @param filePath The file or null if something error happened
      * @return The file or null if something error happened
      * */
-    suspend fun overwriteBitmapToFileInBackground(
+    suspend fun saveBitmapToFile(
         bitmap: Bitmap?,
         filePath: String,
         coroutineContext: CoroutineContext = Dispatchers.IO
     ) = withContext(coroutineContext) {
-        overwriteBitmapToFile(bitmap, filePath)
+        saveBitmapToFile(bitmap, filePath)
     }
 
     /**
-     * Compress image file in full quality and save it in given path
+     * Compress image file in full quality and save it in given path and
+     * replace the file if exits before
+     *
      * @param bitmap Image to be saved
      * @param filePath The path to which the image is saved
      * @return The file or null if something error happened
      * */
-    private fun overwriteBitmapToFile(bitmap: Bitmap?, filePath: String): File? {
+    private fun saveBitmapToFile(bitmap: Bitmap?, filePath: String): File? {
         return try {
             val file = File(filePath)
             if (file.exists()) file.delete()

@@ -139,11 +139,11 @@ internal class CaptureImage(
      * */
     private fun adjustAndOverwriteCapturedImage(callback: PickFilesStatusCallback) {
         caller.lifecycleScope.launch {
-            val adjustedBitmap = FileUtils.getAdjustedBitmap(
+            val adjustedBitmap = FileUtils.getRotatedBitmap(
                 currentCapturedImagePath!!,
                 BitmapFactory.decodeFile(currentCapturedImagePath)
             )
-            FileUtils.overwriteBitmapToFileInBackground(
+            FileUtils.saveBitmapToFile(
                 adjustedBitmap, currentCapturedImagePath!!
             )
             generateAndEmitFileStatus(callback)
