@@ -20,9 +20,9 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.media.MediaMetadataRetriever
-import android.media.MediaScannerConnection
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
@@ -38,6 +38,9 @@ import java.io.InputStream
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 internal object FileUtils {
@@ -266,22 +269,21 @@ internal object FileUtils {
     }
 
     /**
-     * create thumbnail for the given [Uri] of image.
-     * @param context caller activity/fragment context
-     * @param uri saved URI
+     * create thumbnail for the given file path of image.
+     * @param filePath image file path
      * @param thumbnailSize desired thumbnail size
      * @return resized bitmap as desired or null
      * */
-    fun getImageThumbnail(context: Context, uri: Uri, thumbnailSize: Size): Bitmap? {
+    fun getImageThumbnail(filePath: String, thumbnailSize: Size): Bitmap? {
         return try {
-            val openFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
-            val decodeBitmap =
-                BitmapFactory.decodeFileDescriptor(openFileDescriptor?.fileDescriptor)
-            if (thumbnailSize.width == decodeBitmap?.width && thumbnailSize.height == decodeBitmap.height) {
-                decodeBitmap
+            val decodedBitmap =
+                ScalingUtils.decodeFile(filePath, thumbnailSize.width, thumbnailSize.height)
+            val adjustedBitmap = getRotatedBitmap(filePath, decodedBitmap)
+            if (thumbnailSize.width == adjustedBitmap?.width && thumbnailSize.height == adjustedBitmap.height) {
+                adjustedBitmap
             } else {
                 ThumbnailUtils
-                    .extractThumbnail(decodeBitmap, thumbnailSize.width, thumbnailSize.height)
+                    .extractThumbnail(adjustedBitmap, thumbnailSize.width, thumbnailSize.height)
             }
         } catch (ex: OutOfMemoryError) {
             ex.printStackTrace()
@@ -315,6 +317,119 @@ internal object FileUtils {
             null
         } catch (ex: Exception) {
             ex.printStackTrace()
+            null
+        }
+    }
+
+    /**
+     * create rotated bitmap based on file orientation
+     * @param filePath image file Path
+     * @return return adjusted bitmap
+     * */
+    fun getRotatedBitmap(filePath: String, decodedBitmap: Bitmap): Bitmap? {
+        try {
+            return when (getOrientation(filePath)) {
+                ExifInterface.ORIENTATION_ROTATE_90 ->
+                    rotateImage(decodedBitmap, 90f)
+
+                ExifInterface.ORIENTATION_ROTATE_180 ->
+                    rotateImage(decodedBitmap, 180f)
+
+                ExifInterface.ORIENTATION_ROTATE_270 ->
+                    rotateImage(decodedBitmap, 270f)
+                else ->
+                    decodedBitmap
+            }
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            outOfMemoryError.printStackTrace()
+            return null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    /**
+     * Return file orientation
+     * @param filePath image file path
+     * */
+    private fun getOrientation(filePath: String): Int {
+        try {
+            val ei = ExifInterface(filePath)
+            return ei.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return ExifInterface.ORIENTATION_UNDEFINED
+    }
+
+    /**
+     * Return rotated bitmap by given angel
+     * @param source the original bitmap
+     * @param angle the angel to rotate the bitmap
+     * */
+    private fun rotateImage(source: Bitmap?, angle: Float): Bitmap? {
+        if (source == null)
+            return null
+        return try {
+            val matrix = Matrix()
+            matrix.postRotate(angle)
+            Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+        } catch (error: OutOfMemoryError) {
+            error.printStackTrace()
+            null
+        }
+    }
+
+    /** Return true if given file path is not in normal orientation
+     * @param filePath image file Path
+     * */
+    fun shouldRotate(filePath: String): Boolean {
+        val orientation = getOrientation(filePath)
+        return orientation == ExifInterface.ORIENTATION_ROTATE_90
+                || orientation == ExifInterface.ORIENTATION_ROTATE_270
+                || orientation == ExifInterface.ORIENTATION_ROTATE_180
+    }
+
+    /**
+     * Overwrite the image in the given path in given [CoroutineContext] by default
+     * in [Dispatchers.IO]
+     * @param bitmap Image to be saved
+     * @param filePath The file or null if something error happened
+     * @return The file or null if something error happened
+     * */
+    suspend fun saveBitmapToFile(
+        bitmap: Bitmap?,
+        filePath: String,
+        coroutineContext: CoroutineContext = Dispatchers.IO
+    ) = withContext(coroutineContext) {
+        saveBitmapToFile(bitmap, filePath)
+    }
+
+    /**
+     * Compress image file in full quality and save it in given path and
+     * replace the file if exits before
+     *
+     * @param bitmap Image to be saved
+     * @param filePath The path to which the image is saved
+     * @return The file or null if something error happened
+     * */
+    private fun saveBitmapToFile(bitmap: Bitmap?, filePath: String): File? {
+        return try {
+            val file = File(filePath)
+            if (file.exists()) file.delete()
+
+            val fOut = FileOutputStream(file)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            fOut.flush()
+            fOut.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }

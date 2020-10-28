@@ -21,8 +21,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import java.security.Permission
 
 /**
@@ -33,20 +36,23 @@ import java.security.Permission
  */
 class Caller private constructor(
     private val fragment: Fragment? = null,
-    private val activity: Activity? = null
+    private val activity: AppCompatActivity? = null
 ) {
     companion object {
         fun getInstance(caller: Any): Caller {
             return when (caller) {
-                is Activity -> Caller(activity = caller)
+                is AppCompatActivity -> Caller(activity = caller)
                 is Fragment -> Caller(fragment = caller)
-                else -> throw(Throwable("please pass reference of Activity or androidx.fragment.app"))
+                else -> throw(Throwable("please pass reference of androidx.appcompat.app.AppCompatActivity or androidx.fragment.app"))
             }
         }
     }
 
     val context: Context
         get() = (activity ?: fragment?.requireContext())!!
+
+    val lifecycleScope: LifecycleCoroutineScope
+        get() = (activity?.lifecycleScope ?: fragment?.lifecycleScope)!!
 
     fun startActivityForResult(intent: Intent, requestCode: Int) {
         activity?.startActivityForResult(intent, requestCode)

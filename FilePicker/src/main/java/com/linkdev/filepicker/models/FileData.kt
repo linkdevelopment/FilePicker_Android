@@ -57,9 +57,9 @@ data class FileData(
      * */
     fun getThumbnail(context: Context, thumbnailSize: Size): Bitmap? {
         return when {
-            uri == null || mimeType == null -> null
+            filePath == null || uri == null || mimeType == null -> null
             MimeType.isImage(mimeType) ->
-                FileUtils.getImageThumbnail(context, uri, thumbnailSize)
+                FileUtils.getImageThumbnail(filePath, thumbnailSize)
             MimeType.isVideo(mimeType) ->
                 FileUtils.getVideoThumbnail(context, uri, thumbnailSize)
             else -> null
