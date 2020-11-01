@@ -11,14 +11,22 @@ FilePicker allows you to easily capture an image, record a video or pick any fil
 
 # **Setup**
 
-### To Import FilePicker to your project:
-1. Open your project in Android Studio
-2. Download the library (using Git, or a zip archive to unzip)
-3. Go to File > Import-Module and import the library as a module
-4. Right-click on the app in your project view and select "Open Module Settings"
-5. Click the "Dependencies" tab and then the '+' button
-6. Select "Module Dependency"
-7. Select "FilePicker"
+Use Gradle:
+
+```
+implementation 'com.linkdev.filepicker:filepicker:1.0.0'
+```
+
+Or use Maven:
+
+```
+<dependency>
+  <groupId>com.linkdev.filepicker</groupId>
+  <artifactId>filepicker</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+```
 
 ### Runtime permissions
 This library requires specific runtime permissions. Declare it in your `AndroidMnifest.xml`:
