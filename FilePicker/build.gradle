@@ -24,7 +24,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 ext {
     bintrayRepo = "FilePicker"
     bintrayName = "com.linkdev.filepicker"
-    libraryName = "FilePicker"
+    libraryName = "filepicker"
 
     publishedGroupId = 'com.linkdev.filepicker'
     artifact = 'filepicker'
