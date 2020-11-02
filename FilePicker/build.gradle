@@ -31,8 +31,8 @@ ext {
     libraryVersion = '1.0.0'
 
     libraryDescription = 'FilePicker allows you to easily capture an image, record a video or pick any file from the document library.'
-    siteUrl = 'https://link-dev.visualstudio.com/Mobile%20Team-ReusableComponents/_git/FilePicker_Android'
-    gitUrl = 'https://link-dev.visualstudio.com/Mobile%20Team-ReusableComponents/_git/FilePicker_Android'
+    siteUrl = 'https://github.com/linkdevelopment/FilePicker_Android'
+    gitUrl = 'https://github.com/linkdevelopment/FilePicker_Android.git'
 
     developerId ='linkdev-libraries'
     developerName = 'Link Development'
