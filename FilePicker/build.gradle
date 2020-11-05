@@ -28,7 +28,7 @@ ext {
 
     publishedGroupId = 'com.linkdev.filepicker'
     artifact = 'filepicker'
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 
     libraryDescription = 'FilePicker allows you to easily capture an image, record a video or pick any file from the document library.'
     siteUrl = 'https://github.com/linkdevelopment/FilePicker_Android'
@@ -50,7 +50,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
