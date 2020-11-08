@@ -14,7 +14,7 @@ FilePicker allows you to easily capture an image, record a video or pick any fil
 Use Gradle:
 
 ```
-implementation 'com.linkdev.filepicker:filepicker:1.0.0'
+implementation 'com.linkdev.filepicker:filepicker:1.0.1'
 ```
 
 Or use Maven:
@@ -23,7 +23,7 @@ Or use Maven:
 <dependency>
   <groupId>com.linkdev.filepicker</groupId>
   <artifactId>filepicker</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <type>pom</type>
 </dependency>
 ```
